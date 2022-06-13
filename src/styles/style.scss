@@ -8,3 +8,18 @@ body {
   margin: 0;
   font-family: "Open Sans", sans-serif;
 }
+
+.bg-navbar {
+  background-color: $dark;
+}
+
+.link-navbar.navbar-nav .nav-link {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.616);
+  margin-left: 2rem;
+  &:hover,
+  &:active,
+  &:focus {
+    color: #fff;
+  }
+}

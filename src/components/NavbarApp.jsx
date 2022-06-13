@@ -1,27 +1,35 @@
 import React from "react";
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
+// images
+import logo from "../assets/logo.png";
 
 const NavbarApp = () => {
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar className="bg-navbar py-4" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">
+          <img src={logo} alt="" style={{ width: "180px" }} />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
+          <Nav className="me-auto link-navbar">
+            <Link to="/" className="nav-link">
+              Home
+            </Link>
+            <Link to="/category/peristiwa" className="nav-link">
+              Peristiwa
+            </Link>
+            <Link to="/category/parawisata" className="nav-link">
+              Parawisata/Budaya
+            </Link>
+            <Link to="/category/pertanian" className="nav-link">
+              Pertanian
+            </Link>
+          </Nav>
+          <Nav className="ms-auto link-navbar">
+            <Button className="px-4 fw-bold">Masuk</Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
