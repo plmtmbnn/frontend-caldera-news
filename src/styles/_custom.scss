@@ -1,0 +1,16 @@
+// overwrite theme variables
+
+// test theme
+$primary: #e85858;
+$secondary: #0f0;
+$dark: #300;
+$light: #fdd;
+$success: #0fa;
+$info: #555;
+$warning: #ff0;
+$danger: #f00;
+$azul: #2f80ed;
+$dark-blue: #151d48;
+$steel: #737791;
+
+@import "~bootstrap/scss/bootstrap.scss";
