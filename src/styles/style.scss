@@ -23,3 +23,40 @@ body {
     color: #fff;
   }
 }
+
+.slide-stats {
+  padding: 10px 5px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px 0 8px;
+  font-weight: 600;
+  & ul {
+    margin-bottom: 0;
+    & li {
+      display: inline;
+      margin: 10px;
+      font-size: 14px;
+    }
+  }
+}
+
+.head-post {
+  min-width: 120px;
+  height: 120px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 8px;
+}
+
+ul.stats {
+  margin-bottom: 0;
+  margin-top: 10px;
+  & li {
+    display: inline;
+    margin-right: 1rem;
+    font-size: 14px;
+    color: #fff;
+  }
+}
