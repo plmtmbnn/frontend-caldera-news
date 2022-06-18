@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, CloseButton } from "react-bootstrap";
 import NavbarApp from "../components/NavbarApp";
 import TrendingSlider from "../components/TrendingSlider";
 
@@ -16,23 +16,23 @@ const Home = () => {
   const headPost = [
     {
       id: 1,
-      img: "https://via.placeholder.com/500",
-      headline: "Libur Lebaran, Jumlah Kendaraan yang Diangkut Kapal ...",
+      img: "https://source.unsplash.com/random/500/?seaport",
+      headline: "Libur Lebaran, Jumlah Kendaraan yang Diangkut Kapal",
       love: 79,
       comment: 122,
       date: "12 Jam",
     },
     {
       id: 2,
-      img: "https://via.placeholder.com/500",
-      headline: "Main Film Ngeri Ngeri Sedap, Arswendi Nasution Jadi Bapak ...",
+      img: "https://source.unsplash.com/random/500/?movie",
+      headline: "Main Film Ngeri Ngeri Sedap, Arswendi Nasution Jadi Bapak",
       love: 12,
       comment: 22,
       date: "1 Hari",
     },
     {
       id: 3,
-      img: "https://via.placeholder.com/500",
+      img: "https://source.unsplash.com/random/500/?indonesia",
       headline: "5 Bahasa yang Digunakan di Sumatera Utara",
       love: 79,
       comment: 122,
@@ -40,8 +40,9 @@ const Home = () => {
     },
     {
       id: 4,
-      img: "https://via.placeholder.com/500",
-      headline: "Libur Lebaran, Jumlah Kendaraan yang Diangkut Kapal ...",
+      img: "https://source.unsplash.com/random/500/?swiss",
+      headline:
+        "Atalia Kamil Pamit ke Eril: Mama Lepas Kamu di Sungai Aare yang Indah Ini",
       love: 79,
       comment: 122,
       date: "12 Jam",
@@ -112,6 +113,43 @@ const Home = () => {
                 </div>
               </Col>
             ))}
+          </Row>
+        </Container>
+      </section>
+      <hr style={{ color: "#dbdbdb" }} />
+      <section className="py-5">
+        <Container>
+          <Row>
+            <Col md={8}>
+              <h2 className="fw-bold">Rekomendasi</h2>
+              {headPost.slice(2, 4).map((data, i) => (
+                <div className="d-flex my-3" key={i}>
+                  <div
+                    style={{
+                      backgroundImage: `url(${data.img})`,
+                    }}
+                    className="post-rcmd post-img align-self-center"
+                  />
+                  <div className="align-self-center ms-3">
+                    <h4 className="fw-bold">{data.headline}</h4>
+                    <h6 className="text-muted fw-normal">
+                      Satuan Reserse Narkoba Polres Metro Jakarta Barat
+                      menangkap seorang musikus anggota grup band berinisial AB
+                      terkait dugaan keterlibatan dalam kasus
+                    </h6>
+                    <ul className="list-unstyled stats">
+                      <li className="text-dark">
+                        <BiHeart style={iconStats} /> {data.love}
+                      </li>
+                      <li className="text-dark">
+                        <BiChat style={iconStats} /> {data.comment}
+                      </li>
+                      <li className="text-dark">{data.date}</li>
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </Col>
           </Row>
         </Container>
       </section>
