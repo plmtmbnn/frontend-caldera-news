@@ -15,7 +15,7 @@ function TrendingSlider() {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    autoplay: false,
+    autoplay: true,
   };
 
   var cardStyle = {

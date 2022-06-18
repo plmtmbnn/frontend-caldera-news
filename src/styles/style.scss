@@ -42,12 +42,19 @@ body {
   }
 }
 
-.head-post {
-  min-width: 120px;
-  height: 120px;
+.post-img {
   background-position: center;
   background-size: cover;
   border-radius: 8px;
+}
+
+.head-post {
+  min-width: 120px;
+  height: 120px;
+}
+
+.post-latest {
+  height: 300px;
 }
 
 ul.stats {
