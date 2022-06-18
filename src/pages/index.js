@@ -180,6 +180,9 @@ const Home = () => {
           </Row>
         </Container>
       </section>
+      <section className="py-5 bg-category">
+        <Container>asdas</Container>
+      </section>
     </div>
   );
 };
