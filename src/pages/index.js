@@ -1,12 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Container, Row, Col, CloseButton } from "react-bootstrap";
+import { Container, Row, Col, Badge } from "react-bootstrap";
 import NavbarApp from "../components/NavbarApp";
 import TrendingSlider from "../components/TrendingSlider";
+import { Link } from "react-router-dom";
 
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import logoBatak from "../assets/batak-logo.png";
+import FooterApp from "../components/FooterApp";
 
 const Home = () => {
   var iconStats = {
@@ -60,6 +63,27 @@ const Home = () => {
       date: "17-9-2022",
     });
   }
+
+  const newsCategory = [
+    {
+      id: 1,
+      title: "Peristiwa",
+      total_post: 132,
+      url: "#",
+    },
+    {
+      id: 2,
+      title: "Pariwisata/Budaya",
+      total_post: 15,
+      url: "#",
+    },
+    {
+      id: 3,
+      title: "Pertanian",
+      total_post: 2,
+      url: "#",
+    },
+  ];
 
   return (
     <div>
@@ -181,8 +205,39 @@ const Home = () => {
         </Container>
       </section>
       <section className="py-5 bg-category">
-        <Container>asdas</Container>
+        <Container>
+          <Row className="mt-5">
+            <Col md={{ span: 6, offset: 1 }} className="align-self-center">
+              <h2 className="fw-bold text-white mb-5">Kategori Berita</h2>
+              {newsCategory.map((data, i) => (
+                <Link className="cat-link" to={data.url} key={i}>
+                  <Row className="mt-4 text-white">
+                    <Col xs={8}>
+                      <h4 className="fw-bold">{data.title}</h4>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </p>
+                    </Col>
+                    <Col xs={4} className="align-self-center text-end">
+                      <Badge bg="light" text="dark">
+                        {data.total_post} Artikel
+                      </Badge>
+                      <FaLongArrowAltRight className="ms-4" />
+                    </Col>
+                  </Row>
+                  <hr style={{ color: "#fff" }} />
+                </Link>
+              ))}
+            </Col>
+            <Col md={{ span: 2, offset: 1 }} className="align-self-center">
+              <img src={logoBatak} alt="" className="img-fluid" />
+            </Col>
+          </Row>
+        </Container>
       </section>
+      <FooterApp />
     </div>
   );
 };
