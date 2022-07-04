@@ -54,46 +54,6 @@ function CategoryArticle() {
   return (
     <div>
       <NavbarApp />
-      <section className="bg-dark pt-3 pb-5">
-        <Container>
-          <Row>
-            <Col md={{ span: 8, offset: 2 }}>
-              <h4 className="text-white mb-3">
-                Kategori: <span className="fw-bold">Peristiwa</span>
-              </h4>
-              <TrendingSlider />
-            </Col>
-            <Col md={{ span: 10, offset: 1 }}>
-              <Row className="mt-5">
-                {commonPost.slice(0, 3).map((data, i) => (
-                  <Col md={4} className="my-2" key={i}>
-                    <div className="d-flex">
-                      <div
-                        style={{
-                          backgroundImage: `url(${data.img})`,
-                        }}
-                        className="head-post post-img align-self-center"
-                      />
-                      <div className="align-self-center ms-3">
-                        <p className="text-white fw-bold">{data.headline}</p>
-                      </div>
-                    </div>
-                    <ul className="list-unstyled stats">
-                      <li>
-                        <BiHeart style={iconStats} /> {data.love}
-                      </li>
-                      <li>
-                        <BiChat style={iconStats} /> {data.comment}
-                      </li>
-                      <li>{data.date}</li>
-                    </ul>
-                  </Col>
-                ))}
-              </Row>
-            </Col>
-          </Row>
-        </Container>
-      </section>
       <section className="py-5">
         <Container>
           <Row>

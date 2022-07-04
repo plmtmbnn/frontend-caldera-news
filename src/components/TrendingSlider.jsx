@@ -20,7 +20,7 @@ function TrendingSlider() {
 
   var cardStyle = {
     height: "320px",
-    backgroundImage: `url(${bgImg})`,
+    backgroundImage: `url("https://source.unsplash.com/random/500/?landscape})`,
     backgroundSize: "cover",
     backgroudPosition: "center",
     borderRadius: "8px",
