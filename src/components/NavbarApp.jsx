@@ -9,9 +9,9 @@ const NavbarApp = () => {
   return (
     <Navbar className="bg-navbar py-4" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">
+        <Link to="/" className="navbar-brand">
           <img src={logo} alt="" style={{ width: "180px" }} />
-        </Navbar.Brand>
+        </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto link-navbar">

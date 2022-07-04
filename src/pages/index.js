@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import NavbarApp from "../components/NavbarApp";
 import TrendingSlider from "../components/TrendingSlider";
-import { Link } from "react-router-dom";
+import FooterApp from "../components/FooterApp";
 
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import logoBatak from "../assets/batak-logo.png";
-import FooterApp from "../components/FooterApp";
 
 const Home = () => {
   var iconStats = {
