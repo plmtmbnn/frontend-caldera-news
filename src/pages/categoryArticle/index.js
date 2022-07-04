@@ -3,16 +3,16 @@ import { Container } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import NavbarApp from "../../components/NavbarApp";
 
-function SingleArticle() {
+function CategoryArticle() {
   return (
     <div>
       <NavbarApp />
       <div className="py-5">
-        <Container>asd</Container>
+        <Container>Category here</Container>
       </div>
       <FooterApp />
     </div>
   );
 }
 
-export default SingleArticle;
+export default CategoryArticle;
