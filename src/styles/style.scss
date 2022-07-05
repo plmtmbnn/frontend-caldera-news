@@ -125,3 +125,16 @@ footer ul li {
     }
   }
 }
+
+ul.inline li {
+  display: inline-block;
+  margin-left: 2rem;
+  cursor: pointer;
+}
+
+a.link {
+  text-decoration: none;
+  &:hover {
+    opacity: 0.8;
+  }
+}

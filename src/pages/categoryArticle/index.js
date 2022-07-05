@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import NavbarApp from "../../components/NavbarApp";
-import TrendingSlider from "../../components/TrendingSlider";
 
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
@@ -72,7 +71,7 @@ function CategoryArticle() {
               {commonPost.map((data, i) => (
                 <>
                   <div className="d-flex my-3" key={i}>
-                    <div className="align-self-center ms-3">
+                    <div className="align-self-center">
                       <p className="fw-bold">{data.headline}</p>
                       <h6 className="text-muted fw-normal">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,

@@ -99,17 +99,19 @@ const Home = () => {
               <Row className="mt-5">
                 {commonPost.slice(0, 3).map((data, i) => (
                   <Col md={4} className="my-2" key={i}>
-                    <div className="d-flex">
-                      <div
-                        style={{
-                          backgroundImage: `url(${data.img})`,
-                        }}
-                        className="head-post post-img align-self-center"
-                      />
-                      <div className="align-self-center ms-3">
-                        <p className="text-white fw-bold">{data.headline}</p>
+                    <Link to="/article/test" className="link">
+                      <div className="d-flex">
+                        <div
+                          style={{
+                            backgroundImage: `url(${data.img})`,
+                          }}
+                          className="head-post post-img align-self-center"
+                        />
+                        <div className="align-self-center ms-3">
+                          <p className="text-white fw-bold">{data.headline}</p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                     <ul className="list-unstyled stats">
                       <li>
                         <BiHeart style={iconStats} /> {data.love}
