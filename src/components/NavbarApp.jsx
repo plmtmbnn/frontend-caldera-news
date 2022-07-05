@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { Navbar, Container, Nav, Button, Modal } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, Modal, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 // images
 import logo from "../assets/logo.png";
+
+//component
+import Login from './Auth/Login';
+import Register from './Auth/Register';
 
 const NavbarApp = () => {
   const [show, setShow] = useState(false);
@@ -43,6 +47,9 @@ const NavbarApp = () => {
         <Modal.Body className="text-center">
           <h4 className="fw-bold mt-3">Masuk</h4>
           <p>Login dulu biar bisa komen, dan like konten favoritmu. Yuk!</p>
+          <Row>
+            <Login />
+          </Row>
         </Modal.Body>
       </Modal>
     </Navbar>

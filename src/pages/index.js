@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import NavbarApp from "../components/NavbarApp";
@@ -10,6 +10,9 @@ import FooterApp from "../components/FooterApp";
 import { BiChat, BiHeart } from "react-icons/bi";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import logoBatak from "../assets/batak-logo.png";
+
+// api
+import {newsApi} from '../api/api.news';
 
 const Home = () => {
   var iconStats = {
@@ -64,27 +67,55 @@ const Home = () => {
     });
   }
 
-  const newsCategory = [
+  const [newsCategory, setNewsCategory] = useState([
     {
-      id: 1,
-      title: "Peristiwa",
-      total_post: 132,
-      url: "#",
-    },
-    {
-      id: 2,
-      title: "Pariwisata/Budaya",
-      total_post: 15,
-      url: "#",
-    },
-    {
-      id: 3,
-      title: "Pertanian",
-      total_post: 2,
-      url: "#",
-    },
-  ];
+    id: 1,
+    title: "Peristiwa",
+    total_post: 132,
+    url: "#",
+  },
+  {
+    id: 2,
+    title: "Pariwisata/Budaya",
+    total_post: 15,
+    url: "#",
+  },
+  {
+    id: 3,
+    title: "Pertanian",
+    total_post: 2,
+    url: "#",
+  }]); 
 
+  const getCompany = async () => {
+    const result = await newsApi.getCategory();
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setNewsCategory(result.data);
+    }
+  }
+
+  useEffect(() => {
+    getCompany();
+  }, []);
+
+  const categoryNavigation = (index) => {
+    let result = 'category/peristiwa';
+    switch (index) {
+      case 1:
+        result = 'category/peristiwa';
+        break;
+      case 2:
+        result = 'category/parawisata';
+        break;
+      case 3:
+        result = 'category/pertanian';
+        break;
+    
+      default:
+        break;
+    }
+    return result;
+  }
   return (
     <div>
       <NavbarApp />
@@ -212,18 +243,14 @@ const Home = () => {
             <Col md={{ span: 6, offset: 1 }} className="align-self-center">
               <h2 className="fw-bold text-white mb-5">Kategori Berita</h2>
               {newsCategory.map((data, i) => (
-                <Link className="cat-link" to={data.url} key={i}>
+                <Link className="cat-link" to={categoryNavigation(i)} key={i}>
                   <Row className="mt-4 text-white">
                     <Col xs={8}>
-                      <h4 className="fw-bold">{data.title}</h4>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                      </p>
+                      <h4 className="fw-bold">{data.category_name}</h4>
+                      <p>{data.description}</p>
                     </Col>
                     <Col xs={4} className="align-self-center text-end">
-                      <Badge bg="light" text="dark">
+                      <Badge bg="light" text="dark" hidden>
                         {data.total_post} Artikel
                       </Badge>
                       <FaLongArrowAltRight className="ms-4" />
