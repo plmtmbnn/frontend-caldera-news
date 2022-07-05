@@ -5,6 +5,7 @@ import NavbarApp from "../../components/NavbarApp";
 
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 function CategoryArticle() {
   var iconStats = {
@@ -70,33 +71,35 @@ function CategoryArticle() {
               </Row>
               {commonPost.map((data, i) => (
                 <>
-                  <div className="d-flex my-3" key={i}>
-                    <div className="align-self-center">
-                      <p className="fw-bold">{data.headline}</p>
-                      <h6 className="text-muted fw-normal">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris.
-                      </h6>
-                      <ul className="list-unstyled stats">
-                        <li className="text-dark">
-                          <BiHeart style={iconStats} /> {data.love}
-                        </li>
-                        <li className="text-dark">
-                          <BiChat style={iconStats} /> {data.comment}
-                        </li>
-                        <li className="text-dark">{data.date}</li>
-                      </ul>
+                  <Link to="/article/ss" className="link" key={i}>
+                    <div className="d-flex my-3">
+                      <div className="align-self-center">
+                        <p className="fw-bold text-black">{data.headline}</p>
+                        <h6 className="text-muted fw-normal">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit, sed do eiusmod tempor incididunt ut labore et
+                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                          nostrud exercitation ullamco laboris.
+                        </h6>
+                        <ul className="list-unstyled stats">
+                          <li className="text-dark">
+                            <BiHeart style={iconStats} /> {data.love}
+                          </li>
+                          <li className="text-dark">
+                            <BiChat style={iconStats} /> {data.comment}
+                          </li>
+                          <li className="text-dark">{data.date}</li>
+                        </ul>
+                      </div>
+                      <div
+                        style={{
+                          backgroundImage: `url(${data.img})`,
+                          ...imgFeed,
+                        }}
+                        className="post-img align-self-center"
+                      />
                     </div>
-                    <div
-                      style={{
-                        backgroundImage: `url(${data.img})`,
-                        ...imgFeed,
-                      }}
-                      className="post-img align-self-center"
-                    />
-                  </div>
+                  </Link>
                   <hr />
                 </>
               ))}

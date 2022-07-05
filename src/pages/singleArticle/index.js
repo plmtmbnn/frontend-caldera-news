@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col, Card, Breadcrumb } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import FooterApp from "../../components/FooterApp";
+import SectionComment from "./components/sectionComment";
 import NavbarApp from "../../components/NavbarApp";
 
 // icons
@@ -132,7 +133,8 @@ function SingleArticle() {
               </div>
             </Col>
             <Col md={7} xs={12}>
-              <h4 className="fw-bold mb-4">Baca Lainnya</h4>
+              <h4 className="fw-bold">Baca Lainnya</h4>
+              <hr className="title mb-4" />
               {commonPost.map((data, i) => (
                 <>
                   <div className="d-flex my-3" key={i}>
@@ -165,6 +167,9 @@ function SingleArticle() {
                   <hr />
                 </>
               ))}
+              <h4 className="fw-bold mt-5">1 Komentar</h4>
+              <hr className="title mb-4" />
+              <SectionComment />
             </Col>
           </Row>
         </Container>
