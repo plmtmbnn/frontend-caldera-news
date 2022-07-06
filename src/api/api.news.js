@@ -6,7 +6,7 @@ class NewsApi extends BaseApiRequest {
     super(process.env.REACT_APP_API_END_POINT);
   }
 
-  async getCategory(payload) {
+  async getCategory() {
     let result = OpResult.failed("getCategory");
     try {
       let resApi = await this.get("/category");
@@ -15,6 +15,20 @@ class NewsApi extends BaseApiRequest {
       }
     } catch (e) {
       console.log("getCategory", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
+
+  async getNewsList(payload) {
+    let result = OpResult.failed("getNewsList");
+    try {
+      let resApi = await this.post("/news/list", payload);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("getNewsList", e);
       result = OpResult.failed("Internal Error");
     }
     return result;

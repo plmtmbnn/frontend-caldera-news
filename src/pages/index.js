@@ -70,19 +70,19 @@ const Home = () => {
   const [newsCategory, setNewsCategory] = useState([
     {
     id: 1,
-    title: "Peristiwa",
+    category_name: "Peristiwa",
     total_post: 132,
     url: "#",
   },
   {
     id: 2,
-    title: "Pariwisata/Budaya",
+    category_name: "Pariwisata/Budaya",
     total_post: 15,
     url: "#",
   },
   {
     id: 3,
-    title: "Pertanian",
+    category_name: "Pertanian",
     total_post: 2,
     url: "#",
   }]); 

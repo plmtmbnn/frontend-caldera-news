@@ -1,13 +1,74 @@
-import React from "react";
+/* eslint-disable no-use-before-define */
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import NavbarApp from "../../components/NavbarApp";
 
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
+// api
+import {newsApi} from '../../api/api.news';
+import moment from "moment";
+
+import { Pagination } from 'antd';
+
 
 function CategoryArticle() {
+  const params = useParams();
+
+  const [offset, setoffset] = useState(0);
+  const [page, setpage] = useState(1);
+  const [newsList, setnewsList] = useState([]);
+
+  useEffect(() => {
+    getNewsList();
+  }, [params.id, page]);
+
+  const getNewsList = async () => {
+    let category_id = null;
+    switch (params.id) {
+      case 'peristiwa':
+        category_id = 1;
+        break;
+      case 'parawisata':
+        category_id = 2;
+        break;
+      case 'pertanian':
+        category_id = 3;
+        break;
+    
+      default:
+        break;
+    }
+    const result = await newsApi.getNewsList({category_id, status: "PUBLISH", limit: 10, offset});
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setnewsList(result.data);
+    } else {
+      setnewsList([]);
+    }
+  }
+
+  const showCategoryName = (name) => {
+    let result = null;
+    switch (name) {
+      case 'peristiwa':
+        result = 'Peristiwa';
+        break;
+      case 'parawisata':
+        result = 'Parawisata/Budaya';
+        break;
+      case 'pertanian':
+        result = 'Pertanian';
+        break;
+    
+      default:
+        break;
+    }
+    return result;
+  } 
+
   var iconStats = {
     fontSize: "16px",
   };
@@ -15,42 +76,7 @@ function CategoryArticle() {
     minWidth: "100px",
     height: "100px",
   };
-  const commonPost = [
-    {
-      id: 1,
-      img: "https://source.unsplash.com/random/500/?seaport",
-      headline: "Libur Lebaran, Jumlah Kendaraan yang Diangkut Kapal",
-      love: 79,
-      comment: 122,
-      date: "12 Jam",
-    },
-    {
-      id: 2,
-      img: "https://source.unsplash.com/random/500/?movie",
-      headline: "Main Film Ngeri Ngeri Sedap, Arswendi Nasution Jadi Bapak",
-      love: 12,
-      comment: 22,
-      date: "1 Hari",
-    },
-    {
-      id: 3,
-      img: "https://source.unsplash.com/random/500/?medan",
-      headline:
-        "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      love: 79,
-      comment: 122,
-      date: "2 Hari",
-    },
-    {
-      id: 4,
-      img: "https://source.unsplash.com/random/500/?swiss",
-      headline:
-        "Atalia Kamil Pamit ke Eril: Mama Lepas Kamu di Sungai Aare yang Indah Ini",
-      love: 79,
-      comment: 122,
-      date: "12 Jam",
-    },
-  ];
+  
   return (
     <div>
       <NavbarApp />
@@ -59,41 +85,34 @@ function CategoryArticle() {
           <Row>
             <Col md={8}>
               <Row>
-                <Col xs={8}>
-                  <h4 className="fw-bold mb-5">Feed</h4>
-                </Col>
-                <Col xs={4} className="text-end">
-                  <Form.Select aria-label="Select Feed">
-                    <option value="1">Rekomendasi</option>
-                    <option value="2">Terbaru</option>
-                  </Form.Select>
+                <Col xs>
+                  <h4 className="mb-5">Berita Khusus <span className="fw-bold" style={{ color: '#ce1127'}}>{showCategoryName(params.id)}</span></h4>
+                  <hr />
                 </Col>
               </Row>
-              {commonPost.map((data, i) => (
+              {
+              newsList.length === 0 ?
+              <Row><h4>Tidak ada berita...</h4></Row>
+              :
+              newsList.map((data, i) => (
                 <>
-                  <Link to="/article/ss" className="link" key={i}>
+                  <Link to={`/article/${data.news_url}`} className="link" key={i}>
                     <div className="d-flex my-3">
                       <div className="align-self-center">
-                        <p className="fw-bold text-black">{data.headline}</p>
-                        <h6 className="text-muted fw-normal">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam, quis
-                          nostrud exercitation ullamco laboris.
-                        </h6>
+                        <p className="fw-bold text-black">{data.title}</p>                        
                         <ul className="list-unstyled stats">
                           <li className="text-dark">
-                            <BiHeart style={iconStats} /> {data.love}
+                            <BiHeart style={iconStats} /> {parseInt(data.total_likes)}
                           </li>
                           <li className="text-dark">
-                            <BiChat style={iconStats} /> {data.comment}
+                            <BiChat style={iconStats} /> {parseInt(data.total_comment)}
                           </li>
-                          <li className="text-dark">{data.date}</li>
+                          <li className="text-dark">{moment(data.posted_at).format('DD/MM/YYYY')}</li>
                         </ul>
                       </div>
                       <div
                         style={{
-                          backgroundImage: `url(${data.img})`,
+                          backgroundImage: `url(${data.img || 'https://source.unsplash.com/random/500/?seaport'})`,
                           ...imgFeed,
                         }}
                         className="post-img align-self-center"
@@ -104,6 +123,23 @@ function CategoryArticle() {
                 </>
               ))}
             </Col>
+          </Row>
+          <Row>
+          <Col>
+          <Pagination 
+          defaultCurrent={offset} 
+          defaultPageSize={10} 
+          total={newsList.length}
+          onChange={(page, pageSize) => {
+            setpage(page);
+            if(page === 1){
+              setoffset(0);
+            } else {
+              setoffset((page * 10));
+            }
+          }}
+          />
+          </Col>
           </Row>
         </Container>
       </section>
