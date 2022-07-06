@@ -5,9 +5,11 @@ import { toast } from 'react-toastify';
 
 import {authApi} from '../../api/api.auth';
 
-const Login = () => {
+import { connect } from "react-redux";
+import {updateUser} from '../../redux/action/user_action';
+const Login = (props) => {
     const [isLogin, setisLogin] = useState(false);
-
+    console.log('props', props);
     const [loginForm, setloginForm] = useState({
         email: 'test@gmail.com',
         password: "12345"
@@ -28,6 +30,7 @@ const Login = () => {
                     closeOnClick: true,
                     progress: undefined,
                     });
+                    props.dispatch(updateUser(result.data));
                 setisLogin(true);
             } else {
                 switch (result.message) {
@@ -99,4 +102,10 @@ const Login = () => {
     )
 }
 
-export default Login;
+function mapStateToProps(state) {
+    return {
+      user: state.user,
+    };
+  }
+  
+  export default connect(mapStateToProps)(Login);

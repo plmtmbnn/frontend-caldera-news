@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
 import { Container, Row, Col, Card, Breadcrumb } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import FooterApp from "../../components/FooterApp";
 import SectionComment from "./components/sectionComment";
 import NavbarApp from "../../components/NavbarApp";
@@ -9,7 +10,79 @@ import NavbarApp from "../../components/NavbarApp";
 import { BiChat, BiHeart } from "react-icons/bi";
 import { FaWhatsapp, FaShareAlt } from "react-icons/fa";
 
+// api
+import {newsApi} from '../../api/api.news';
+import {commentLikeApi} from '../../api/api.comment-likes';
+
+import moment from "moment";
+
+
 function SingleArticle() {
+  const params = useParams();
+  
+  useEffect(() => {
+    getNewsDetail();
+  }, [params.id]);
+
+  const [isLoading, setisLoading] = useState(true);
+
+  const [newsDetail, setnewsDetail] = useState({
+      "news":{
+         "id":"ae7d6f62-fa0a-11ec-8c6d-cecd024eb8ee",
+         "author_id":1,
+         "news_url":"220702-20-27-12_5-tempat-terbaik-di-sumut",
+         "title":"",
+         "image_url":null,
+         "content":"",
+         "status":"PUBLISH",
+         "category_id":1,
+         "posted_at":"2022-07-06T09:18:33.246Z",
+         "is_recommendation":false,
+         "is_trending":false,
+         "total_visit":"0",
+         "createdAt":"2022-07-02T13:27:12.682Z",
+         "updatedAt":"2022-07-02T13:27:12.682Z",
+         "t_author":{
+            "id":1,
+            "user_id":3,
+            "author_name":"Akun Testing",
+            "createdAt":"2022-07-02T12:05:28.775Z",
+            "updatedAt":"2022-07-02T12:05:28.775Z"
+         },
+         "t_news_category":{
+            "id":1,
+            "category_name":"Peristiwa",
+            "status":true,
+            "description":"Kategori khusus peristiwa.",
+            "createdAt":"2022-07-02T08:51:21.062Z",
+            "updatedAt":"2022-07-02T08:51:21.062Z"
+         }
+      },
+      "likes":0,
+      "comments":0
+  });
+
+  const [comments, setcomments] = useState([]);
+
+  const getNewsDetail = async () => {   
+    const result = await newsApi.getNewsDetail(params.id);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      await getCommentList(result.data.news.id);
+      setnewsDetail(result.data);
+    } else {
+    }
+    setisLoading(false);
+  }
+
+  const getCommentList = async (news_id) => {   
+    const result = await commentLikeApi.getCommentList(news_id);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setcomments(result.data.comments);
+      setnewsDetail({...newsDetail, comments: result.data.comments_count});
+    } else {
+    }
+  }
+
   var cardStyle = {
     height: "400px",
     backgroundImage: `url("https://source.unsplash.com/random/500/?car})`,
@@ -66,115 +139,94 @@ function SingleArticle() {
       <NavbarApp />
       <div className="py-5">
         <Container>
-          <Row>
-            <Col md={{ span: 6, offset: 3 }}>
-              <section>
-                <Breadcrumb>
-                  <Breadcrumb.Item>
-                    <Link to="/">Home</Link>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item>
-                    <Link to="/category/peristiwa">Peristiwa</Link>
-                  </Breadcrumb.Item>
-                </Breadcrumb>
-                <h3 className="fw-bold my-4">
-                  Suzuki Brezza Dapat Penyegaran, Lebih Menarik dari Toyota
-                  HyRyder?
-                </h3>
-                <div className="d-flex justify-content-between my-4">
-                  <p className="text-muted">
-                    5 Juli 2022 11:03 · waktu baca 2 menit
-                  </p>
-                  <ul className="list-unstyled inline">
-                    <li>
-                      <BiHeart className="text-info" style={iconStats} /> 79
-                    </li>
-                    <li>
-                      <BiChat className="text-info" style={iconStats} /> 122
-                    </li>
-                    <li>
-                      <FaWhatsapp className="text-success" style={iconStats} />
-                    </li>
-                    <li>
-                      <FaShareAlt className="text-info" style={iconStats} />
-                    </li>
-                  </ul>
-                </div>
-                <Card style={cardStyle} />
-                <h6 className="opacity-75 mt-2 mb-5">
-                  Random Dummy Photo Foto: dok. Unsplash
-                </h6>
-                <div className="p-article mb-5">
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Massa tempor nec feugiat nisl pretium. In iaculis
-                    nunc sed augue lacus viverra vitae congue eu. At tellus at
-                    urna condimentum mattis pellentesque id nibh. Pretium aenean
-                    pharetra magna ac placerat vestibulum. Integer enim neque
-                    volutpat ac tincidunt vitae semper.{" "}
-                    <a href="/#">Dictum sit amet</a> justo donec enim diam
-                    vulputate ut. Ut tellus elementum sagittis vitae et leo
-                    duis. Vitae sapien pellentesque habitant morbi. Pellentesque
-                    diam volutpat commodo sed egestas egestas fringilla. A arcu
-                    cursus vitae congue mauris rhoncus aenean vel elit. Potenti
-                    nullam ac tortor vitae purus faucibus ornare suspendisse
-                    sed.
-                  </p>
-                  <p>
-                    <a href="/#">Metus dictum at tempor commodo</a> ac tortor
-                    dignissim convallis aenean et. Metus dictum at tempor
-                    commodo. Consectetur lorem donec massa sapien faucibus et
-                    molestie. Donec et odio pellentesque diam volutpat commodo
-                    sed. Enim nunc faucibus a pellentesque sit amet porttitor.
-                    Posuere sollicitudin aliquam ultrices sagittis. Ut enim
-                    blandit volutpat maecenas. Diam in arcu cursus euismod.
-                    Tristique et egestas quis ipsum suspendisse ultrices. Lorem
-                    sed risus ultricies tristique nulla aliquet enim tortor at
-                  </p>
-                </div>
-              </section>
-              <section>
-                <h4 className="fw-bold">Baca Lainnya</h4>
-                <hr className="title mb-4" />
-                {commonPost.map((data, i) => (
-                  <>
-                    <div className="d-flex my-3" key={i}>
-                      <div className="align-self-center">
-                        <p className="fw-bold">{data.headline}</p>
-                        <h6 className="text-muted fw-normal">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam, quis
-                          nostrud exercitation ullamco laboris.
-                        </h6>
-                        <ul className="list-unstyled stats">
-                          <li className="text-dark">
-                            <BiHeart style={iconStats} /> {data.love}
-                          </li>
-                          <li className="text-dark">
-                            <BiChat style={iconStats} /> {data.comment}
-                          </li>
-                          <li className="text-dark">{data.date}</li>
-                        </ul>
+          {
+            isLoading ?
+            <Row>
+              <Col md={{ span: 6, offset: 3 }}>
+                <h3>Sedang memuat berita...</h3>
+              </Col>
+            </Row>
+            :
+            <Row>
+              <Col md={{ span: 6, offset: 3 }}>
+                <section>
+                  <h3 className="fw-bold my-4">
+                    {newsDetail.news.title}
+                  </h3>
+                  <h6 className="opacity-75">
+                    Ditulis oleh: {newsDetail.news.t_author.author_name}
+                  </h6>
+                  <div className="d-flex justify-content-between my-4">
+                    <p className="text-muted">
+                      {moment(newsDetail.news.posted_at).format('DD/MM/YYYY HH:mm')}
+                    </p>                  
+                    <ul className="list-unstyled inline">
+                      <li>
+                        <BiHeart onClick={() => {alert('LIKE')}} className="text-info" style={iconStats} /> {newsDetail.likes}
+                      </li>
+                      <li>
+                        <BiChat className="text-info" style={iconStats} /> {newsDetail.comments}
+                      </li>
+                      <li>
+                        <FaShareAlt className="text-info" style={iconStats} />
+                      </li>
+                    </ul>
+                  </div>
+                  <Card style={cardStyle} />
+                  <h6 className="opacity-75 mt-2 mb-5" hidden>
+                    Random Dummy Photo Foto: dok. Unsplash
+                  </h6>
+                  <div className="p-article mb-5">
+                    <p>
+                      {
+                        newsDetail.news.content
+                      }
+                    </p>
+                  </div>
+                </section>
+                <section>
+                  <h4 className="fw-bold" hidden>Baca Lainnya</h4>
+                  <hr className="title mb-4" hidden/>
+                  {commonPost.map((data, i) => (
+                    <div hidden>
+                      <div className="d-flex my-3" key={i} hidden>
+                        <div className="align-self-center">
+                          <p className="fw-bold">{data.headline}</p>
+                          <h6 className="text-muted fw-normal">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris.
+                          </h6>
+                          <ul className="list-unstyled stats">
+                            <li className="text-dark">
+                              <BiHeart style={iconStats} /> {data.love}
+                            </li>
+                            <li className="text-dark">
+                              <BiChat style={iconStats} /> {data.comment}
+                            </li>
+                            <li className="text-dark">{data.date}</li>
+                          </ul>
+                        </div>
+                        <div
+                          style={{
+                            backgroundImage: `url(${data.img})`,
+                            ...imgFeed,
+                          }}
+                          className="post-img align-self-center"
+                        />
                       </div>
-                      <div
-                        style={{
-                          backgroundImage: `url(${data.img})`,
-                          ...imgFeed,
-                        }}
-                        className="post-img align-self-center"
-                      />
+                      <hr />
                     </div>
-                    <hr />
-                  </>
-                ))}
-                <h4 className="fw-bold mt-5">1 Komentar</h4>
-                <hr className="title mb-4" />
-                <SectionComment />
-              </section>
-            </Col>
-          </Row>
+                  ))}
+                  <hr />
+                  <h4 className="fw-bold mt-5">{newsDetail.comments} Komentar</h4>
+                  <hr className="title mb-4" />
+                  <SectionComment comments={comments} news_id={newsDetail.id} user_id={3}/>
+                </section>
+              </Col>
+            </Row>
+          }
         </Container>
       </div>
       <FooterApp />

@@ -10,7 +10,7 @@ class BaseApiRequest {
   }
 
   init() {
-    const store = localStorage.getItem(process.env.REACT_APP_LOCAL_STORAGE_NAME);
+    const store = localStorage.getItem("_CALDERA_");
     if (store) {
         this.setConfig(store.token);
     }
