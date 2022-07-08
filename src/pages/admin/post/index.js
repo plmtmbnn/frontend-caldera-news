@@ -3,6 +3,7 @@ import { Breadcrumb, Button, Layout } from "antd";
 
 import SidebarAdmin from "../layouts/Sider";
 import TablePost from "./components/TablePost";
+import { Link } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
 
 function AdminPost() {
@@ -42,9 +43,11 @@ function AdminPost() {
           >
             <div className="mb-5 d-flex">
               <h4 className="w-100">List Posts</h4>
-              <Button type="primary" className="float-end">
-                Create New Post
-              </Button>
+              <Link to="/admin/post/create">
+                <Button type="primary" className="float-end">
+                  Create New Post
+                </Button>
+              </Link>
             </div>
             <TablePost />
           </div>
