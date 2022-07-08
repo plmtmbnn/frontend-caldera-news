@@ -145,3 +145,24 @@ hr.title {
   color: $primary;
   opacity: 1;
 }
+
+.bg-admin {
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(90, 92, 106, 1) 0%,
+    rgba(32, 45, 58, 1) 81.3%
+  );
+  height: 100vh;
+  align-items: center;
+  display: flex;
+}
+
+.logo-admin {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
