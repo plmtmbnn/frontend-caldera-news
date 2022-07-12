@@ -5,7 +5,8 @@ const initState = {
   "avatar_url": "",
   "created_at": "",
   "isAdmin": false,
-  "token": ""
+  "token": "xxx",
+  "author_id": ""
 };
 
 export const user = (state = initState, action) => {
@@ -20,7 +21,8 @@ export const user = (state = initState, action) => {
         "avatar_url": "",
         "created_at": "",
         "isAdmin": false,
-        "token": ""
+        "token": "xxx",
+        "author_id": ""
       };      
     default:
       return state;

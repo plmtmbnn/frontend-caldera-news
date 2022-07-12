@@ -45,6 +45,7 @@ h6 {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.616);
   margin-left: 2rem;
+
   &:hover,
   &:active,
   &:focus {
@@ -60,8 +61,10 @@ h6 {
   background: rgba(255, 255, 255, 0.6);
   border-radius: 8px 0 8px;
   font-weight: 600;
+
   & ul {
     margin-bottom: 0;
+
     & li {
       display: inline;
       margin: 10px;
@@ -93,6 +96,7 @@ h6 {
 ul.stats {
   margin-bottom: 0;
   margin-top: 10px;
+
   & li {
     display: inline;
     margin-right: 1rem;
@@ -117,9 +121,11 @@ a.cat-link {
 
 footer ul li {
   margin-top: 10px;
+
   & a {
     color: #fff !important;
     text-decoration: none;
+
     &:hover {
       text-decoration: underline;
     }
@@ -134,6 +140,7 @@ ul.inline li {
 
 a.link {
   text-decoration: none;
+
   &:hover {
     opacity: 0.8;
   }
@@ -147,11 +154,9 @@ hr.title {
 }
 
 .bg-admin {
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(90, 92, 106, 1) 0%,
-    rgba(32, 45, 58, 1) 81.3%
-  );
+  background-image: radial-gradient(circle farthest-corner at 10% 20%,
+      rgba(90, 92, 106, 1) 0%,
+      rgba(32, 45, 58, 1) 81.3%);
   height: 100vh;
   align-items: center;
   display: flex;
@@ -165,4 +170,21 @@ hr.title {
 
 .site-layout .site-layout-background {
   background: #fff;
+}
+
+.quill>.ql-toolbar:first-child {
+  display: none !important;
+}
+
+.ql-editor {
+  white-space: normal !important;
+  min-height: 200px !important;
+}
+
+.ql-editor br {
+  margin-bottom: 10px;
+}
+
+.ql-editor p {
+  margin-bottom: 10px;
 }

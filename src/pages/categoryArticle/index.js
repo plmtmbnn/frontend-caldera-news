@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import NavbarApp from "../../components/NavbarApp";
 
@@ -21,6 +21,7 @@ function CategoryArticle() {
   const [offset, setoffset] = useState(0);
   const [page, setpage] = useState(1);
   const [newsList, setnewsList] = useState([]);
+  const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     getNewsList();
@@ -45,9 +46,11 @@ function CategoryArticle() {
     const result = await newsApi.getNewsList({category_id, status: "PUBLISH", limit: 10, offset});
     if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
       setnewsList(result.data);
+      setisLoading(false);
     } else {
       setnewsList([]);
-    }
+      setisLoading(false);
+    }    
   }
 
   const showCategoryName = (name) => {
@@ -91,6 +94,14 @@ function CategoryArticle() {
                 </Col>
               </Row>
               {
+              isLoading ?
+              <Row>
+                  <h4>
+                    <Spinner animation="border" variant="danger" />
+                    {' Sedang memuat berita...'}
+                  </h4>
+              </Row>
+              :
               newsList.length === 0 ?
               <Row><h4>Tidak ada berita...</h4></Row>
               :
@@ -125,8 +136,8 @@ function CategoryArticle() {
             </Col>
           </Row>
           <Row>
-          <Col>
-          <Pagination 
+          <Col hidden = {newsList.length === 0}>
+          <Pagination          
           defaultCurrent={offset} 
           defaultPageSize={10} 
           total={newsList.length}

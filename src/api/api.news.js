@@ -47,6 +47,20 @@ class NewsApi extends BaseApiRequest {
     }
     return result;
   }
+
+  async upsertNews(payload) {
+    let result = OpResult.failed("upsertNews");
+    try {
+      let resApi = await this.post("/news/upsert", payload);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("upsertNews", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
 }
 
 export const newsApi = new NewsApi();

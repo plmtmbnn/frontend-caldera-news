@@ -87,7 +87,7 @@ const Home = () => {
     url: "#",
   }]); 
 
-  const getCompany = async () => {
+  const getCategory = async () => {
     const result = await newsApi.getCategory();
     if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
       setNewsCategory(result.data);
@@ -95,7 +95,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    getCompany();
+    getCategory();
   }, []);
 
   const categoryNavigation = (index) => {

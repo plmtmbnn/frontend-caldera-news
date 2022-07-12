@@ -222,7 +222,7 @@ function SingleArticle() {
                   <hr />
                   <h4 className="fw-bold mt-5">{newsDetail.comments} Komentar</h4>
                   <hr className="title mb-4" />
-                  <SectionComment comments={comments} news_id={newsDetail.id} user_id={3}/>
+                  <SectionComment comments={comments} news_id={newsDetail.news.id} user_id={3}/>
                 </section>
               </Col>
             </Row>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "antd";
 import { Form, Button, Col, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
 import { FilePond } from 'react-filepond';
@@ -17,7 +17,8 @@ import moment from "moment";
 
 const { Header, Content, Footer } = Layout;
 
-function CreatePost(props) {
+function DetailPost(props) {
+  const param = useParams();
   const editor = useRef(null);
 
   const [newsCategory, setNewsCategory] = useState([]); 
@@ -28,7 +29,8 @@ function CreatePost(props) {
     content: "",
     status: 'DRAFT',
     file: null,
-    category_id: 1
+    category_id: 1,
+    news_id: null
   });
 
   const getCategory = async () => {
@@ -38,16 +40,32 @@ function CreatePost(props) {
     }
   }
 
+  const getNewsDetail = async () => {   
+    const result = await newsApi.getNewsDetail(param.news_url);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setnewsContent(result.data.news);
+    } else {
+    }
+  }
+
+  useEffect(() => {
+    getNewsDetail();
+  }, [param.news_url]);
+
   const upsertNews = async (sumbit_type) => {
     const payload = new FormData();
     payload.append("title", newsContent.title);
     payload.append("author_id", newsContent.author_id);
     payload.append("content", newsContent.content);
     payload.append("status", sumbit_type);
+    payload.append("category_id", newsContent.category_id);
+
     if(newsContent.file){
       payload.append("file", newsContent.file);
     }
-    payload.append("category_id", newsContent.category_id);
+    if(newsContent.id){
+      payload.append("news_id", newsContent.id);
+    }
     if(sumbit_type === 'PUBLISH'){
       payload.append("posted_at", moment().format('YYYY-MM-DD HH:mm:ss'));
     }
@@ -143,7 +161,15 @@ function CreatePost(props) {
                       >
                         {
                           newsCategory.map((item, index) => {
-                            return (<option key={item.id} value={item.id}>{item.category_name}</option>);
+                            return (
+                              <option
+                                selected={item.id === newsContent.category_id}
+                                key={item.id} 
+                                value={item.id}
+                              >
+                                {item.category_name}
+                              </option>
+                            );
                           })
                         }
                       </Form.Select>
@@ -209,13 +235,13 @@ function CreatePost(props) {
                    </Form.Group>                  
                   <Row>
                     <Col>
-                        <Link to={'/admin/post'}>
+                    <Link to={'/admin/post'}>
                         <Button onClick={() => {
                           handleSubmit("CANCEL");
                         }} variant="light" className="me-3">
                           Batal
                         </Button>
-                        </Link>
+                    </Link>
                     </Col>
                     <Col>
                       <Button onClick={() => {
@@ -255,4 +281,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(CreatePost);
+export default connect(mapStateToProps)(DetailPost);

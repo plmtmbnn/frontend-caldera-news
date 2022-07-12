@@ -3,15 +3,16 @@ import { OpResult } from "../helper/operation_result";
 
 class BaseApiRequest {
   constructor(endpoint) {
-    this.endpoint = 'https://backend-caldera-news.herokuapp.com';
+    this.endpoint = 'http://localhost:8080';
     this.token = "token";
     this.config = undefined;
     this.init();
   }
 
   init() {
-    const store = localStorage.getItem("_CALDERA_");
+    let store = localStorage.getItem("_CALDERA_");
     if (store) {
+        store = JSON.parse(store);
         this.setConfig(store.token);
     }
   }
@@ -19,7 +20,12 @@ class BaseApiRequest {
   setConfig(token) {
     this.token = token;
     this.config = {
-      headers: { authorization: token },
+      headers: { 
+        withCredentials: false,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+        authorization: token
+       },
       maxContentLength: 100000000,
       maxBodyLength: 1000000000,
       validateStatus: function () {
@@ -29,6 +35,7 @@ class BaseApiRequest {
   }
 
   async get(uri) {
+    this.init();
     try {
       if (this.token) {
         let response = await axios.get(this.endpoint + uri, this.config);
@@ -53,6 +60,7 @@ class BaseApiRequest {
   }
 
   async post(route, req_body) {
+    this.init();
     try {
       if (this.token) {
         axios.defaults.validateStatus = function () {
@@ -83,6 +91,7 @@ class BaseApiRequest {
   }
 
   async downloadWithPost(route, payload, document_name) {
+    this.init();
     try {
       const config = { ...this.config, responseType: "blob" };
       if (this.token) {

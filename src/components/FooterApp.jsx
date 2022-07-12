@@ -20,13 +20,13 @@ function FooterApp() {
                 <Link to="/#">Home</Link>
               </li>
               <li>
-                <Link to="/#">Peristiwa</Link>
+                <Link to="/category/peristiwa">Peristiwa</Link>
               </li>
               <li>
-                <Link to="/#">Budaya</Link>
+                <Link to="/category/parawisata">Parawisata/Budaya</Link>
               </li>
               <li>
-                <Link to="/#">Pertanian</Link>
+                <Link to="/category/pertanian">Pertanian</Link>
               </li>
             </ul>
           </Col>

@@ -1,22 +1,33 @@
 import { FileTextOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 const { Sider } = Layout;
 
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-const items = [getItem("Post", "2", <FileTextOutlined />)];
-
 const SidebarAdmin = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const params = useParams();
+  let location = useLocation();
+
+  useEffect(() => {
+  })
+
+  const getKey = () => {
+    let key = null;
+    switch (location.pathname) {
+      case '/admin/post':
+        key = '1';
+        break;
+      case '/admin/post/create':
+        key = '2';
+        break;
+      default:
+        break;
+  }
+  return key;
+}
+
   return (
     <Sider
       collapsible
@@ -26,10 +37,21 @@ const SidebarAdmin = () => {
       <div className="logo-admin" />
       <Menu
         theme="dark"
-        defaultSelectedKeys={["2"]}
+        defaultSelectedKeys={["1"]}
         mode="inline"
-        items={items}
-      />
+        selectedKeys={[getKey()]}
+      >
+        <Menu.Item key="1">
+        <FileTextOutlined/>
+            <span>Daftar Berita</span>
+            <Link to="/admin/post" />
+        </Menu.Item>
+        <Menu.Item key="2">
+            <FileTextOutlined/>
+            <span>Buat Berita</span>
+            <Link to="/admin/post/create" />
+        </Menu.Item>
+      </Menu>
     </Sider>
   );
 };

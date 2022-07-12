@@ -43,21 +43,35 @@ const NavbarApp = (props) => {
           <Nav className="ms-auto link-navbar">
             {
               props.user && props.user.full_name ?
-              <><h5 style={{color: 'white'}}>{props.user.full_name+", "} 
-              <Button variant="secondary"
-              onClick={()=> {
-                  localStorage.setItem("_CALDERA_", JSON.stringify({
-                    "id": 3,
-                    "full_name": "",
-                    "email": "",
-                    "avatar_url": "",
-                    "created_at": "",
-                    "isAdmin": false,
-                    "token": ""
-                  }));
-                  props.dispatch(resetUser());
-              }}
-              >Keluar</Button></h5></>
+              <Row>
+                <Col>
+                  {
+                      props.user.isAdmin ?
+                      <Link to="/admin/post">
+                        <Button variant="primary">Dashboard</Button>
+                      </Link>
+                      :
+                        <h5 style={{color: 'white'}} className='bg-link'>{props.user.full_name+", "}</h5>
+                  }
+                  
+                </Col>
+                <Col>
+                  <Button variant="warning"
+                  onClick={()=> {
+                      localStorage.setItem("_CALDERA_", JSON.stringify({
+                        "id": 3,
+                        "full_name": "",
+                        "email": "",
+                        "avatar_url": "",
+                        "created_at": "",
+                        "isAdmin": false,
+                        "token": ""
+                      }));
+                      props.dispatch(resetUser());
+                  }}
+                  >Keluar</Button>
+                </Col>
+              </Row>
               :
               <Button className="px-4 fw-bold" onClick={handleShow}>
               Masuk
