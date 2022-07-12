@@ -41,6 +41,11 @@ const SidebarAdmin = () => {
         mode="inline"
         selectedKeys={[getKey()]}
       >
+        <Menu.Item key="3">
+        <FileTextOutlined/>
+            <span>Halaman Utama</span>
+            <Link to="/" />
+        </Menu.Item>
         <Menu.Item key="1">
         <FileTextOutlined/>
             <span>Daftar Berita</span>
