@@ -158,7 +158,7 @@ function SingleArticle() {
                   </h6>
                   <div className="d-flex justify-content-between my-4">
                     <p className="text-muted">
-                      {moment(newsDetail.news.posted_at).format('DD/MM/YYYY HH:mm')}
+                      {moment(newsDetail.news.posted_at).format('DD/MM/YYYY')}
                     </p>                  
                     <ul className="list-unstyled inline">
                       <li>

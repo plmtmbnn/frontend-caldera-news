@@ -14,10 +14,14 @@ import {resetUser} from '../redux/action/user_action';
 
 
 const NavbarApp = (props) => {
-  const [show, setShow] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const handleCloseLogin = () => setShowLogin(false);
+  const handleShowLogin = () => setShowLogin(true);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [showRegister, setShowRegister] = useState(false);
+  const handleCloseRegister = () => setShowRegister(false);
+  const handleShowRegister = () => setShowRegister(true);
+
   return (
     <Navbar className="bg-navbar py-4" expand="lg">
       <Container>
@@ -43,6 +47,16 @@ const NavbarApp = (props) => {
           <Nav className="ms-auto link-navbar">
             {
               props.user && props.user.full_name ?
+              null
+              :
+              <Button className="px-4 fw-bold" onClick={handleShowRegister}>
+                Daftar
+            </Button>
+            }
+          </Nav>          
+          <Nav className="ms-auto link-navbar">
+            {
+              props.user && props.user.full_name ?
               <Row>
                 <Col>
                   {
@@ -52,8 +66,7 @@ const NavbarApp = (props) => {
                       </Link>
                       :
                         <h5 style={{color: 'white'}} className='bg-link'>{props.user.full_name+", "}</h5>
-                  }
-                  
+                  }                  
                 </Col>
                 <Col>
                   <Button variant="warning"
@@ -73,22 +86,37 @@ const NavbarApp = (props) => {
                 </Col>
               </Row>
               :
-              <Button className="px-4 fw-bold" onClick={handleShow}>
+              <Button className="px-4 fw-bold" onClick={handleShowLogin}>
               Masuk
             </Button>
             }
           </Nav>
         </Navbar.Collapse>
       </Container>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Body className="text-center">
-          <h4 className="fw-bold mt-3">Masuk</h4>
-          <p>Login dulu biar bisa komen, dan like konten favoritmu. Yuk!</p>
-          <Row>
-            <Login />
-          </Row>
-        </Modal.Body>
-      </Modal>
+      <Row>
+        <Modal show={showRegister} onHide={handleCloseRegister}>
+          <Modal.Body className="text-center">
+            <h4 className="fw-bold mt-3">Pendaftaran Akun Baru</h4>
+            <Row>
+              <Col>
+              <Register handleClose={()=> {handleCloseRegister()}}/>
+              </Col>            
+            </Row>
+          </Modal.Body>
+        </Modal>
+      </Row>
+      <Row>
+        <Modal show={showLogin} onHide={handleCloseLogin}>
+          <Modal.Body className="text-center">
+            <h4 className="fw-bold mt-3">Masuk</h4>
+            <Row>
+              <Col>
+              <Login handleClose={()=> {handleCloseLogin()}}/>
+              </Col>            
+            </Row>
+          </Modal.Body>
+        </Modal>
+      </Row>      
     </Navbar>
   );
 };

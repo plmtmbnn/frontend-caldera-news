@@ -13,59 +13,24 @@ import logoBatak from "../assets/batak-logo.png";
 
 // api
 import {newsApi} from '../api/api.news';
+import moment from "moment";
+
+
+import { Tabs } from 'antd';
+const { TabPane } = Tabs;
+
+const categoryImageList = ['Beach', 'danautoba', 'indonesia', 'sumatera', 'holiday', 'travelling', 'food']; 
+const getRandomImage = () => {
+  return `https://source.unsplash.com/random/500/?${categoryImageList[(Math.random() * categoryImageList.length) | 0]}`;
+}
 
 const Home = () => {
+
+  
+
   var iconStats = {
     fontSize: "16px",
   };
-
-  const commonPost = [
-    {
-      id: 1,
-      img: "https://source.unsplash.com/random/500/?seaport",
-      headline: "Libur Lebaran, Jumlah Kendaraan yang Diangkut Kapal",
-      love: 79,
-      comment: 122,
-      date: "12 Jam",
-    },
-    {
-      id: 2,
-      img: "https://source.unsplash.com/random/500/?movie",
-      headline: "Main Film Ngeri Ngeri Sedap, Arswendi Nasution Jadi Bapak",
-      love: 12,
-      comment: 22,
-      date: "1 Hari",
-    },
-    {
-      id: 3,
-      img: "https://source.unsplash.com/random/500/?medan",
-      headline:
-        "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      love: 79,
-      comment: 122,
-      date: "2 Hari",
-    },
-    {
-      id: 4,
-      img: "https://source.unsplash.com/random/500/?swiss",
-      headline:
-        "Atalia Kamil Pamit ke Eril: Mama Lepas Kamu di Sungai Aare yang Indah Ini",
-      love: 79,
-      comment: 122,
-      date: "12 Jam",
-    },
-  ];
-
-  const generalPost = [];
-  for (let i = 0; i < 4; i++) {
-    generalPost.push({
-      key: i,
-      headline: `Menantu Luhut Mayjen Maruli Simanjuntak Jadi Pangkostrad ${i}`,
-      content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-      do consectetur adipiscing elit ${i}`,
-      date: "17-9-2022",
-    });
-  }
 
   const [newsCategory, setNewsCategory] = useState([
     {
@@ -85,7 +50,7 @@ const Home = () => {
     category_name: "Pertanian",
     total_post: 2,
     url: "#",
-  }]); 
+  }]);
 
   const getCategory = async () => {
     const result = await newsApi.getCategory();
@@ -94,9 +59,58 @@ const Home = () => {
     }
   }
 
+  const [lastestNewsList, setlastestNewsList] = useState([]);
+  const getlastestNewsList = async (payload) => {
+    const result = await newsApi.getNewsList(payload);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setlastestNewsList(result.data);
+    } else {
+      setlastestNewsList([]);
+    }
+  }
+
+  const [recommendedNewsList, setrecommendedNewsList] = useState([]);
+  const getrecommendedNewsList = async (payload) => {
+    const result = await newsApi.getNewsList(payload);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setrecommendedNewsList(result.data);
+    } else {
+      setrecommendedNewsList([]);
+    }
+  }
+
+  const [trendingNewsList, setTrendingNewsList] = useState([]);
+  const getTrendingNewsList = async (payload) => {
+    const result = await newsApi.getNewsList(payload);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setTrendingNewsList(result.data);
+    } else {
+      setTrendingNewsList([]);
+    }
+  }
+
+  const [baseOnCategoryNewsList, setbaseOnCategoryNewsList] = useState([]);
+  const getbaseOnCategoryNewsList = async (payload) => {
+    const result = await newsApi.getNewsList(payload);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setbaseOnCategoryNewsList(result.data);
+    } else {
+      setbaseOnCategoryNewsList([]);
+    }
+  }
+  
+  const [category_id, setcategory_id] = useState(1);
   useEffect(() => {
     getCategory();
+    getlastestNewsList({status: 'PUBLISH', limit: 4, offset: 0});
+    getrecommendedNewsList({is_recommendation: true ,status: 'PUBLISH', limit: 5, offset: 0});
+    getTrendingNewsList({is_trending: true ,status: 'PUBLISH', limit: 3, offset: 0});
+    getbaseOnCategoryNewsList({category_id ,status: 'PUBLISH', limit: 3, offset: 0});
   }, []);
+
+  useEffect(() => {
+    getbaseOnCategoryNewsList({category_id ,status: 'PUBLISH', limit: 5, offset: 0});
+  }, [category_id]);
 
   const categoryNavigation = (index) => {
     let result = 'category/peristiwa';
@@ -128,29 +142,36 @@ const Home = () => {
             </Col>
             <Col md={{ span: 10, offset: 1 }}>
               <Row className="mt-5">
-                {commonPost.slice(0, 3).map((data, i) => (
+                {
+                trendingNewsList.length === 0
+                ?
+                <div className="d-flex my-3 text-center">
+                  <h6 style={{color: 'white'}}>Belum ada berita trending</h6>
+                </div>
+                :
+                trendingNewsList.map((data, i) => (
                   <Col md={4} className="my-2" key={i}>
-                    <Link to="/article/test" className="link">
+                    <Link to={`/article/${data.news_url}`} className="link">
                       <div className="d-flex">
                         <div
                           style={{
-                            backgroundImage: `url(${data.img})`,
+                            backgroundImage: `url(${data.img || getRandomImage()})`,
                           }}
                           className="head-post post-img align-self-center"
                         />
                         <div className="align-self-center ms-3">
-                          <p className="text-white fw-bold">{data.headline}</p>
+                          <p className="text-white fw-bold">{data.title}</p>
                         </div>
                       </div>
                     </Link>
                     <ul className="list-unstyled stats">
                       <li>
-                        <BiHeart style={iconStats} /> {data.love}
+                        <BiHeart style={iconStats} /> {data.total_likes}
                       </li>
                       <li>
-                        <BiChat style={iconStats} /> {data.comment}
+                        <BiChat style={iconStats} /> {data.total_comment}
                       </li>
-                      <li>{data.date}</li>
+                      <li>{data.posted_at ? moment(data.posted_at).format('DD/MM/YYYY'): '-'}</li>
                     </ul>
                   </Col>
                 ))}
@@ -170,17 +191,35 @@ const Home = () => {
             </a>
           </div>
           <Row className="mt-5">
-            {commonPost.map((data, i) => (
+            {
+            lastestNewsList.length === 0
+            ?
+            <div className="d-flex my-3">
+                <h6>Belum ada berita terbaru</h6>
+              </div>
+            :
+            lastestNewsList.map((data, i) => (
               <Col md={3} key={i}>
-                <div
-                  style={{
-                    backgroundImage: `url(${data.img})`,
-                  }}
-                  className="post-latest post-img"
-                />
-                <div className="mt-3">
-                  <p className="fw-bold">{data.headline}</p>
-                </div>
+                <Link to={`/article/${data.news_url}`} className="link">
+                  <div
+                    style={{
+                      backgroundImage: `url(${data.image_url || getRandomImage()})`,
+                    }}
+                    className="post-latest post-img"
+                  />
+                  <div className="mt-3">
+                    <p className="fw-bold" style={{color: 'black'}}>{data.title}</p>
+                    <ul className="list-unstyled stats">
+                      <li className="text-dark">
+                        <BiHeart style={iconStats} /> {data.total_likes}
+                      </li>
+                      <li className="text-dark">
+                        <BiChat style={iconStats} /> {data.total_comment}
+                      </li>
+                      <li className="text-dark">{data.posted_at ? moment(data.posted_at).format('DD/MM/YYYY'): '-'}</li>
+                    </ul>
+                  </div>
+                </Link>
               </Col>
             ))}
           </Row>
@@ -192,47 +231,72 @@ const Home = () => {
           <Row>
             <Col md={8}>
               <h2 className="fw-bold mb-5">Rekomendasi</h2>
-              {commonPost.slice(2, 4).map((data, i) => (
+              {
+              recommendedNewsList.length === 0 ?
+              <div className="d-flex my-3">
+                <h6>Belum ada berita rekomendasi</h6>
+              </div>
+              :
+              recommendedNewsList.map((data, i) => (
+              <Link to={`/article/${data.news_url}`} className="link">
                 <div className="d-flex my-3" key={i}>
                   <div
                     style={{
-                      backgroundImage: `url(${data.img})`,
+                      backgroundImage: `url(${data.image_url || getRandomImage()})`,
                     }}
                     className="post-rcmd post-img align-self-center"
                   />
                   <div className="align-self-center ms-3">
-                    <h4 className="fw-bold">{data.headline}</h4>
-                    <h6 className="text-muted fw-normal">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      Duis aute irure dolor in reprehenderit in voluptate velit
-                      esse cillum dolore eu fugiat nulla pariatur.
-                    </h6>
+                    <h4 className="fw-bold">{data.title}</h4>
                     <ul className="list-unstyled stats">
                       <li className="text-dark">
-                        <BiHeart style={iconStats} /> {data.love}
+                        <BiHeart style={iconStats} /> {data.total_likes}
                       </li>
                       <li className="text-dark">
-                        <BiChat style={iconStats} /> {data.comment}
+                        <BiChat style={iconStats} /> {data.total_comment}
                       </li>
-                      <li className="text-dark">{data.date}</li>
+                      <li className="text-dark">{data.posted_at ? moment(data.posted_at).format('DD/MM/YYYY'): '-'}</li>
                     </ul>
                   </div>
                 </div>
+                </Link>
               ))}
             </Col>
             <Col md={4}>
               <h4 className="mb-5">Artikel Umum</h4>
-              {generalPost.map((data, i) => (
-                <div className="my-3" key={i}>
-                  <p className="mb-0 text-primary">{data.date}</p>
-                  <p className="fw-bold mb-2">{data.headline}</p>
-                  <h6 className="opacity-75 fw-normal">{data.content}</h6>
-                  <hr style={{ color: "#5e5e5e" }} />
-                </div>
-              ))}
+              <Tabs defaultActiveKey={1} onChange={(key)=>{
+                setcategory_id(key);
+              }}>
+                {
+                  newsCategory.map((e)=>{
+                    return (
+                      <TabPane tab={e.category_name} key={e.id}>
+                          {
+                          baseOnCategoryNewsList.length === 0 ?
+                          <p>Tidak ada berita</p>
+                          :
+                          baseOnCategoryNewsList.map((data, i) => (
+                            <Link to={`/article/${data.news_url}`} className="link">                            
+                              <div className="my-3" key={i}>
+                                <p className="mb-0 text-primary">{data.posted_at ? moment(data.posted_at).format('DD/MM/YYYY'): '-'}</p>
+                                <p className="fw-bold mb-2">{data.title}</p>
+                                <ul className="list-unstyled stats">
+                                  <li className="text-dark">
+                                    <BiHeart style={iconStats} /> {data.total_likes}
+                                  </li>
+                                  <li className="text-dark">
+                                    <BiChat style={iconStats} /> {data.total_comment}
+                                  </li>
+                                </ul>
+                                <hr style={{ color: "#5e5e5e" }} />
+                              </div>
+                            </Link>
+                          ))}
+                      </TabPane>
+                    )
+                  })
+                }
+              </Tabs>              
             </Col>
           </Row>
         </Container>

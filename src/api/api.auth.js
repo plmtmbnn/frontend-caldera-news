@@ -23,7 +23,7 @@ class AuthApi extends BaseApiRequest {
   async register(payload) {
     let result = OpResult.failed("register");
     try {
-      let resApi = await this.post("/auth/register", payload);
+      let resApi = await this.post("/auth/register", payload, true);
       if (resApi.status) {
         result = resApi;
       }

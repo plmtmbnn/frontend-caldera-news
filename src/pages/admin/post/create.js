@@ -49,7 +49,7 @@ function CreatePost(props) {
     }
     payload.append("category_id", newsContent.category_id);
     if(sumbit_type === 'PUBLISH'){
-      payload.append("posted_at", moment().format('YYYY-MM-DD HH:mm:ss'));
+      payload.append("posted_at", moment().format('YYYY-MM-DD'));
     }
     
     const result = await newsApi.upsertNews(payload);

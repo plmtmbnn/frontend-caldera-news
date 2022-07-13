@@ -51,7 +51,7 @@ class NewsApi extends BaseApiRequest {
   async upsertNews(payload) {
     let result = OpResult.failed("upsertNews");
     try {
-      let resApi = await this.post("/news/upsert", payload);
+      let resApi = await this.post("/news/upsert", payload, true);
       if (resApi.status) {
         result = resApi;
       }

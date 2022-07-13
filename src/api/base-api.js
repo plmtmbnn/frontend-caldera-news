@@ -59,7 +59,7 @@ class BaseApiRequest {
     }
   }
 
-  async post(route, req_body) {
+  async post(route, req_body, isFormData) {
     this.init();
     try {
       if (this.token) {
@@ -69,7 +69,13 @@ class BaseApiRequest {
         let response = await axios.post(
           this.endpoint + route,
           req_body,
-          this.config
+          {
+             ...this.config,
+             headers: {
+              ...this.config.headers,
+              "Content-Type": isFormData ? "multipart/form-data" : "application/json"
+             }
+          }
         );
         if (response.status >= 400 && response.status < 500) {
           if (response.status === 401) {

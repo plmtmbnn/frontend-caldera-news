@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import {updateUser} from '../../redux/action/user_action';
 const Login = (props) => {
     const [isLogin, setisLogin] = useState(false);
-    console.log('props', props);
+
     const [loginForm, setloginForm] = useState({
         email: 'test@gmail.com',
         password: "12345"
@@ -32,6 +32,7 @@ const Login = (props) => {
                     });
                     props.dispatch(updateUser(result.data));
                 setisLogin(true);
+                props.handleClose();
             } else {
                 switch (result.message) {
                     case "USER_NOT_REGISTERED_YET":
