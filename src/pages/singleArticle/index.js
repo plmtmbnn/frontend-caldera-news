@@ -8,18 +8,43 @@ import NavbarApp from "../../components/NavbarApp";
 
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
-import { FaWhatsapp, FaShareAlt } from "react-icons/fa";
+import { FaShareAlt } from "react-icons/fa";
+
+//share
+import {
+  FacebookShareButton, FacebookIcon, 
+  WhatsappIcon, WhatsappShareButton,
+  TwitterIcon, TwitterShareButton
+} from 'react-share';
 
 // api
 import {newsApi} from '../../api/api.news';
 import {commentLikeApi} from '../../api/api.comment-likes';
 
 import moment from "moment";
+import { toast } from 'react-toastify';
 
+import { connect } from "react-redux";
 
-function SingleArticle() {
+const categoryImageList = ['Beach', 'danautoba', 'indonesia', 'sumatera', 'holiday', 'travelling', 'food']; 
+const getRandomImage = () => {
+  return `https://source.unsplash.com/random/500/?${categoryImageList[(Math.random() * categoryImageList.length) | 0]}`;
+}
+
+function SingleArticle(props) {
   const params = useParams();
   
+  const [lastestNewsList, setlastestNewsList] = useState([]);
+  const getlastestNewsList = async (payload) => {
+    const result = await newsApi.getNewsList(payload);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setlastestNewsList(result.data);
+    } else {
+      setlastestNewsList([]);
+    }
+  }
+
+
   useEffect(() => {
     getNewsDetail();
   }, [params.id]);
@@ -68,6 +93,7 @@ function SingleArticle() {
     const result = await newsApi.getNewsDetail(params.id);
     if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
       await getCommentList(result.data.news.id);
+      getlastestNewsList({category_id: result.data.news.category_id, status: 'PUBLISH', limit: 5, offset: 0});
       setnewsDetail(result.data);
     } else {
     }
@@ -94,46 +120,43 @@ function SingleArticle() {
   var iconStats = {
     fontSize: "24px",
   };
-  var imgFeed = {
-    minWidth: "100px",
-    height: "100px",
-  };
-  const commonPost = [
-    {
-      id: 1,
-      img: "https://source.unsplash.com/random/500/?seaport",
-      headline: "Libur Lebaran, Jumlah Kendaraan yang Diangkut Kapal",
-      love: 79,
-      comment: 122,
-      date: "12 Jam",
-    },
-    {
-      id: 2,
-      img: "https://source.unsplash.com/random/500/?movie",
-      headline: "Main Film Ngeri Ngeri Sedap, Arswendi Nasution Jadi Bapak",
-      love: 12,
-      comment: 22,
-      date: "1 Hari",
-    },
-    {
-      id: 3,
-      img: "https://source.unsplash.com/random/500/?medan",
-      headline:
-        "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      love: 79,
-      comment: 122,
-      date: "2 Hari",
-    },
-    {
-      id: 4,
-      img: "https://source.unsplash.com/random/500/?swiss",
-      headline:
-        "Atalia Kamil Pamit ke Eril: Mama Lepas Kamu di Sungai Aare yang Indah Ini",
-      love: 79,
-      comment: 122,
-      date: "12 Jam",
-    },
-  ];
+
+  const getLikeList = async (news_id) => {   
+    const result = await commentLikeApi.getLikeList(news_id);
+    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+      setnewsDetail({...newsDetail, likes: result.data.likes_count});
+    } else {
+    }
+  }
+
+  const handleLike = async () => {
+      const result = await commentLikeApi.addLike({
+        news_id: newsDetail.news.id, 
+        user_id: props.user.id
+      });
+      if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+        await getLikeList(newsDetail.news.id);                
+      } else {
+        if(result.message === 'NOT_AUTHENTICATED') {
+          toast.info('Silakan login untuk menyukai berita ini.', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            progress: undefined,
+            });
+        } else {
+          toast.error('Fitur like bermasalah.', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            progress: undefined,
+            });
+        }
+      }
+  }
+
   return (
     <div>
       <NavbarApp />
@@ -154,7 +177,7 @@ function SingleArticle() {
                     {newsDetail.news.title}
                   </h3>
                   <h6 className="opacity-75">
-                    Ditulis oleh: {newsDetail.news.t_author.author_name}
+                    Penulis: {newsDetail.news.t_author.author_name}
                   </h6>
                   <div className="d-flex justify-content-between my-4">
                     <p className="text-muted">
@@ -162,13 +185,37 @@ function SingleArticle() {
                     </p>                  
                     <ul className="list-unstyled inline">
                       <li>
-                        <BiHeart onClick={() => {alert('LIKE')}} className="text-info" style={iconStats} /> {newsDetail.likes}
+                        <BiHeart onClick={() => { handleLike()}} className="text-info" style={iconStats} /> {newsDetail.likes}
                       </li>
                       <li>
                         <BiChat className="text-info" style={iconStats} /> {newsDetail.comments}
                       </li>
                       <li>
-                        <FaShareAlt className="text-info" style={iconStats} />
+                        <FaShareAlt className="text-info" style={{ ...iconStats, margin: '2px'}} />
+                        <FacebookShareButton
+                          style={{ ...iconStats, margin: '2px'}}
+                          url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                          quote={newsDetail.news.title}
+                          hashtag="#CalderaNews"
+                        >
+                        <FacebookIcon size={36} />
+                       </FacebookShareButton>
+                       <TwitterShareButton
+                           style={{ ...iconStats, margin: '2px'}}
+                          url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                          quote={newsDetail.news.title}
+                          hashtag="#CalderaNews"
+                        >
+                        <TwitterIcon size={36} />
+                       </TwitterShareButton>
+                       <WhatsappShareButton
+                          style={{ ...iconStats, margin: '2px'}}                       
+                          url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                          quote={newsDetail.news.title}
+                          hashtag="#CalderaNews"
+                        >
+                        <WhatsappIcon size={36} />
+                       </WhatsappShareButton>
                       </li>
                     </ul>
                   </div>
@@ -176,53 +223,55 @@ function SingleArticle() {
                   <h6 className="opacity-75 mt-2 mb-5" hidden>
                     Random Dummy Photo Foto: dok. Unsplash
                   </h6>
+                  <br />
                   <div className="p-article mb-5">
-                    <p>
-                      {
-                        newsDetail.news.content
-                      }
-                    </p>
+                  <div dangerouslySetInnerHTML={{ __html: newsDetail.news.content }} />                    
                   </div>
                 </section>
                 <section>
-                  <h4 className="fw-bold" hidden>Baca Lainnya</h4>
-                  <hr className="title mb-4" hidden/>
-                  {commonPost.map((data, i) => (
-                    <div hidden>
-                      <div className="d-flex my-3" key={i} hidden>
+                  <h4 className="fw-bold">Baca Lainnya</h4>
+                  <hr className="title mb-4"/>
+                  {
+                  lastestNewsList.length === 0 
+                  ?
+                  <div className="d-flex my-3">
+                    <h6>Belum ada berita rekomendasi</h6>
+                  </div>
+                  :
+                  lastestNewsList.map((data, i) => (
+                    <Link to={`/article/${data.news_url}`} className="link">
+                      <div className="d-flex my-3" key={i}>
                         <div className="align-self-center">
-                          <p className="fw-bold">{data.headline}</p>
-                          <h6 className="text-muted fw-normal">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris.
-                          </h6>
+                          <p className="fw-bold">{data.title}</p>
                           <ul className="list-unstyled stats">
                             <li className="text-dark">
-                              <BiHeart style={iconStats} /> {data.love}
+                              <BiHeart style={iconStats} /> {data.total_likes}
                             </li>
                             <li className="text-dark">
-                              <BiChat style={iconStats} /> {data.comment}
+                              <BiChat style={iconStats} /> {data.total_comment}
                             </li>
-                            <li className="text-dark">{data.date}</li>
+                            <li className="text-dark">{data.posted_at ? moment(data.posted_at).format('DD/MM/YYYY'): '-'}</li>
                           </ul>
                         </div>
                         <div
                           style={{
-                            backgroundImage: `url(${data.img})`,
-                            ...imgFeed,
+                            backgroundImage: `url(${data.image_url || getRandomImage()})`,
                           }}
                           className="post-img align-self-center"
                         />
                       </div>
                       <hr />
-                    </div>
+                    </Link>
                   ))}
                   <hr />
                   <h4 className="fw-bold mt-5">{newsDetail.comments} Komentar</h4>
                   <hr className="title mb-4" />
-                  <SectionComment comments={comments} news_id={newsDetail.news.id} user_id={3}/>
+                  <SectionComment 
+                    comments={comments} 
+                    news_id={newsDetail.news.id} 
+                    user_id={3} 
+                    getCommentList={()=>{getCommentList(newsDetail.news.id)}}
+                  />
                 </section>
               </Col>
             </Row>
@@ -234,4 +283,11 @@ function SingleArticle() {
   );
 }
 
-export default SingleArticle;
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps)(SingleArticle);

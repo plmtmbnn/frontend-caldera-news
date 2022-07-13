@@ -25,9 +25,6 @@ const getRandomImage = () => {
 }
 
 const Home = () => {
-
-  
-
   var iconStats = {
     fontSize: "16px",
   };
@@ -100,6 +97,7 @@ const Home = () => {
   }
   
   const [category_id, setcategory_id] = useState(1);
+  
   useEffect(() => {
     getCategory();
     getlastestNewsList({status: 'PUBLISH', limit: 4, offset: 0});
@@ -155,7 +153,7 @@ const Home = () => {
                       <div className="d-flex">
                         <div
                           style={{
-                            backgroundImage: `url(${data.img || getRandomImage()})`,
+                            backgroundImage: `url(${data.image_url || getRandomImage()})`,
                           }}
                           className="head-post post-img align-self-center"
                         />

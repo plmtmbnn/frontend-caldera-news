@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 
 const { TextArea } = Input;
 
-
 const CommentItem = ({commentDetail}) => (
   <Comment
     author={commentDetail.t_user.full_name}
@@ -32,12 +31,12 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
         type="primary"
       >
         Tambahkan Komentar
-      </Button>
+      </Button>          
     </Form.Item>
   </>
 );
 
-const SectionComment = ({comments, news_id, user_id}) => {
+const SectionComment = ({comments, news_id, user_id, getCommentList}) => {
 const [comment, setcomment] = useState("");
 const submitComment = async () => {
   try {
@@ -52,6 +51,7 @@ const submitComment = async () => {
         progress: undefined,
         });
         setcomment("");
+        getCommentList();
     } else {
       if(result.message === 'NOT_AUTHENTICATED') {
         toast.info('Silakan login untuk menambahkan komentar.', {

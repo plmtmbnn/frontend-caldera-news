@@ -123,7 +123,7 @@ function CategoryArticle() {
                       </div>
                       <div
                         style={{
-                          backgroundImage: `url(${data.img || 'https://source.unsplash.com/random/500/?seaport'})`,
+                          backgroundImage: `url(${data.image_url || 'https://source.unsplash.com/random/500/?seaport'})`,
                           ...imgFeed,
                         }}
                         className="post-img align-self-center"
