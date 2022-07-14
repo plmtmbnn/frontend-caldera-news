@@ -22,6 +22,9 @@ const SidebarAdmin = () => {
       case '/admin/post/create':
         key = '2';
         break;
+      case '/admin/user':
+        key = '3';
+        break;
       default:
         break;
   }
@@ -41,7 +44,7 @@ const SidebarAdmin = () => {
         mode="inline"
         selectedKeys={[getKey()]}
       >
-        <Menu.Item key="3">
+        <Menu.Item key="0">
         <FileTextOutlined/>
             <span>Halaman Utama</span>
             <Link to="/" />
@@ -55,6 +58,11 @@ const SidebarAdmin = () => {
             <FileTextOutlined/>
             <span>Buat Berita</span>
             <Link to="/admin/post/create" />
+        </Menu.Item>
+        <Menu.Item key="3">
+            <FileTextOutlined/>
+            <span>Daftar Pengguna</span>
+            <Link to="/admin/user" />
         </Menu.Item>
       </Menu>
     </Sider>

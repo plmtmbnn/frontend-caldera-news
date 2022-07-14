@@ -9,7 +9,7 @@ import moment from "moment";
 
 const { Header, Content, Footer } = Layout;
 
-function AdminPost() {
+function AdminUser() {
   const [offset, setoffset] = useState(0);
   const [page, setpage] = useState(1);
   const [newsList, setnewsList] = useState([]);
@@ -56,12 +56,7 @@ function AdminPost() {
             }}
           >
             <div className="mb-5 d-flex">
-              <h4 className="w-100">Daftar Berita</h4>
-              <Link to="/admin/post/create">
-                <Button type="primary" className="float-end">
-                  Buat Berita Baru
-                </Button>
-              </Link>
+              <h4 className="w-100">Daftar Pengguna</h4>
             </div>
             <Table             
             columns={
@@ -142,4 +137,4 @@ function AdminPost() {
   );
 }
 
-export default AdminPost;
+export default AdminUser;

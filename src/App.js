@@ -6,6 +6,7 @@ import CreatePost from "./pages/admin/post/create";
 import DetailPost from "./pages/admin/post/detail";
 import CategoryArticle from "./pages/categoryArticle";
 import SingleArticle from "./pages/singleArticle";
+import AdminUser from "./pages/admin/user";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/admin/post/detail/:news_url" element={<DetailPost />}></Route>
       <Route path="/admin/post" element={<AdminPost />}></Route>
       <Route path="/admin" element={<AdminPage />}></Route>
+      <Route path="/admin/user" element={<AdminUser />}></Route>
     </Routes>
   );
 }
