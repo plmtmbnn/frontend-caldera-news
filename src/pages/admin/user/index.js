@@ -1,32 +1,57 @@
 import React, {useState, useEffect} from "react";
-import { Button, Layout, Space, Table, Tag } from "antd";
+import { Layout, Space, Table, Tag } from "antd";
+import { Button } from 'react-bootstrap';
 
 import SidebarAdmin from "../layouts/Sider";
-import { Link } from "react-router-dom";
 
-import {newsApi} from '../../../api/api.news';
+import { toast } from 'react-toastify';
+
+
+import {authApi} from '../../../api/api.auth';
 import moment from "moment";
 
 const { Header, Content, Footer } = Layout;
 
 function AdminUser() {
-  const [offset, setoffset] = useState(0);
-  const [page, setpage] = useState(1);
-  const [newsList, setnewsList] = useState([]);
-  const [isLoading, setisLoading] = useState(true);
+  const [userList, setuserList] = useState([]);
+  const [filterUser, setfilterUser] = useState({
+    full_name: null,
+    email: null
+  });
 
   useEffect(() => {
-    getNewsList();
-  }, [page]);
+    getUserList();
+  }, []);
 
-  const getNewsList = async () => {
-    let category_id = null;
-    const result = await newsApi.getNewsList({category_id, limit: 10, offset});
+  const getUserList = async () => {
+    const result = await authApi.userList(filterUser);
     if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
-      setnewsList(result.data);
+      setuserList(result.data);
     } else {
-      setnewsList([]);
+      setuserList([]);
     }    
+  }
+
+  const handleUserStatus = async (data, action) => {
+      const result = await authApi.updateUserStatus(action, data.id);
+      if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+        await getUserList();
+        toast.success("Sukses." , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+          });
+      } else {
+        toast.error("Gagal." , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+          });
+      }
   }
 
   return (
@@ -62,51 +87,38 @@ function AdminUser() {
             columns={
               [
                   {
-                    title: "Judul",
-                    dataIndex: "title",
-                    key: "title",
+                    title: "id",
+                    dataIndex: "id",
+                    key: "id",
                     render: (text) => <p>{text}</p>,
                   },
                   {
                     title: "Status",
-                    dataIndex: "status",
-                    key: "status",
-                    defaultSortOrder: 'descend',
-                    sorter: (a, b) => a.status.length - b.status.length,
-                    render: (text) => <Tag color={text === 'PUBLISH' ? 'green' : 'volcano'} key={text}>{text}</Tag>,
-                  },
-                  {
-                    title: "Kategori",
-                    dataIndex: "category_name",
-                    key: "category_name",
-                    sorter: (a, b) => a.category_name.length - b.category_name.length,
+                    dataIndex: "user_status",
+                    key: "user_status",
+                    defaultSortOrder: 'ascend',
+                    sorter: (a, b) => a.user_status.length - b.user_status.length,
                     render: (text) => <p>{text}</p>,
                   },
                   {
-                    title: "Komentar",
-                    dataIndex: "total_comment",
-                    key: "total_comment",
-                    sorter: (a, b) => a.total_comment - b.total_comment,
+                    title: "Nama",
+                    dataIndex: "full_name",
+                    key: "full_name",
+                    sorter: (a, b) => a.full_name.length - b.full_name.length,
                     render: (text) => <p>{text}</p>,
                   },
                   {
-                    title: "Like",
-                    dataIndex: "total_likes",
-                    key: "total_likes",
-                    sorter: (a, b) => a.total_likes - b.total_likes,
+                    title: "Email",
+                    dataIndex: "email",
+                    key: "email",
+                    sorter: (a, b) => a.email.length - b.email.length,
                     render: (text) => <p>{text}</p>,
                   },
                   {
-                    title: "Kunjungan",
-                    dataIndex: "total_visit",
-                    key: "total_visit",
-                    sorter: (a, b) => a.total_visit - b.total_visit,
-                    render: (text) => <p>{text}</p>,
-                  },
-                  {
-                    title: "Tgl Update",
-                    dataIndex: "updated_at",
-                    key: "updated_at",
+                    title: "Tgl Pendaftaran",
+                    dataIndex: "created_at",
+                    key: "created_at",
+                    sorter: (a, b) => a.created_at.length - b.created_at.length,
                     render: (text) => <p>{moment(text).format('DD/MM/YYYY')}</p>,
                   },
                   {
@@ -114,15 +126,24 @@ function AdminUser() {
                     key: "action",
                     render: (_, record) => (
                       <Space size="middle">
-                        <Link to={`/admin/post/detail/${record.news_url}`}>
-                          <Button type="primary">Detail</Button>
-                        </Link>
-                        <Button danger>Hapus</Button>
+                          <Button
+                            onClick={()=> {
+                              handleUserStatus(record, record.user_status === 'Pembaca' ? 'SET_TO_AUTHOR' : 'SET_TO_READER');
+                            }}
+                            variant={record.user_status === 'Pembaca' ? "success" : 'primary'}
+                          >
+                            {
+                              record.user_status === 'Pembaca' ?
+                              'Jadikan Penulis'
+                              :
+                              'Jadikan Pembaca'
+                            }
+                            </Button>
                       </Space>
                     ),
                   },                
               ]
-            } dataSource={newsList} />
+            } dataSource={userList} />
           </div>
         </Content>
         <Footer

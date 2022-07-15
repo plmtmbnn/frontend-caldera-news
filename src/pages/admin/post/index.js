@@ -122,7 +122,6 @@ function AdminPost() {
                         <Link to={`/admin/post/detail/${record.news_url}`}>
                           <Button type="primary">Detail</Button>
                         </Link>
-                        <Button danger>Hapus</Button>
                       </Space>
                     ),
                   },                

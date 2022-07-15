@@ -33,6 +33,34 @@ class AuthApi extends BaseApiRequest {
     }
     return result;
   }
+
+  async userList(payload) {
+    let result = OpResult.failed("userList");
+    try {
+      let resApi = await this.post("/auth/user/list", payload);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("userList", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
+
+  async updateUserStatus(action, user_id) {
+    let result = OpResult.failed("updateUserStatus");
+    try {
+      let resApi = await this.post(`/auth/user/update`, { action, user_id });
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("updateUserStatus", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
 }
 
 export const authApi = new AuthApi();
