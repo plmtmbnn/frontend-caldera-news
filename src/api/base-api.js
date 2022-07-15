@@ -16,6 +16,8 @@ class BaseApiRequest {
     if (store) {
         store = JSON.parse(store);
         this.setConfig(store.token);
+    } else {
+      this.setConfig('xxx');
     }
   }
 
