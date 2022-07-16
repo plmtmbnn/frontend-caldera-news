@@ -1,17 +1,26 @@
 import React, { useState } from "react";
-import { Navbar, Container, Nav, Button, Modal, Row, Col } from "react-bootstrap";
+import {
+  Navbar,
+  Container,
+  Nav,
+  Button,
+  Modal,
+  Row,
+  Col,
+  NavLink,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 // images
 import logo from "../assets/logo.png";
+import { AiOutlineMenu } from "react-icons/ai";
 
 //component
-import Login from './Auth/Login';
-import Register from './Auth/Register';
+import Login from "./Auth/Login";
+import Register from "./Auth/Register";
 
 import { connect } from "react-redux";
-import {resetUser} from '../redux/action/user_action';
-
+import { resetUser } from "../redux/action/user_action";
 
 const NavbarApp = (props) => {
   const [showLogin, setShowLogin] = useState(false);
@@ -28,7 +37,9 @@ const NavbarApp = (props) => {
         <Link to="/" className="navbar-brand">
           <img src={logo} alt="" style={{ width: "180px" }} />
         </Link>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle>
+          <AiOutlineMenu className="text-white" />
+        </Navbar.Toggle>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto link-navbar">
             <Link to="/" className="nav-link">
@@ -45,78 +56,88 @@ const NavbarApp = (props) => {
             </Link>
           </Nav>
           <Nav className="ms-auto link-navbar">
-            {
-              props.user && props.user.full_name ?
-              null
-              :
-              <Button className="px-4 fw-bold" onClick={handleShowRegister}>
-                Daftar
-            </Button>
-            }
-          </Nav>          
-          <Nav className="ms-auto link-navbar">
-            {
-              props.user && props.user.full_name ?
+            {props.user && props.user.full_name ? null : (
+              <NavLink>
+                <Button className="fw-bold" onClick={handleShowRegister}>
+                  Daftar
+                </Button>
+              </NavLink>
+            )}
+
+            {props.user && props.user.full_name ? (
               <Row>
                 <Col>
-                  {
-                      props.user.isAdmin ?
-                      <Link to="/admin/post">
-                        <Button variant="primary">Dashboard</Button>
-                      </Link>
-                      :
-                        <h5 style={{color: 'white'}} className='bg-link'>{props.user.full_name+", "}</h5>
-                  }                  
+                  {props.user.isAdmin ? (
+                    <Link to="/admin/post">
+                      <Button variant="primary">Dashboard</Button>
+                    </Link>
+                  ) : (
+                    <h5 style={{ color: "white" }} className="bg-link">
+                      {props.user.full_name + ", "}
+                    </h5>
+                  )}
                 </Col>
                 <Col>
-                  <Button variant="warning"
-                  onClick={()=> {
-                      localStorage.setItem("_CALDERA_", JSON.stringify({
-                        "id": 3,
-                        "full_name": "",
-                        "email": "",
-                        "avatar_url": "",
-                        "created_at": "",
-                        "isAdmin": false,
-                        "token": ""
-                      }));
+                  <Button
+                    variant="warning"
+                    onClick={() => {
+                      localStorage.setItem(
+                        "_CALDERA_",
+                        JSON.stringify({
+                          id: 3,
+                          full_name: "",
+                          email: "",
+                          avatar_url: "",
+                          created_at: "",
+                          isAdmin: false,
+                          token: "",
+                        })
+                      );
                       props.dispatch(resetUser());
-                  }}
-                  >Keluar</Button>
+                    }}
+                  >
+                    Keluar
+                  </Button>
                 </Col>
               </Row>
-              :
-              <Button className="px-4 fw-bold" onClick={handleShowLogin}>
-              Masuk
-            </Button>
-            }
+            ) : (
+              <NavLink>
+                <Button className="px-4 fw-bold" onClick={handleShowLogin}>
+                  Masuk
+                </Button>
+              </NavLink>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
-      <Row>
-        <Modal show={showRegister} onHide={handleCloseRegister}>
-          <Modal.Body className="text-center">
-            <h4 className="fw-bold mt-3">Pendaftaran Akun Baru</h4>
-            <Row>
-              <Col>
-              <Register handleClose={()=> {handleCloseRegister()}}/>
-              </Col>            
-            </Row>
-          </Modal.Body>
-        </Modal>
-      </Row>
-      <Row>
-        <Modal show={showLogin} onHide={handleCloseLogin}>
-          <Modal.Body className="text-center">
-            <h4 className="fw-bold mt-3">Masuk</h4>
-            <Row>
-              <Col>
-              <Login handleClose={()=> {handleCloseLogin()}}/>
-              </Col>            
-            </Row>
-          </Modal.Body>
-        </Modal>
-      </Row>      
+      <Modal show={showRegister} onHide={handleCloseRegister}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h5 className="fw-bold mt-2">Pendaftaran Akun Baru</h5>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Register
+            handleClose={() => {
+              handleCloseRegister();
+            }}
+          />
+        </Modal.Body>
+      </Modal>
+      <Modal show={showLogin} onHide={handleCloseLogin}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h5 className="fw-bold mt-2">Masuk</h5>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Login
+            handleClose={() => {
+              handleCloseLogin();
+            }}
+          />
+        </Modal.Body>
+      </Modal>
     </Navbar>
   );
 };

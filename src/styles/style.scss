@@ -154,9 +154,11 @@ hr.title {
 }
 
 .bg-admin {
-  background-image: radial-gradient(circle farthest-corner at 10% 20%,
-      rgba(90, 92, 106, 1) 0%,
-      rgba(32, 45, 58, 1) 81.3%);
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(90, 92, 106, 1) 0%,
+    rgba(32, 45, 58, 1) 81.3%
+  );
   height: 100vh;
   align-items: center;
   display: flex;
@@ -172,7 +174,7 @@ hr.title {
   background: #fff;
 }
 
-.quill>.ql-toolbar:first-child {
+.quill > .ql-toolbar:first-child {
   display: none !important;
 }
 
@@ -187,4 +189,9 @@ hr.title {
 
 .ql-editor p {
   margin-bottom: 10px;
+}
+
+.navbar-toggler {
+  border: 1px solid #fff !important;
+  padding-bottom: 5px;
 }

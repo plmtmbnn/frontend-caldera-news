@@ -11,10 +11,14 @@ function FooterApp() {
         <Row>
           <Col md={3} className="align-self-center">
             <img src={logo} alt="" style={{ width: "180px" }} />
-            <h6 className="text-muted mt-5">© 2022 Allright reserved</h6>
+            <h6 className="text-muted mt-5 d-none d-md-block">
+              © 2022 Allright reserved
+            </h6>
           </Col>
           <Col md={{ span: 2, offset: 3 }}>
-            <h5 className="mb-4 fw-bold" style={{color: '#ce1127'}}>Menu</h5>
+            <h5 className="mb-4 fw-bold" style={{ color: "#ce1127" }}>
+              Menu
+            </h5>
             <ul className="list-unstyled">
               <li>
                 <Link to="/#">Home</Link>
@@ -31,7 +35,9 @@ function FooterApp() {
             </ul>
           </Col>
           <Col md={2}>
-            <h5 className="mb-4 fw-bold" style={{color: '#ce1127'}}>Caldera</h5>
+            <h5 className="mb-4 fw-bold" style={{ color: "#ce1127" }}>
+              Caldera
+            </h5>
             <ul className="list-unstyled">
               <li>
                 <Link to="/#">Syarat dan Ketentuan</Link>
@@ -48,7 +54,9 @@ function FooterApp() {
             </ul>
           </Col>
           <Col md={2}>
-            <h5 className="mb-4 fw-bold" style={{color: '#ce1127'}}>Contact Us</h5>
+            <h5 className="mb-4 fw-bold" style={{ color: "#ce1127" }}>
+              Contact Us
+            </h5>
             <ul className="list-unstyled">
               <li>caldera@gmail.com</li>
               <li>021 1234 5678</li>
@@ -56,6 +64,9 @@ function FooterApp() {
             </ul>
           </Col>
         </Row>
+        <h6 className="text-muted mt-5 d-md-none text-center">
+          © 2022 Allright reserved
+        </h6>
       </Container>
     </footer>
   );

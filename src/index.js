@@ -1,18 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 // vendors
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "antd/dist/antd.css";
-
-import 'react-toastify/dist/ReactToastify.css';
-
-import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // styles
 import "./styles/style.scss";
+import "./styles/style-responsive.scss";
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -20,28 +19,27 @@ import store from "./redux/store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-
 // Import React FilePond
-import { FilePond, registerPlugin } from 'react-filepond';
+import { registerPlugin } from "react-filepond";
 
 // Import FilePond styles
-import 'filepond/dist/filepond.min.css';
+import "filepond/dist/filepond.min.css";
 
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-      <Provider store={store}>
+    <Provider store={store}>
       <BrowserRouter>
-      <ToastContainer />
-      <App />
-    </BrowserRouter>
-      </Provider>
+        <ToastContainer />
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
