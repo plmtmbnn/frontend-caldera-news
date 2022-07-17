@@ -8,6 +8,9 @@
 
 // Small devices (landscape phones, less than 768px)
 @media (max-width: 767.98px) {
+  .link-navbar.navbar-nav .nav-link {
+    margin-left: 0;
+  }
 }
 
 // Extra small devices (portrait phones, less than 576px)
