@@ -89,7 +89,13 @@ function CategoryArticle() {
             <Col md={8}>
               <Row>
                 <Col xs>
-                  <h4 className="mb-5">Berita Khusus <span className="fw-bold" style={{ color: '#ce1127'}}>{showCategoryName(params.id)}</span></h4>
+                  {
+                    params.id === 'berita-terbaru'
+                    ?
+                    <h4 className="mb-5">Kumpulan Berita Terbaru</h4>
+                    :
+                    <h4 className="mb-5">Kumpulan Berita Khusus <span className="fw-bold" style={{ color: '#ce1127'}}>{showCategoryName(params.id)}</span></h4>
+                  }
                   <hr />
                 </Col>
               </Row>

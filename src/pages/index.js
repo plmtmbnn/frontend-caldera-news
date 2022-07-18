@@ -221,9 +221,9 @@ const Home = () => {
             <h2 className="fw-bold align-self-center flex-fill">
               Artikel Terbaru
             </h2>
-            <a href="#" className="text-right align-self-center">
+            <Link to="/category/berita-terbaru" className="text-right align-self-center">
               Lihat Semua Artikel <FaLongArrowAltRight />
-            </a>
+            </Link>
           </div>
           <Row className="mt-5">
             {lastestNewsList.length === 0 ? (
