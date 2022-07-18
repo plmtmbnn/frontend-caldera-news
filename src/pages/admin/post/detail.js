@@ -4,13 +4,13 @@ import { Form, Button, Col, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
-import { FilePond } from 'react-filepond';
+import { FilePond } from "react-filepond";
 
 import JoditEditor from "jodit-react";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 // api
-import {newsApi} from '../../../api/api.news';
+import { newsApi } from "../../../api/api.news";
 
 import { connect } from "react-redux";
 import moment from "moment";
@@ -21,32 +21,32 @@ function DetailPost(props) {
   const param = useParams();
   const editor = useRef(null);
 
-  const [newsCategory, setNewsCategory] = useState([]); 
+  const [newsCategory, setNewsCategory] = useState([]);
 
   const [newsContent, setnewsContent] = useState({
-    title: '',
+    title: "",
     author_id: props.user.author_id,
     content: "",
-    status: 'DRAFT',
+    status: "DRAFT",
     file: null,
     category_id: 1,
-    news_id: null
+    news_id: null,
   });
 
   const getCategory = async () => {
     const result = await newsApi.getCategory();
-    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setNewsCategory(result.data);
     }
-  }
+  };
 
-  const getNewsDetail = async () => {   
+  const getNewsDetail = async () => {
     const result = await newsApi.getNewsDetail(param.news_url);
-    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsContent(result.data.news);
     } else {
     }
-  }
+  };
 
   useEffect(() => {
     getNewsDetail();
@@ -60,44 +60,46 @@ function DetailPost(props) {
     payload.append("status", sumbit_type);
     payload.append("category_id", newsContent.category_id);
 
-    if(newsContent.file){
+    if (newsContent.file) {
       payload.append("file", newsContent.file);
     }
-    if(newsContent.id){
+    if (newsContent.id) {
       payload.append("news_id", newsContent.id);
     }
-    if(sumbit_type === 'PUBLISH'){
-      payload.append("posted_at", moment().format('YYYY-MM-DD'));
+    if (sumbit_type === "PUBLISH") {
+      payload.append("posted_at", moment().format("YYYY-MM-DD"));
     }
-    
+
     const result = await newsApi.upsertNews(payload);
-    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
-      let message = sumbit_type === 'PUBLISH' ? 
-      'Berhasil menyimpan dan mempublikasikan berita.' : 'Berhasil menyimpan berita sebagai draft.';
-      toast.success(message , {
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
+      let message =
+        sumbit_type === "PUBLISH"
+          ? "Berhasil menyimpan dan mempublikasikan berita."
+          : "Berhasil menyimpan berita sebagai draft.";
+      toast.success(message, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         progress: undefined,
-        });
+      });
     } else {
-      toast.error('Gagal menyimpan berita.', {
+      toast.error("Gagal menyimpan berita.", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         progress: undefined,
-        });
+      });
     }
-  }
+  };
 
   const handleSubmit = async (sumbit_type) => {
-    if(sumbit_type === 'CANCEL') {
+    if (sumbit_type === "CANCEL") {
     } else {
-      await upsertNews(sumbit_type);   
+      await upsertNews(sumbit_type);
     }
-  }
+  };
 
   useEffect(() => {
     getCategory();
@@ -143,120 +145,128 @@ function DetailPost(props) {
                       value={newsContent.title}
                       onChange={(event) => {
                         setnewsContent({
-                            ...newsContent,
-                            title: event.target.value
+                          ...newsContent,
+                          title: event.target.value,
                         });
                       }}
                     />
                   </Form.Group>
                   <Form.Group className="mb-4">
                     <Form.Label>Kategori</Form.Label>
-                      <Form.Select 
+                    <Form.Select
                       onChange={(event) => {
                         setnewsContent({
-                            ...newsContent,
-                            category_id: event.target.value
+                          ...newsContent,
+                          category_id: event.target.value,
                         });
                       }}
-                      >
-                        {
-                          newsCategory.map((item, index) => {
-                            return (
-                              <option
-                                selected={item.id === newsContent.category_id}
-                                key={item.id} 
-                                value={item.id}
-                              >
-                                {item.category_name}
-                              </option>
-                            );
-                          })
-                        }
-                      </Form.Select>
+                    >
+                      {newsCategory.map((item, index) => {
+                        return (
+                          <option
+                            selected={item.id === newsContent.category_id}
+                            key={item.id}
+                            value={item.id}
+                          >
+                            {item.category_name}
+                          </option>
+                        );
+                      })}
+                    </Form.Select>
                   </Form.Group>
                   <Form.Group className="mb-4">
                     <Form.Label>Gambar Utama Berita</Form.Label>
                     <br />
                     <FilePond
-                        credits={""}
-                        files={
-                          typeof newsContent.file === "string" ||
-                          !newsContent.file
-                            ? newsContent.file
-                            :
-                            [newsContent.file]
-                        }
-                        allowMultiple={false} 
-                        maxFiles={1}
-                        acceptedFileTypes={"image/*"}
-                        instantUpload={false}
-                        beforeAddFile={(item) => {
-                          if (
-                            newsContent.file === null ||
-                            newsContent.file.size !== item.file.size
-                          ) {
-                            setnewsContent({
-                              ...newsContent,
-                              file: item.file
-                            });
-                          }                        
-                          }
-                        }
-                        beforeRemoveFile={() => {
+                      credits={""}
+                      files={
+                        typeof newsContent.file === "string" ||
+                        !newsContent.file
+                          ? newsContent.file
+                          : [newsContent.file]
+                      }
+                      allowMultiple={false}
+                      maxFiles={1}
+                      acceptedFileTypes={"image/*"}
+                      instantUpload={false}
+                      beforeAddFile={(item) => {
+                        if (
+                          newsContent.file === null ||
+                          newsContent.file.size !== item.file.size
+                        ) {
                           setnewsContent({
                             ...newsContent,
-                            file: null
+                            file: item.file,
                           });
-                        }}
-                        labelIdle='Silakan drag & drop file Anda atau <span class="filepond--label-action">Cari File</span>'
-                        name="files"
+                        }
+                      }}
+                      beforeRemoveFile={() => {
+                        setnewsContent({
+                          ...newsContent,
+                          file: null,
+                        });
+                      }}
+                      labelIdle='Silakan drag & drop file Anda atau <span class="filepond--label-action">Cari File</span>'
+                      name="files"
                     />
                   </Form.Group>
-                  <Form.Group className="mb-5">                  
+                  <Form.Group className="mb-5">
                     <Form.Label>Isi Berita</Form.Label>
                     <div>
                       <JoditEditor
                         ref={editor}
                         value={newsContent.content}
                         config={{
-                          height: '450px',
+                          height: "450px",
                           readonly: false,
-                          placeholder: 'Mulai menulis berita...',                          
+                          placeholder: "Mulai menulis berita...",
                         }}
                         tabIndex={1} // tabIndex of textarea
-                        onBlur={newContent => {
+                        onBlur={(newContent) => {
                           setnewsContent({
                             ...newsContent,
-                            content: newContent
-                          })
+                            content: newContent,
+                          });
                         }}
-                    />
+                      />
                     </div>
-                   </Form.Group>                  
+                  </Form.Group>
                   <Row>
-                    <Col>
-                    <Link to={'/admin/post'}>
-                        <Button onClick={() => {
-                          handleSubmit("CANCEL");
-                        }} variant="light" className="me-3">
+                    <Col xs={12} md={4} className="my-2 my-md-0">
+                      <Link to={"/admin/post"}>
+                        <Button
+                          onClick={() => {
+                            handleSubmit("CANCEL");
+                          }}
+                          variant="light"
+                          className="me-3"
+                        >
                           Batal
                         </Button>
-                    </Link>
+                      </Link>
                     </Col>
-                    <Col>
-                      <Button onClick={() => {
-                        handleSubmit("DRAFT");
-                      }} variant="outline-primary" className="me-3">
+                    <Col xs={12} md={4} className="my-2 my-md-0">
+                      <Button
+                        onClick={() => {
+                          handleSubmit("DRAFT");
+                        }}
+                        variant="outline-primary"
+                        className="me-3"
+                      >
                         Simpan Sebagai Draft
                       </Button>
                     </Col>
-                    <Col>
-                      <Button onClick={() => {
-                        handleSubmit("PUBLISH");
-                      }} variant="primary" className="me-3 px-5">
-                        Simpan & Publish
-                      </Button>                        
-                    </Col>          
+                    <Col xs={12} md={4} className="my-2 my-md-0">
+                      <Button
+                        onClick={() => {
+                          handleSubmit("PUBLISH");
+                        }}
+                        variant="primary"
+                        className="me-3 px-5"
+                      >
+                        Simpan &amp; Publish
+                      </Button>
+                    </Col>
                   </Row>
                 </Form>
               </Col>

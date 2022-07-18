@@ -10,32 +10,36 @@ const SidebarAdmin = () => {
   const params = useParams();
   let location = useLocation();
 
-  useEffect(() => {
-  })
+  useEffect(() => {});
 
   const getKey = () => {
     let key = null;
     switch (location.pathname) {
-      case '/admin/post':
-        key = '1';
+      case "/admin/post":
+        key = "1";
         break;
-      case '/admin/post/create':
-        key = '2';
+      case "/admin/post/create":
+        key = "2";
         break;
-      case '/admin/user':
-        key = '3';
+      case "/admin/user":
+        key = "3";
         break;
       default:
         break;
-  }
-  return key;
-}
+    }
+    return key;
+  };
 
   return (
     <Sider
       collapsible
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
+      breakpoint="lg"
+      collapsedWidth="0"
+      onBreakpoint={(broken) => {
+        console.log(broken);
+      }}
     >
       <div className="logo-admin" />
       <Menu
@@ -45,24 +49,24 @@ const SidebarAdmin = () => {
         selectedKeys={[getKey()]}
       >
         <Menu.Item key="0">
-        <FileTextOutlined/>
-            <span>Halaman Utama</span>
-            <Link to="/" />
+          <FileTextOutlined />
+          <span>Halaman Utama</span>
+          <Link to="/" />
         </Menu.Item>
         <Menu.Item key="1">
-        <FileTextOutlined/>
-            <span>Daftar Berita</span>
-            <Link to="/admin/post" />
+          <FileTextOutlined />
+          <span>Daftar Berita</span>
+          <Link to="/admin/post" />
         </Menu.Item>
         <Menu.Item key="2">
-            <FileTextOutlined/>
-            <span>Buat Berita</span>
-            <Link to="/admin/post/create" />
+          <FileTextOutlined />
+          <span>Buat Berita</span>
+          <Link to="/admin/post/create" />
         </Menu.Item>
         <Menu.Item key="3">
-            <FileTextOutlined/>
-            <span>Daftar Pengguna</span>
-            <Link to="/admin/user" />
+          <FileTextOutlined />
+          <span>Daftar Pengguna</span>
+          <Link to="/admin/user" />
         </Menu.Item>
       </Menu>
     </Sider>

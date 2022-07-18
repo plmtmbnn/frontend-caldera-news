@@ -65,11 +65,11 @@ const NavbarApp = (props) => {
             )}
 
             {props.user && props.user.full_name ? (
-              <Row>
-                <Col>
+              <Row className="mt-4 mt-md-0">
+                <Col xs={4} md={6}>
                   {props.user.isAdmin ? (
-                    <Link to="/admin/post">
-                      <Button variant="primary">Dashboard</Button>
+                    <Link to="/admin/post" className="btn btn-primary mb-2">
+                      Dashboard
                     </Link>
                   ) : (
                     <h5 style={{ color: "white" }} className="bg-link">
@@ -77,7 +77,7 @@ const NavbarApp = (props) => {
                     </h5>
                   )}
                 </Col>
-                <Col>
+                <Col xs={4} md={6}>
                   <Button
                     variant="warning"
                     onClick={() => {
