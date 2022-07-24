@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "antd";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import { Form, Button, Col, Row, FormCheck } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
@@ -209,6 +209,21 @@ function CreatePost(props) {
                       />
                     </div>
                   </Form.Group>
+                  <Row>
+                  <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Form.Check
+                      label={`Berita Rekomendasi`}
+                      id={`Berita Rekomendasi-default`}
+                    />
+                  </Col>
+                  <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Form.Check
+                      label={`Berita Trending`}
+                      id={`Berita Trending-default`}
+                    />
+                  </Col>
+                  </Row>
+                  <br /><hr />
                   <Row>
                     <Col xs={12} md={4} className="my-2 my-md-0">
                       <Link to={"/admin/post"}>

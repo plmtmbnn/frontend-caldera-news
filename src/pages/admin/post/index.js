@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+
 import { Button, Layout, Space, Table, Tag } from "antd";
+import {FormControl, Row, Col, FormGroup, FormLabel, FormSelect} from 'react-bootstrap';
 
 import SidebarAdmin from "../layouts/Sider";
 import { Link } from "react-router-dom";
@@ -67,6 +69,27 @@ function AdminPost() {
                 </Button>
               </Link>
             </div>
+            <div className="mb-5 d-flex">
+              <Row>
+                <Col>
+                  <FormGroup>
+                    <FormLabel>Judul Berita</FormLabel>
+                    <FormControl placeholder="Cari judul berita..."/>
+                  </FormGroup>
+                </Col>
+                <Col>
+                <FormGroup>
+                    <FormLabel>Kategori Berita</FormLabel>
+                    <FormSelect placeholder="Cari berita">
+                        <option>Peristiwa</option>
+                        <option>Parawisata/Budaya</option>
+                        <option>Pertanian</option>    
+                    </FormSelect>
+                  </FormGroup>
+                </Col>
+              </Row>
+            </div>
+            <hr />
             <Table
               scroll={{ x: 980 }}
               columns={[
