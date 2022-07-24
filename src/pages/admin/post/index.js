@@ -131,7 +131,7 @@ function AdminPost() {
                   key: "action",
                   render: (_, record) => (
                     <Space size="middle">
-                      <Link to={`/admin/post/detail/${record.news_url}`}>
+                      <Link to={`/admin/post/detail/${record.news_url}`} target="_blank" rel="noopener noreferrer">
                         <Button type="primary">Detail</Button>
                       </Link>
                     </Space>

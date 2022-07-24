@@ -97,7 +97,7 @@ function AdminUser() {
                   key: "user_status",
                   defaultSortOrder: "ascend",
                   sorter: (a, b) => a.user_status.length - b.user_status.length,
-                  render: (text) => <p>{text}</p>,
+                  render: (text) => {return(<Tag color={text === 'Pembaca' ? 'green': 'red'}>{text}</Tag>)},
                 },
                 {
                   title: "Nama",
