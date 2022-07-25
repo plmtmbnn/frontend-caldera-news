@@ -67,7 +67,7 @@ const NavbarApp = (props) => {
             {props.user && props.user.full_name ? (
               <Row className="mt-4 mt-md-0">
                 <Col xs={4} md={6}>
-                  {props.user.isAdmin ? (
+                  {props.user.isAuthor ? (
                     <Link to="/admin/post" className="btn btn-primary mb-2">
                       Dashboard
                     </Link>
@@ -90,6 +90,7 @@ const NavbarApp = (props) => {
                           avatar_url: "",
                           created_at: "",
                           isAdmin: false,
+                          isAuthor: false,
                           token: "",
                         })
                       );
