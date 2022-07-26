@@ -29,6 +29,7 @@ function CreatePost(props) {
     status: "DRAFT",
     file: null,
     category_id: 1,
+    image_desc: ''
   });
 
   const getCategory = async () => {
@@ -44,6 +45,7 @@ function CreatePost(props) {
     payload.append("author_id", newsContent.author_id);
     payload.append("content", newsContent.content);
     payload.append("status", sumbit_type);
+    payload.append("image_desc", newsContent.image_desc);    
     if (newsContent.file) {
       payload.append("file", newsContent.file);
     }
@@ -186,6 +188,20 @@ function CreatePost(props) {
                       }}
                       labelIdle='Silakan drag & drop file Anda atau <span class="filepond--label-action">Cari File</span>'
                       name="files"
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label>Deskripsi Gambar</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Tulis Deskripsi Gambar"
+                      value={newsContent.image_desc}
+                      onChange={(event) => {
+                        setnewsContent({
+                          ...newsContent,
+                          image_desc: event.target.value,
+                        });
+                      }}
                     />
                   </Form.Group>
                   <Form.Group className="mb-5">

@@ -31,6 +31,7 @@ function DetailPost(props) {
     file: null,
     category_id: 1,
     news_id: null,
+    image_desc: ''
   });
 
   const getCategory = async () => {
@@ -59,6 +60,7 @@ function DetailPost(props) {
     payload.append("content", newsContent.content);
     payload.append("status", sumbit_type);
     payload.append("category_id", newsContent.category_id);
+    payload.append("image_desc", newsContent.image_desc);
 
     if (newsContent.file) {
       payload.append("file", newsContent.file);
@@ -210,6 +212,20 @@ function DetailPost(props) {
                       name="files"
                     />
                   </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label>Deskripsi Gambar</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Tulis Deskripsi Gambar"
+                      value={newsContent.image_desc}
+                      onChange={(event) => {
+                        setnewsContent({
+                          ...newsContent,
+                          image_desc: event.target.value,
+                        });
+                      }}
+                    />
+                  </Form.Group>                  
                   <Form.Group className="mb-5">
                     <Form.Label>Isi Berita</Form.Label>
                     <div>
