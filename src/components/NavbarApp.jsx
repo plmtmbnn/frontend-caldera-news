@@ -8,6 +8,7 @@ import {
   Row,
   Col,
   NavLink,
+  NavDropdown,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -49,16 +50,38 @@ const NavbarApp = (props) => {
               Peristiwa
             </Link>
             <Link to="/category/parawisata" className="nav-link">
-              Parawisata/Budaya
+              Parawisata
             </Link>
-            <Link to="/category/pertanian" className="nav-link">
-              Pertanian
+            <Link to="/category/politik" className="nav-link">
+              Politik
             </Link>
+            <NavDropdown title="Lainnya" id="basic-nav-dropdown">
+              <Link className="dropdown-item" to="/category/budaya-pendidikan">
+                Budaya/Pendidikan
+              </Link>
+              <Link
+                className="dropdown-item"
+                to="/category/lingkungan-kesehatan"
+              >
+                Lingkungan/Kesehatan
+              </Link>
+              <Link className="dropdown-item" to="/category/pertanian-ekonomi">
+                Pertanian/Ekonomi
+              </Link>
+              <Link className="dropdown-item" to="/category/calderapedia">
+                CalderaPedia
+              </Link>
+            </NavDropdown>
           </Nav>
+          <hr className="d-md-none" />
           <Nav className="ms-auto link-navbar">
             {props.user && props.user.full_name ? null : (
-              <NavLink>
-                <Button className="fw-bold" onClick={handleShowRegister}>
+              <NavLink className="d-grid">
+                <Button
+                  variant="outline-primary"
+                  className="fw-bold px-4"
+                  onClick={handleShowRegister}
+                >
                   Daftar
                 </Button>
               </NavLink>
@@ -102,7 +125,7 @@ const NavbarApp = (props) => {
                 </Col>
               </Row>
             ) : (
-              <NavLink>
+              <NavLink className="d-grid mt-md-0 mt-2">
                 <Button className="px-4 fw-bold" onClick={handleShowLogin}>
                   Masuk
                 </Button>

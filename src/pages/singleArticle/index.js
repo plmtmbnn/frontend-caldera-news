@@ -181,13 +181,13 @@ function SingleArticle(props) {
         <Container>
           {isLoading ? (
             <Row>
-              <Col md={{ span: 6, offset: 3 }}>
+              <Col lg={{ span: 6, offset: 3 }}>
                 <h3>Sedang memuat berita...</h3>
               </Col>
             </Row>
           ) : (
             <Row>
-              <Col md={{ span: 6, offset: 3 }}>
+              <Col lg={{ span: 6, offset: 3 }}>
                 <section>
                   <h3 className="fw-bold my-4">{newsDetail.news.title}</h3>
                   <h6 className="opacity-75">

@@ -9,13 +9,13 @@ function FooterApp() {
     <footer className="bg-dark py-5 text-white">
       <Container>
         <Row>
-          <Col md={3} className="align-self-center">
-            <img src={logo} alt="" style={{ width: "180px" }} />
+          <Col md={3} lg={3} className="align-self-center">
+            <img src={logo} alt="" style={{ width: "150px" }} />
             <h6 className="text-muted mt-5 d-none d-md-block">
               © 2022 Allright reserved
             </h6>
           </Col>
-          <Col md={{ span: 2, offset: 3 }}>
+          <Col md={3} lg={{ span: 2, offset: 3 }}>
             <h5 className="mb-4 fw-bold" style={{ color: "#ce1127" }}>
               Menu
             </h5>
@@ -34,7 +34,7 @@ function FooterApp() {
               </li>
             </ul>
           </Col>
-          <Col md={2}>
+          <Col md={3} lg={2}>
             <h5 className="mb-4 fw-bold" style={{ color: "#ce1127" }}>
               Caldera
             </h5>
@@ -53,7 +53,7 @@ function FooterApp() {
               </li>
             </ul>
           </Col>
-          <Col md={2}>
+          <Col md={3} lg={2}>
             <h5 className="mb-4 fw-bold" style={{ color: "#ce1127" }}>
               Contact Us
             </h5>

@@ -7,28 +7,42 @@ import { BiChat, BiHeart } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
 // api
-import {newsApi} from '../api/api.news';
+import { newsApi } from "../api/api.news";
 import moment from "moment";
 
-const categoryImageList = ['Beach', 'danautoba', 'indonesia', 'sumatera', 'holiday', 'travelling', 'food']; 
+const categoryImageList = [
+  "Beach",
+  "danautoba",
+  "indonesia",
+  "sumatera",
+  "holiday",
+  "travelling",
+  "food",
+];
 const getRandomImage = () => {
-  return `https://source.unsplash.com/random/500/?${categoryImageList[(Math.random() * categoryImageList.length) | 0]}`;
-}
-
+  return `https://source.unsplash.com/random/500/?${
+    categoryImageList[(Math.random() * categoryImageList.length) | 0]
+  }`;
+};
 
 function TrendingSlider() {
   const [trendingNewsList, setTrendingNewsList] = useState([]);
   const getTrendingNewsList = async (payload) => {
     const result = await newsApi.getNewsList(payload);
-    if(result.status === 'SUCCESS' && result.message === 'SUCCESS'){
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setTrendingNewsList(result.data);
     } else {
       setTrendingNewsList([]);
     }
-  }
+  };
 
   useEffect(() => {
-    getTrendingNewsList({is_trending: true ,status: 'PUBLISH', limit: 3, offset: 0});
+    getTrendingNewsList({
+      is_trending: true,
+      status: "PUBLISH",
+      limit: 3,
+      offset: 0,
+    });
   }, []);
 
   var settings = {
@@ -54,12 +68,16 @@ function TrendingSlider() {
 
   return (
     <Slider {...settings}>
-      {
-         trendingNewsList.map((data, i) => {
-            return(
-              <Link to={`/article/${data.news_url}`} className="link">
-              <div className="px-2">
-              <Card style={{...cardStyle, backgroundImage: `url(${data.image_url || getRandomImage()})`,}}>
+      {trendingNewsList.map((data, i) => {
+        return (
+          <Link to={`/article/${data.news_url}`} className="link" key={i}>
+            <div className="px-2">
+              <Card
+                style={{
+                  ...cardStyle,
+                  backgroundImage: `url(${data.image_url || getRandomImage()})`,
+                }}
+              >
                 <Card.Body className="slide-stats">
                   <ul className="list-unstyled">
                     <li>
@@ -68,18 +86,21 @@ function TrendingSlider() {
                     <li>
                       <BiChat style={iconStats} /> {data.total_comment}
                     </li>
-                    <li>{data.posted_at ? moment(data.posted_at).format('DD/MM/YYYY'): '-'}</li>
+                    <li>
+                      {data.posted_at
+                        ? moment(data.posted_at).format("DD/MM/YYYY")
+                        : "-"}
+                    </li>
                   </ul>
                 </Card.Body>
               </Card>
               <h4 className="text-white fw-bold text-center m-3">
-              {data.title}
+                {data.title}
               </h4>
             </div>
-            </Link>
-            ); 
-         })
-      }
+          </Link>
+        );
+      })}
     </Slider>
   );
 }

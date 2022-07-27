@@ -9,7 +9,6 @@ import FooterApp from "../components/FooterApp";
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
 import { FaLongArrowAltRight } from "react-icons/fa";
-import logoBatak from "../assets/batak-logo.png";
 
 // api
 import { newsApi } from "../api/api.news";
@@ -164,21 +163,18 @@ const Home = () => {
       <section className="bg-dark pt-3 pb-5">
         <Container>
           <Row>
-            <Col md={{ span: 8, offset: 2 }}>
-              <h2 className="text-white fw-bold">Trending</h2>
+            <Col lg={{ span: 8, offset: 2 }}>
               <TrendingSlider />
             </Col>
-            <Col md={{ span: 10, offset: 1 }}>
+            <Col lg={{ span: 10, offset: 1 }}>
               <Row className="mt-5">
                 {trendingNewsList.length === 0 ? (
                   <div className="d-flex my-3 text-center">
-                    <h6 style={{ color: "white" }}>
-                      Belum ada berita trending
-                    </h6>
+                    <h6 style={{ color: "white" }}>Belum ada berita</h6>
                   </div>
                 ) : (
                   trendingNewsList.map((data, i) => (
-                    <Col md={4} className="my-2" key={i}>
+                    <Col md={6} lg={4} className="my-2" key={i}>
                       <Link to={`/article/${data.news_url}`} className="link">
                         <div className="d-flex">
                           <div
@@ -221,7 +217,10 @@ const Home = () => {
             <h2 className="fw-bold align-self-center flex-fill">
               Artikel Terbaru
             </h2>
-            <Link to="/category/berita-terbaru" className="text-right align-self-center">
+            <Link
+              to="/category/berita-terbaru"
+              className="text-right align-self-center"
+            >
               Lihat Semua Artikel <FaLongArrowAltRight />
             </Link>
           </div>
@@ -232,7 +231,7 @@ const Home = () => {
               </div>
             ) : (
               lastestNewsList.map((data, i) => (
-                <Col md={3} key={i} className="my-4">
+                <Col md={6} lg={3} key={i} className="my-4">
                   <Link to={`/article/${data.news_url}`} className="link">
                     <div
                       style={{
@@ -284,8 +283,8 @@ const Home = () => {
                     className="link"
                     key={i}
                   >
-                    <Row className="my-4">
-                      <Col md={5}>
+                    <Row className="my-5">
+                      <Col lg={5}>
                         <div
                           style={{
                             backgroundImage: `url(${
@@ -295,7 +294,7 @@ const Home = () => {
                           className="post-rcmd post-img align-self-center mx-md-2"
                         />
                       </Col>
-                      <Col md={6} className="align-self-center">
+                      <Col lg={6} className="align-self-center mt-md-3 mt-lg-0">
                         <h4 className="fw-bold">{data.title}</h4>
                         <ul className="list-unstyled stats">
                           <li className="text-dark">
@@ -368,28 +367,34 @@ const Home = () => {
       <section className="py-5 bg-category">
         <Container>
           <Row className="mt-5">
-            <Col md={{ span: 6, offset: 1 }} className="align-self-center">
-              <h2 className="fw-bold text-white mb-5">Kategori Berita</h2>
-              {newsCategory.map((data, i) => (
-                <Link className="cat-link" to={categoryNavigation(i)} key={i}>
-                  <Row className="mt-4 text-white">
-                    <Col xs={8}>
-                      <h4 className="fw-bold">{data.category_name}</h4>
-                      <p>{data.description}</p>
-                    </Col>
-                    <Col xs={4} className="align-self-center text-end">
-                      <Badge bg="light" text="dark" hidden>
-                        {data.total_post} Artikel
-                      </Badge>
-                      <FaLongArrowAltRight className="ms-4" />
-                    </Col>
-                  </Row>
-                  <hr style={{ color: "#fff" }} />
-                </Link>
-              ))}
-            </Col>
-            <Col md={{ span: 2, offset: 1 }} className="align-self-center">
-              <img src={logoBatak} alt="" className="img-fluid" />
+            <Col lg={{ span: 10, offset: 1 }}>
+              <Row>
+                <h2 className="fw-bold text-white mb-5">Kategori Berita</h2>
+                {newsCategory.map((data, i) => (
+                  <Col md={6} className="align-self-center">
+                    <Link
+                      className="cat-link"
+                      to={categoryNavigation(i)}
+                      key={i}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Row className="mt-4 text-white">
+                        <Col xs={8}>
+                          <h4 className="fw-bold">{data.category_name}</h4>
+                          <p>{data.description}</p>
+                        </Col>
+                        <Col xs={4} className="align-self-center text-end">
+                          <Badge bg="light" text="dark" hidden>
+                            {data.total_post} Artikel
+                          </Badge>
+                          <FaLongArrowAltRight className="ms-4" />
+                        </Col>
+                      </Row>
+                      <hr style={{ color: "#fff" }} />
+                    </Link>
+                  </Col>
+                ))}
+              </Row>
             </Col>
           </Row>
         </Container>

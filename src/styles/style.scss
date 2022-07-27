@@ -195,3 +195,8 @@ hr.title {
   border: 1px solid #fff !important;
   padding-bottom: 5px;
 }
+
+.navbar-light .navbar-nav .show > .nav-link,
+.navbar-light .navbar-nav .nav-link.active {
+  color: $primary;
+}
