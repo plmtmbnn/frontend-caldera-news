@@ -48,6 +48,20 @@ class NewsApi extends BaseApiRequest {
     return result;
   }
 
+  async getNewsDetailById(image_url) {
+    let result = OpResult.failed("getNewsDetail");
+    try {
+      let resApi = await this.get(`/news/show/by-id/${image_url}`);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("getNewsDetail", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
+
   async upsertNews(payload) {
     let result = OpResult.failed("upsertNews");
     try {

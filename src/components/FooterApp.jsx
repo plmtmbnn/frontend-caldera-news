@@ -27,7 +27,7 @@ function FooterApp() {
                 <Link to="/category/peristiwa">Peristiwa</Link>
               </li>
               <li>
-                <Link to="/category/parawisata">Parawisata/Budaya</Link>
+                <Link to="/category/parawisata">Parawisata</Link>
               </li>
               <li>
                 <Link to="/category/pertanian">Pertanian</Link>

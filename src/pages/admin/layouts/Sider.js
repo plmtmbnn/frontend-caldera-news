@@ -24,6 +24,9 @@ const SidebarAdmin = () => {
       case "/admin/user":
         key = "3";
         break;
+      case "/admin/review":
+        key = "4";
+        break;
       default:
         break;
     }
@@ -53,15 +56,20 @@ const SidebarAdmin = () => {
           <span>Halaman Utama</span>
           <Link to="/" />
         </Menu.Item>
-        <Menu.Item key="1">
-          <FileTextOutlined />
-          <span>Daftar Berita</span>
-          <Link to="/admin/post" />
-        </Menu.Item>
         <Menu.Item key="2">
           <FileTextOutlined />
           <span>Buat Berita</span>
           <Link to="/admin/post/create" />
+        </Menu.Item>        
+        <Menu.Item key="4">
+          <FileTextOutlined />
+          <span>Daftar Review Berita</span>
+          <Link to="/admin/review" />
+        </Menu.Item>
+        <Menu.Item key="1">
+          <FileTextOutlined />
+          <span>Daftar Berita</span>
+          <Link to="/admin/post" />
         </Menu.Item>
         <Menu.Item key="3">
           <FileTextOutlined />

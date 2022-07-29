@@ -35,8 +35,20 @@ function CategoryArticle() {
       case "parawisata":
         category_id = 2;
         break;
-      case "pertanian":
+      case "politik":
         category_id = 3;
+        break;
+      case "budaya-pendidikan":
+        category_id = 4;
+        break;
+      case "lingkungan-kesehatan":
+        category_id = 5;
+        break;
+      case "pertanian-ekonomi":
+        category_id = 6;
+        break;
+      case "calderapedia":
+        category_id = 7;
         break;
 
       default:
@@ -64,10 +76,22 @@ function CategoryArticle() {
         result = "Peristiwa";
         break;
       case "parawisata":
-        result = "Parawisata/Budaya";
+        result = "Parawisata";
         break;
-      case "pertanian":
-        result = "Pertanian";
+      case "politik":
+        result = "Politik";
+        break;
+      case "budaya-pendidikan":
+        result = "Budaya/Pendidikan";
+        break;
+      case "lingkungan-kesehatan":
+        result = "Lingkungan/Kesehatan";
+        break;
+      case "pertanian-ekonomi":
+        result = "Pertanian/Ekonomi";
+        break;
+      case "calderapedia":
+        result = "Calderapedia";
         break;
 
       default:

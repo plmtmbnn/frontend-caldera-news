@@ -11,7 +11,7 @@ import moment from "moment";
 
 const { Header, Content, Footer } = Layout;
 
-function AdminPost() {
+function ReviewNews() {
   const [offset, setoffset] = useState(0);
   const [page, setpage] = useState(1);
   const [newsList, setnewsList] = useState([]);
@@ -22,11 +22,10 @@ function AdminPost() {
   }, [page]);
 
   const getNewsList = async () => {
-    let category_id = null;
     const result = await newsApi.getNewsList({
-      category_id,
       limit: 10,
       offset,
+      status: 'REVIEW'
     });
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsList(result.data);
@@ -63,11 +62,6 @@ function AdminPost() {
           >
             <div className="mb-5 d-flex">
               <h4 className="w-100">Daftar Berita</h4>
-              <Link to="/admin/post/create">
-                <Button type="primary" className="float-end">
-                  Buat Berita Baru
-                </Button>
-              </Link>
             </div>
             <div className="mb-5 d-flex">
               <Row>
@@ -177,4 +171,4 @@ function AdminPost() {
   );
 }
 
-export default AdminPost;
+export default ReviewNews;

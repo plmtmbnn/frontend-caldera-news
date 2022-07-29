@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { Container, Row, Col, Card, Breadcrumb } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import SectionComment from "./components/sectionComment";
 import NavbarApp from "../../components/NavbarApp";
+
+import { toast } from "react-toastify";
 
 // icons
 import { BiChat, BiHeart } from "react-icons/bi";
@@ -25,7 +27,6 @@ import { newsApi } from "../../api/api.news";
 import { commentLikeApi } from "../../api/api.comment-likes";
 
 import moment from "moment";
-import { toast } from "react-toastify";
 
 import { connect } from "react-redux";
 
@@ -67,6 +68,7 @@ function SingleArticle(props) {
     news: {
       id: "ae7d6f62-fa0a-11ec-8c6d-cecd024eb8ee",
       author_id: 1,
+      image_desc: '',
       news_url: "220702-20-27-12_5-tempat-terbaik-di-sumut",
       title: "",
       image_url: null,
@@ -216,6 +218,16 @@ function SingleArticle(props) {
                         <FaShareAlt
                           className="text-info me-2"
                           style={{ ...iconStats, margin: "2px" }}
+                          onClick={()=>{
+                            toast.success("URL berita berhasil disalin.", {
+                              position: "top-center",
+                              autoClose: 3000,
+                              hideProgressBar: true,
+                              closeOnClick: true,
+                              progress: undefined,
+                            });
+                            navigator.clipboard.writeText(`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`);
+                          }}
                         />
                         <FacebookShareButton
                           style={{ ...iconStats, margin: "2px" }}
@@ -275,10 +287,9 @@ function SingleArticle(props) {
                     </WhatsappShareButton>
                   </div>
                   <Card style={cardStyle} />
-                  <h6 className="opacity-75 mt-2 mb-5" hidden>
-                    Random Dummy Photo Foto: dok. Unsplash
+                  <h6 className="opacity-75 mt-2 mb-5">
+                    {newsDetail.news.image_desc}
                   </h6>
-                  <br />
                   <div className="p-article mb-5">
                     <div
                       dangerouslySetInnerHTML={{
