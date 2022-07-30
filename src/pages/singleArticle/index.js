@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { Spin } from 'antd';
+
 import { Container, Row, Col, Card } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import SectionComment from "./components/sectionComment";
@@ -30,6 +32,16 @@ import moment from "moment";
 
 import { connect } from "react-redux";
 
+import { LoadingOutlined } from '@ant-design/icons';
+
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
 const categoryImageList = [
   "Beach",
   "danautoba",
@@ -177,14 +189,17 @@ function SingleArticle(props) {
   };
 
   return (
-    <div>
+    <div onCopy={(e) => {
+        e.preventDefault();
+        return false;
+    }}>
       <NavbarApp />
       <div className="py-5">
         <Container>
           {isLoading ? (
             <Row>
               <Col lg={{ span: 6, offset: 3 }}>
-                <h3>Sedang memuat berita...</h3>
+                <h3 className="text-center"><span><Spin indicator={antIcon} /></span> Sedang memuat berita...</h3>
               </Col>
             </Row>
           ) : (
@@ -197,7 +212,7 @@ function SingleArticle(props) {
                   </h6>
                   <div className="d-flex justify-content-between my-md-4">
                     <p className="text-muted">
-                      {moment(newsDetail.news.posted_at).format("DD/MM/YYYY")}
+                      {moment(newsDetail.news.posted_at).locale('id').format("DD MMM YYYY")}
                     </p>
                     <ul className="list-unstyled inline">
                       <li>
@@ -321,7 +336,7 @@ function SingleArticle(props) {
                               </li>
                               <li className="text-dark">
                                 {data.posted_at
-                                  ? moment(data.posted_at).format("DD/MM/YYYY")
+                                  ? moment(data.posted_at).format("DD MMM YYYY")
                                   : "-"}
                               </li>
                             </ul>

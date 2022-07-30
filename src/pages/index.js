@@ -199,7 +199,7 @@ const Home = () => {
                         </li>
                         <li>
                           {data.posted_at
-                            ? moment(data.posted_at).format("DD/MM/YYYY")
+                            ? moment(data.posted_at).format("DD MMM YYYY")
                             : "-"}
                         </li>
                       </ul>
@@ -254,7 +254,7 @@ const Home = () => {
                         </li>
                         <li className="text-dark">
                           {data.posted_at
-                            ? moment(data.posted_at).format("DD/MM/YYYY")
+                            ? moment(data.posted_at).format("DD MMM YYYY")
                             : "-"}
                         </li>
                       </ul>
@@ -305,7 +305,7 @@ const Home = () => {
                           </li>
                           <li className="text-dark">
                             {data.posted_at
-                              ? moment(data.posted_at).format("DD/MM/YYYY")
+                              ? moment(data.posted_at).format("DD MMM YYYY")
                               : "-"}
                           </li>
                         </ul>
@@ -337,7 +337,7 @@ const Home = () => {
                             <div className="my-3" key={i}>
                               <p className="mb-0 text-primary">
                                 {data.posted_at
-                                  ? moment(data.posted_at).format("DD/MM/YYYY")
+                                  ? moment(data.posted_at).format("DD MMM YYYY")
                                   : "-"}
                               </p>
                               <p className="fw-bold mb-2">{data.title}</p>

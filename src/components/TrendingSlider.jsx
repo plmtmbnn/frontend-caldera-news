@@ -48,6 +48,7 @@ function TrendingSlider() {
   var settings = {
     dots: true,
     infinite: true,
+    fade: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -88,7 +89,7 @@ function TrendingSlider() {
                     </li>
                     <li>
                       {data.posted_at
-                        ? moment(data.posted_at).format("DD/MM/YYYY")
+                        ? moment(data.posted_at).format("DD MMM YYYY")
                         : "-"}
                     </li>
                   </ul>

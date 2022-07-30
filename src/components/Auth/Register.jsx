@@ -30,6 +30,13 @@ const Register = (props) => {
         registerForm.password &&
         registerForm.avatar_file
       ) {
+        toast.info("Sedang diproses...", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+        });
         const payload = new FormData();
         payload.append("full_name", registerForm.full_name);
         payload.append("email", registerForm.email);

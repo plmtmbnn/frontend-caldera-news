@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Layout } from "antd";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import { Layout, Alert } from "antd";
+import { Form, Button, Col, Row  } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
@@ -54,11 +54,24 @@ function DetailPost(props) {
   }, [param.id]);
 
   const upsertNews = async (sumbit_type) => {
+    toast.info("Sedang diproses...", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      progress: undefined,
+    });
+
     const payload = new FormData();
+
+    if(props.user && props.user.isAuthor && !props.user.isAdmin){
+      payload.append("author_id", newsContent.author_id);      
+      payload.append("status", sumbit_type === 'DRAFT' ? 'DRAFT' : 'REVIEW');
+    } else {
+      payload.append("status", 'PUBLISH');
+    }
     payload.append("title", newsContent.title);
-    payload.append("author_id", newsContent.author_id);
     payload.append("content", newsContent.content);
-    payload.append("status", sumbit_type);
     payload.append("category_id", newsContent.category_id);
     payload.append("image_desc", newsContent.image_desc);
 
@@ -103,9 +116,47 @@ function DetailPost(props) {
     }
   };
 
+  const showNewsStatusAlert = () => {
+      let type = 'success';
+
+      switch (newsContent.status) {
+        case 'PUBLISH':
+          type = 'success';
+          break;
+        case 'DRAFT':
+          type = 'warning';
+          break;
+        case 'REVIEW':
+          type = 'info';
+          break;
+        case 'DECLINED':
+          type = 'error';
+          break;
+      
+        default:
+          break;
+      }
+
+      return (<Alert message={`Status berita: ${newsContent.status}`} type={type} />)
+  }
+
   useEffect(() => {
     getCategory();
   }, []);
+
+  const handleHidden = () => {
+    let result = false;
+    try {
+      if(props.user && props.user.isAuthor && !props.user.isAdmin){
+        if(newsContent.status === 'PUBLISH' ){
+          result = true;
+        }
+      }
+    } catch (error) {
+      
+    }
+    return result;
+  }
 
   return (
     <Layout
@@ -134,13 +185,13 @@ function DetailPost(props) {
             }}
           >
             <div className="mb-3 d-flex">
-              <h4 className="w-100">Buat Berita</h4>
+              <h3 className="w-100 text-center" style={{color: '#ce1127'}}>Buat Berita</h3>
             </div>
             <Row>
               <Col md={8}>
                 <Form>
                   <Form.Group className="mb-4">
-                    <Form.Label>Judul</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Judul Berita</Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="Tulis Judul Artikel"
@@ -154,7 +205,7 @@ function DetailPost(props) {
                     />
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label>Kategori</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Kategori Berita</Form.Label>
                     <Form.Select
                       onChange={(event) => {
                         setnewsContent({
@@ -177,7 +228,7 @@ function DetailPost(props) {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label>Gambar Utama Berita</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Gambar Utama Berita</Form.Label>
                     <br />
                     <FilePond
                       credits={""}
@@ -213,7 +264,7 @@ function DetailPost(props) {
                     />
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label>Deskripsi Gambar</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Deskripsi Gambar</Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="Tulis Deskripsi Gambar"
@@ -227,7 +278,7 @@ function DetailPost(props) {
                     />
                   </Form.Group>                  
                   <Form.Group className="mb-5">
-                    <Form.Label>Isi Berita</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Isi Berita</Form.Label>
                     <div>
                       <JoditEditor
                         ref={editor}
@@ -247,8 +298,11 @@ function DetailPost(props) {
                       />
                     </div>
                   </Form.Group>
-                  <Row>
-                    <Col xs={12} md={4} className="my-2 my-md-0">
+                  <div className="mb-3">
+                    {showNewsStatusAlert()}
+                  </div>                  
+                  <Row hidden={handleHidden()} className='d-flex justify-content-between'>
+                    <Col xs={12} md={6} className="my-2 my-md-2 text-center">
                       <Link to={"/admin/post"}>
                         <Button
                           onClick={() => {
@@ -261,7 +315,7 @@ function DetailPost(props) {
                         </Button>
                       </Link>
                     </Col>
-                    <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Col xs={12} md={6} className="my-2 my-md-2 text-center">
                       <Button
                         onClick={() => {
                           handleSubmit("DRAFT");
@@ -272,7 +326,8 @@ function DetailPost(props) {
                         Simpan Sebagai Draft
                       </Button>
                     </Col>
-                    <Col xs={12} md={4} className="my-2 my-md-0">
+                    <hr />
+                    <Col xs={12} md={12} className="my-2 my-md-2 text-center">
                       <Button
                         onClick={() => {
                           handleSubmit("PUBLISH");
@@ -280,10 +335,19 @@ function DetailPost(props) {
                         variant="primary"
                         className="me-3 px-5"
                       >
-                        Simpan &amp; Publish
+                        
+                        {
+                        props.user && props.user.isAuthor && !props.user.isAdmin ?
+                          'Simpan & Mulai Review Admin'
+                          :
+                          'Simpan & Publish'
+                        }
                       </Button>
                     </Col>
                   </Row>
+                  <div className="mb-3" hidden={!handleHidden()}>
+                    <Alert message={"Berita sudah PUBLISH, hanya admin yang bisa mengubah."}/>
+                  </div>
                 </Form>
               </Col>
             </Row>

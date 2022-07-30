@@ -3,9 +3,11 @@ import { Layout, Menu } from "antd";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 
+import { connect } from "react-redux";
+
 const { Sider } = Layout;
 
-const SidebarAdmin = () => {
+const SidebarAdmin = (props) => {
   const [collapsed, setCollapsed] = useState(false);
   const params = useParams();
   let location = useLocation();
@@ -60,8 +62,10 @@ const SidebarAdmin = () => {
           <FileTextOutlined />
           <span>Buat Berita</span>
           <Link to="/admin/post/create" />
-        </Menu.Item>        
-        <Menu.Item key="4">
+        </Menu.Item>
+        <Menu.Item key="4" hidden={
+          props.user.isAdmin ? false : true
+        }>
           <FileTextOutlined />
           <span>Daftar Review Berita</span>
           <Link to="/admin/review" />
@@ -71,7 +75,9 @@ const SidebarAdmin = () => {
           <span>Daftar Berita</span>
           <Link to="/admin/post" />
         </Menu.Item>
-        <Menu.Item key="3">
+        <Menu.Item key="3" hidden={
+          props.user.isAdmin ? false : true
+        }>
           <FileTextOutlined />
           <span>Daftar Pengguna</span>
           <Link to="/admin/user" />
@@ -81,4 +87,10 @@ const SidebarAdmin = () => {
   );
 };
 
-export default SidebarAdmin;
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps)(SidebarAdmin);

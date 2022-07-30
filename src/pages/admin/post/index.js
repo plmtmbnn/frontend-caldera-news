@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import { Button, Layout, Space, Table, Tag } from "antd";
-import {FormControl, Row, Col, FormGroup, FormLabel, FormSelect} from 'react-bootstrap';
+import {Layout, Space, Table, Tag } from "antd";
+import {Button, FormControl, Row, Col, FormGroup, FormLabel, FormSelect} from 'react-bootstrap';
 
 import SidebarAdmin from "../layouts/Sider";
 import { Link } from "react-router-dom";
@@ -9,25 +9,51 @@ import { Link } from "react-router-dom";
 import { newsApi } from "../../../api/api.news";
 import moment from "moment";
 
+import { connect } from "react-redux";
+
 const { Header, Content, Footer } = Layout;
 
-function AdminPost() {
+function AdminPost(props) {
   const [offset, setoffset] = useState(0);
   const [page, setpage] = useState(1);
   const [newsList, setnewsList] = useState([]);
-  const [isLoading, setisLoading] = useState(true);
+  const [newsCategory, setNewsCategory] = useState([]);
+  const [category_id, setcategory_id] = useState(null);
+
+
+  const [title, settitle] = useState("");
+
+  const getCategory = async () => {
+    const result = await newsApi.getCategory();
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
+      setNewsCategory(result.data);
+    }
+  };
 
   useEffect(() => {
     getNewsList();
-  }, [page]);
+    getCategory();
+  }, [page, category_id]);
 
-  const getNewsList = async () => {
-    let category_id = null;
-    const result = await newsApi.getNewsList({
-      category_id,
+  const getNewsList = async () => {    
+    let payload = {
       limit: 10,
       offset,
-    });
+    };
+
+    if(props.user && props.user.isAuthor && !props.user.isAdmin){
+      payload.author_id = props.user.author_id;
+    }
+    
+    if(title && title !== ''){
+      payload.title = title;
+    }
+
+    if(category_id && category_id !== 'Semua'){
+      payload.category_id = category_id;
+    }
+
+    const result = await newsApi.getNewsList(payload);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsList(result.data);
     } else {
@@ -69,26 +95,56 @@ function AdminPost() {
                 </Button>
               </Link>
             </div>
-            <div className="mb-5 d-flex">
+            <div className="mb-1 d-flex">
               <Row>
                 <Col>
                   <FormGroup>
                     <FormLabel>Judul Berita</FormLabel>
-                    <FormControl placeholder="Cari judul berita..."/>
+                    <FormControl 
+                      placeholder="Cari judul berita..." 
+                      onChange={(e)=>{
+                        settitle(e.target.value);
+                      }}
+                    />
                   </FormGroup>
                 </Col>
                 <Col>
                 <FormGroup>
                     <FormLabel>Kategori Berita</FormLabel>
-                    <FormSelect placeholder="Cari berita">
-                        <option>Peristiwa</option>
-                        <option>Parawisata</option>
-                        <option>Pertanian</option>    
+                    <FormSelect
+                      onChange={(event) => {setcategory_id(event.target.value);}}
+                    >
+                      <option
+                            selected={null === category_id}
+                            key={null}
+                            value={null}
+                          >
+                            Semua
+                      </option>
+                      {newsCategory.map((item, index) => {
+                        return (
+                          <option
+                            selected={item.id === category_id}
+                            key={item.id}
+                            value={item.id}
+                          >
+                            {item.category_name}
+                          </option>
+                        );
+                      })}
                     </FormSelect>
                   </FormGroup>
-                </Col>
-              </Row>
+                </Col>                
+              </Row>              
             </div>
+            <div>
+              <Button
+                onClick={ async ()=> {
+                  await getNewsList();
+                }}
+                variant="primary"
+              >Cari</Button>
+            </div>          
             <hr />
             <Table
               scroll={{ x: 980 }}
@@ -147,7 +203,7 @@ function AdminPost() {
                   title: "Tgl Update",
                   dataIndex: "updated_at",
                   key: "updated_at",
-                  render: (text) => <p>{moment(text).format("DD/MM/YYYY")}</p>,
+                  render: (text) => <p>{moment(text).format("DD MMM YYYY")}</p>,
                 },
                 {
                   title: "Action",
@@ -177,4 +233,10 @@ function AdminPost() {
   );
 }
 
-export default AdminPost;
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps)(AdminPost);

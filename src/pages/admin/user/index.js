@@ -9,9 +9,12 @@ import { toast } from "react-toastify";
 import { authApi } from "../../../api/api.auth";
 import moment from "moment";
 
+import { connect } from "react-redux";
+
 const { Header, Content, Footer } = Layout;
 
-function AdminUser() {
+function AdminUser(props) {
+  console.log(props.user);
   const [userList, setuserList] = useState([]);
   const [filterUser, setfilterUser] = useState({
     full_name: null,
@@ -118,13 +121,13 @@ function AdminUser() {
                   dataIndex: "created_at",
                   key: "created_at",
                   sorter: (a, b) => a.created_at.length - b.created_at.length,
-                  render: (text) => <p>{moment(text).format("DD/MM/YYYY")}</p>,
+                  render: (text) => <p>{moment(text).format("DD MMM YYYY")}</p>,
                 },
                 {
                   title: "Action",
                   key: "action",
                   render: (_, record) => (
-                    <Space size="middle">
+                    <Space size="middle" hidden={!props.user.isAdmin}>
                       <Button
                         onClick={() => {
                           handleUserStatus(
@@ -164,4 +167,11 @@ function AdminUser() {
   );
 }
 
-export default AdminUser;
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps)(AdminUser);

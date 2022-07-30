@@ -21,6 +21,13 @@ const Login = (props) => {
 
   const handleLogin = async () => {
     try {
+      toast.info("Sedang diproses...", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: undefined,
+      });
       const result = await authApi.login(loginForm);
       if (result.status === "SUCCESS" && result.message === "SUCCESS") {
         toast.success("Berhasil masuk!", {

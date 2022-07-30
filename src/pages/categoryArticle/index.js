@@ -159,7 +159,7 @@ function CategoryArticle() {
                               {parseInt(data.total_comment)}
                             </li>
                             <li className="text-dark">
-                              {moment(data.posted_at).format("DD/MM/YYYY")}
+                              {moment(data.posted_at).format("DD MMM YYYY")}
                             </li>
                           </ul>
                         </Col>
