@@ -193,13 +193,13 @@ function ReviewNews(props) {
                   sorter: (a, b) => a.total_likes - b.total_likes,
                   render: (text) => <p>{text}</p>,
                 },
-                {
-                  title: "Kunjungan",
-                  dataIndex: "total_visit",
-                  key: "total_visit",
-                  sorter: (a, b) => a.total_visit - b.total_visit,
-                  render: (text) => <p>{text}</p>,
-                },
+                // {
+                //   title: "Kunjungan",
+                //   dataIndex: "total_visit",
+                //   key: "total_visit",
+                //   sorter: (a, b) => a.total_visit - b.total_visit,
+                //   render: (text) => <p>{text}</p>,
+                // },
                 {
                   title: "Tgl Update",
                   dataIndex: "updated_at",

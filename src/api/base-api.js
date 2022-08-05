@@ -3,12 +3,21 @@ import { OpResult } from "../helper/operation_result";
 
 class BaseApiRequest {
   constructor(endpoint) {
-    this.endpoint = 'https://backend-caldera-news.herokuapp.com';
+    this.endpoint = this.handleEntpoint(endpoint);
     // this.endpoint = 'http://localhost:8081';
 
     this.token = "token";
     this.config = undefined;
     this.init();
+  }
+
+  handleEntpoint(endpoint) {
+    let result = 'https://backend-caldera-news.herokuapp.com';
+
+    if(endpoint){
+      result = endpoint;
+    }
+    return result;
   }
 
   init() {
