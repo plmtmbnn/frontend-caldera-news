@@ -15,6 +15,18 @@ import { newsApi } from "../../../api/api.news";
 import { connect } from "react-redux";
 import moment from "moment";
 
+import newsImage from '../../../assets/news-image.jpg';
+
+const getImage = (image_url) => {
+  if(image_url){
+    const current = 
+    `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
+    return(current);
+  } else {
+    return newsImage;
+  }
+};
+
 const { Header, Content, Footer } = Layout;
 
 function DetailPost(props) {
@@ -31,7 +43,10 @@ function DetailPost(props) {
     file: null,
     category_id: 1,
     news_id: null,
-    image_desc: ''
+    image_desc: '',
+    image_url: null,
+    is_recommendation: false,
+    is_trending: false
   });
 
   const getCategory = async () => {
@@ -65,7 +80,7 @@ function DetailPost(props) {
     const payload = new FormData();
 
     if(props.user && props.user.isAuthor && !props.user.isAdmin){
-      payload.append("author_id", newsContent.author_id);      
+      payload.append("author_id", newsContent.author_id);
       payload.append("status", sumbit_type === 'DRAFT' ? 'DRAFT' : 'REVIEW');
     } else {
       payload.append("status", 'PUBLISH');
@@ -74,6 +89,9 @@ function DetailPost(props) {
     payload.append("content", newsContent.content);
     payload.append("category_id", newsContent.category_id);
     payload.append("image_desc", newsContent.image_desc);
+
+    payload.append("is_recommendation", newsContent.is_recommendation);
+    payload.append("is_trending", newsContent.is_trending);
 
     if (newsContent.file) {
       payload.append("file", newsContent.file);
@@ -235,7 +253,8 @@ function DetailPost(props) {
                       files={
                         typeof newsContent.file === "string" ||
                         !newsContent.file
-                          ? newsContent.file
+                          ?
+                          getImage(newsContent.image_url)
                           : [newsContent.file]
                       }
                       allowMultiple={false}
@@ -245,7 +264,7 @@ function DetailPost(props) {
                       beforeAddFile={(item) => {
                         if (
                           newsContent.file === null ||
-                          newsContent.file.size !== item.file.size
+                          newsContent.file !== item.file
                         ) {
                           setnewsContent({
                             ...newsContent,
@@ -298,12 +317,41 @@ function DetailPost(props) {
                       />
                     </div>
                   </Form.Group>
+                  <Row>
+                  <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Form.Check
+                      label={`Berita Rekomendasi`}
+                      id={`Berita Rekomendasi-default`}
+                      checked={newsContent.is_recommendation}
+                      onChange={()=>{
+                        setnewsContent({
+                          ...newsContent,
+                          is_recommendation: !newsContent.is_recommendation,
+                        });
+                      }}
+                    />
+                  </Col>
+                  <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Form.Check
+                      label={`Berita Trending`}
+                      id={`Berita Trending-default`}
+                      checked={newsContent.is_trending}
+                      onChange={()=>{
+                        setnewsContent({
+                          ...newsContent,
+                          is_trending: !newsContent.is_trending,
+                        });
+                      }}
+                    />
+                  </Col>
+                  </Row>
+                  <br /><hr />
                   <div className="mb-3">
                     {showNewsStatusAlert()}
                   </div>                  
                   <Row hidden={handleHidden()} className='d-flex justify-content-between'>
                     <Col xs={12} md={6} className="my-2 my-md-2 text-center">
-                      <Link to={"/admin/post"}>
+                      <Link onClick={()=>{window.scrollTo(0, 0)}} to={"/admin/post"}>
                         <Button
                           onClick={() => {
                             handleSubmit("CANCEL");

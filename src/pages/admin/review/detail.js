@@ -31,7 +31,9 @@ function DetailPost(props) {
     file: null,
     category_id: 1,
     news_id: null,
-    image_desc: ''
+    image_desc: '',
+    is_recommendation: false,
+    is_trending: false
   });
 
   const getCategory = async () => {
@@ -61,6 +63,9 @@ function DetailPost(props) {
     payload.append("status", sumbit_type);
     payload.append("category_id", newsContent.category_id);
     payload.append("image_desc", newsContent.image_desc);
+
+    payload.append("is_recommendation", newsContent.is_recommendation);
+    payload.append("is_trending", newsContent.is_trending);
 
     if (newsContent.file) {
       payload.append("file", newsContent.file);
@@ -248,8 +253,37 @@ function DetailPost(props) {
                     </div>
                   </Form.Group>
                   <Row>
+                  <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Form.Check
+                      label={`Berita Rekomendasi`}
+                      id={`Berita Rekomendasi-default`}
+                      checked={newsContent.is_recommendation}
+                      onChange={()=>{
+                        setnewsContent({
+                          ...newsContent,
+                          is_recommendation: !newsContent.is_recommendation,
+                        });
+                      }}
+                    />
+                  </Col>
+                  <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Form.Check
+                      label={`Berita Trending`}
+                      id={`Berita Trending-default`}
+                      checked={newsContent.is_trending}
+                      onChange={()=>{
+                        setnewsContent({
+                          ...newsContent,
+                          is_trending: !newsContent.is_trending,
+                        });
+                      }}
+                    />
+                  </Col>
+                  </Row>
+                  <br /><hr />
+                  <Row>
                     <Col xs={12} md={4} className="my-2 my-md-0">
-                      <Link to={"/admin/post"}>
+                      <Link onClick={()=>{window.scrollTo(0, 0)}} to={"/admin/post"}>
                         <Button
                           onClick={() => {
                             handleSubmit("CANCEL");

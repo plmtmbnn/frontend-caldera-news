@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+
 import Home from "./pages";
 import AdminPage from "./pages/admin";
 import AdminPost from "./pages/admin/post";
@@ -9,9 +10,12 @@ import SingleArticle from "./pages/singleArticle";
 import AdminUser from "./pages/admin/user";
 import ReviewNews from "./pages/admin/review";
 
+// import ScrollToTop from './ScrollToTop';
+
 function App() {
   return (
     <Routes>
+      {/* <ScrollToTop /> */}
       <Route path="/" element={<Home />}></Route>
       <Route path="/article/:id" element={<SingleArticle />}></Route>
       <Route path="/category/:id" element={<CategoryArticle />}></Route>

@@ -89,7 +89,7 @@ function AdminPost(props) {
           >
             <div className="mb-5 d-flex">
               <h4 className="w-100">Daftar Berita</h4>
-              <Link to="/admin/post/create">
+              <Link onClick={()=>{window.scrollTo(0, 0)}} to="/admin/post/create">
                 <Button type="primary" className="float-end">
                   Buat Berita Baru
                 </Button>
@@ -210,7 +210,7 @@ function AdminPost(props) {
                   key: "action",
                   render: (_, record) => (
                     <Space size="middle">
-                      <Link to={`/admin/post/detail/${record.id}`} target="_blank" rel="noopener noreferrer">
+                      <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/admin/post/detail/${record.id}`} target="_blank" rel="noopener noreferrer">
                         <Button type="primary">Detail</Button>
                       </Link>
                     </Space>

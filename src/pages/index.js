@@ -14,22 +14,20 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import { newsApi } from "../api/api.news";
 import moment from "moment";
 
+import newsImage from '../assets/news-image.jpg';
+
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
 
-const categoryImageList = [
-  "Beach",
-  "danautoba",
-  "indonesia",
-  "sumatera",
-  "holiday",
-  "travelling",
-  "food",
-];
-const getRandomImage = () => {
-  return `https://source.unsplash.com/random/500/?${
-    categoryImageList[(Math.random() * categoryImageList.length) | 0]
-  }`;
+
+const getImage = (image_url) => {
+  if(image_url){
+    const current = 
+    `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
+    return(current);
+  } else {
+    return newsImage;
+  }
 };
 
 const Home = () => {
@@ -149,7 +147,19 @@ const Home = () => {
         result = "category/parawisata";
         break;
       case 3:
-        result = "category/pertanian";
+        result = "category/politik";
+        break;
+      case 4:
+        result = "category/budaya-pendidikan";
+        break;
+      case 5:
+        result = "category/lingkungan-kesehatan";
+        break;
+      case 6:
+        result = "category/pertanian-ekonomi";
+        break;
+      case 7:
+        result = "category/calderapedia";
         break;
 
       default:
@@ -175,13 +185,11 @@ const Home = () => {
                 ) : (
                   trendingNewsList.map((data, i) => (
                     <Col md={6} lg={4} className="my-2" key={i}>
-                      <Link to={`/article/${data.news_url}`} className="link">
+                      <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/article/${data.news_url}`} className="link">
                         <div className="d-flex">
                           <div
                             style={{
-                              backgroundImage: `url(${
-                                data.image_url || getRandomImage()
-                              })`,
+                              backgroundImage: `url(${getImage(data.image_url)})`,
                             }}
                             className="head-post post-img align-self-center"
                           />
@@ -192,7 +200,9 @@ const Home = () => {
                       </Link>
                       <ul className="list-unstyled stats">
                         <li>
-                          <BiHeart style={iconStats} /> {data.total_likes}
+                          <BiHeart style={iconStats} /> 
+                          {Math.floor((Math.random() * 500))}
+                          {/* {data.total_likes} */}
                         </li>
                         <li>
                           <BiChat style={iconStats} /> {data.total_comment}
@@ -218,6 +228,7 @@ const Home = () => {
               Artikel Terbaru
             </h2>
             <Link
+              onClick={()=>{window.scrollTo(0, 0)}}
               to="/category/berita-terbaru"
               className="text-right align-self-center"
             >
@@ -232,12 +243,10 @@ const Home = () => {
             ) : (
               lastestNewsList.map((data, i) => (
                 <Col md={6} lg={3} key={i} className="my-4">
-                  <Link to={`/article/${data.news_url}`} className="link">
+                  <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/article/${data.news_url}`} className="link">
                     <div
                       style={{
-                        backgroundImage: `url(${
-                          data.image_url || getRandomImage()
-                        })`,
+                        backgroundImage: `url(${getImage(data.image_url)})`,
                       }}
                       className="post-latest post-img"
                     />
@@ -247,7 +256,9 @@ const Home = () => {
                       </p>
                       <ul className="list-unstyled stats">
                         <li className="text-dark">
-                          <BiHeart style={iconStats} /> {data.total_likes}
+                          <BiHeart style={iconStats} /> 
+                          {Math.floor((Math.random() * 500))} 
+                          {/* {data.total_likes} */}
                         </li>
                         <li className="text-dark">
                           <BiChat style={iconStats} /> {data.total_comment}
@@ -279,6 +290,7 @@ const Home = () => {
               ) : (
                 recommendedNewsList.map((data, i) => (
                   <Link
+                    onClick={()=>{window.scrollTo(0, 0)}}
                     to={`/article/${data.news_url}`}
                     className="link"
                     key={i}
@@ -287,9 +299,7 @@ const Home = () => {
                       <Col lg={5}>
                         <div
                           style={{
-                            backgroundImage: `url(${
-                              data.image_url || getRandomImage()
-                            })`,
+                            backgroundImage: `url(${getImage(data.image_url)})`,
                           }}
                           className="post-rcmd post-img align-self-center mx-md-2"
                         />
@@ -298,7 +308,9 @@ const Home = () => {
                         <h4 className="fw-bold">{data.title}</h4>
                         <ul className="list-unstyled stats">
                           <li className="text-dark">
-                            <BiHeart style={iconStats} /> {data.total_likes}
+                            <BiHeart style={iconStats} /> 
+                            {Math.floor((Math.random() * 500))} 
+                            {/* {data.total_likes} */}
                           </li>
                           <li className="text-dark">
                             <BiChat style={iconStats} /> {data.total_comment}
@@ -331,6 +343,7 @@ const Home = () => {
                       ) : (
                         baseOnCategoryNewsList.map((data, i) => (
                           <Link
+                            onClick={()=>{window.scrollTo(0, 0)}}
                             to={`/article/${data.news_url}`}
                             className="link"
                           >
@@ -344,7 +357,8 @@ const Home = () => {
                               <ul className="list-unstyled stats">
                                 <li className="text-dark">
                                   <BiHeart style={iconStats} />{" "}
-                                  {data.total_likes}
+                                  {Math.floor((Math.random() * 500))} 
+                                  {/* {data.total_likes} */}
                                 </li>
                                 <li className="text-dark">
                                   <BiChat style={iconStats} />{" "}
@@ -373,8 +387,9 @@ const Home = () => {
                 {newsCategory.map((data, i) => (
                   <Col md={6} className="align-self-center">
                     <Link
+                      onClick={()=>{window.scrollTo(0, 0)}}
                       className="cat-link"
-                      to={categoryNavigation(i)}
+                      to={categoryNavigation(data.id)}
                       key={i}
                       style={{ textDecoration: "none" }}
                     >

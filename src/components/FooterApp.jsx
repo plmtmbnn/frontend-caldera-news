@@ -24,13 +24,13 @@ function FooterApp() {
                 <Link to="/#">Home</Link>
               </li>
               <li>
-                <Link to="/category/peristiwa">Peristiwa</Link>
+                <Link onClick={()=>{window.scrollTo(0, 0)}} to="/category/peristiwa">Peristiwa</Link>
               </li>
               <li>
-                <Link to="/category/parawisata">Parawisata</Link>
+                <Link onClick={()=>{window.scrollTo(0, 0)}} to="/category/parawisata">Parawisata</Link>
               </li>
               <li>
-                <Link to="/category/pertanian">Pertanian</Link>
+                <Link onClick={()=>{window.scrollTo(0, 0)}} to="/category/pertanian">Pertanian</Link>
               </li>
             </ul>
           </Col>

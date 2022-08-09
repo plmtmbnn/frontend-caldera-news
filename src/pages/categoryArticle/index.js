@@ -14,6 +14,18 @@ import moment from "moment";
 
 import { Pagination } from "antd";
 
+import newsImage from '../../assets/news-image.jpg';
+
+const getImage = (image_url) => {
+  if(image_url){
+    const current = 
+    `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
+    return(current);
+  } else {
+    return newsImage;
+  }
+};
+
 function CategoryArticle() {
   const params = useParams();
 
@@ -142,6 +154,7 @@ function CategoryArticle() {
                 newsList.map((data, i) => (
                   <>
                     <Link
+                      onClick={()=>{window.scrollTo(0, 0)}}
                       to={`/article/${data.news_url}`}
                       className="link"
                       key={i}
@@ -152,7 +165,8 @@ function CategoryArticle() {
                           <ul className="list-unstyled stats">
                             <li className="text-dark">
                               <BiHeart style={iconStats} />{" "}
-                              {parseInt(data.total_likes)}
+                              {Math.floor((Math.random() * 500))} 
+                              {/* {parseInt(data.total_likes)} */}
                             </li>
                             <li className="text-dark">
                               <BiChat style={iconStats} />{" "}
@@ -166,10 +180,7 @@ function CategoryArticle() {
                         <Col xs={4}>
                           <div
                             style={{
-                              backgroundImage: `url(${
-                                data.image_url ||
-                                "https://source.unsplash.com/random/500/?seaport"
-                              })`,
+                              backgroundImage: `url(${getImage(data.image_url)})`,
                               ...imgFeed,
                             }}
                             className="post-img align-self-end"

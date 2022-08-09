@@ -10,19 +10,16 @@ import { Link } from "react-router-dom";
 import { newsApi } from "../api/api.news";
 import moment from "moment";
 
-const categoryImageList = [
-  "Beach",
-  "danautoba",
-  "indonesia",
-  "sumatera",
-  "holiday",
-  "travelling",
-  "food",
-];
-const getRandomImage = () => {
-  return `https://source.unsplash.com/random/500/?${
-    categoryImageList[(Math.random() * categoryImageList.length) | 0]
-  }`;
+import newsImage from '../assets/news-image.jpg';
+
+const getImage = (image_url) => {
+  if(image_url){
+    const current = 
+    `${process.env.REACT_APP_API_END_POINT}/image/news/${image_url}`;
+    return(current);
+  } else {
+    return newsImage;
+  }
 };
 
 function TrendingSlider() {
@@ -71,18 +68,19 @@ function TrendingSlider() {
     <Slider {...settings}>
       {trendingNewsList.map((data, i) => {
         return (
-          <Link to={`/article/${data.news_url}`} className="link" key={i}>
+          <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/article/${data.news_url}`} className="link" key={i}>
             <div className="px-2">
               <Card
                 style={{
                   ...cardStyle,
-                  backgroundImage: `url(${data.image_url || getRandomImage()})`,
+                  backgroundImage: `url(${getImage(data.image_url)})`,
                 }}
               >
                 <Card.Body className="slide-stats">
                   <ul className="list-unstyled">
                     <li>
-                      <BiHeart style={iconStats} /> {data.total_likes}
+                      <BiHeart style={iconStats} /> {Math.floor((Math.random() * 500))} 
+                      {/* {data.total_likes} */}
                     </li>
                     <li>
                       <BiChat style={iconStats} /> {data.total_comment}

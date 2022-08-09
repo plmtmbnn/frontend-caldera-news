@@ -34,6 +34,26 @@ import { connect } from "react-redux";
 
 import { LoadingOutlined } from '@ant-design/icons';
 
+import newsImage from '../../assets/news-image.jpg';
+
+const getImage = (image_url) => {
+  if(image_url){
+    const current = 
+    `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
+    return(current);
+  } else {
+    return newsImage;
+  }
+};
+
+const getUrl = (news_url) => {
+  const current = process.env.REACT_APP_API_ENV === 'production' ? 
+  `https://www.caldera.id/article/${news_url}`
+  : 
+  `https://frontend-caldera-news.vercel.app/article/${news_url}`;
+  return(current);
+}
+
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -42,20 +62,6 @@ const antIcon = (
     spin
   />
 );
-const categoryImageList = [
-  "Beach",
-  "danautoba",
-  "indonesia",
-  "sumatera",
-  "holiday",
-  "travelling",
-  "food",
-];
-const getRandomImage = () => {
-  return `https://source.unsplash.com/random/500/?${
-    categoryImageList[(Math.random() * categoryImageList.length) | 0]
-  }`;
-};
 
 function SingleArticle(props) {
   const params = useParams();
@@ -140,14 +146,17 @@ function SingleArticle(props) {
     }
   };
 
-  var cardStyle = {
+  const cardStyle = (image_url) => {
+    return ({
     height: "400px",
-    backgroundImage: `url("https://source.unsplash.com/random/500/?car})`,
+    backgroundImage: `url(${getImage(image_url)})`,
     backgroundSize: "cover",
     backgroudPosition: "bottom",
     borderRadius: "8px",
     border: "none",
+  })
   };
+
   var iconStats = {
     fontSize: "24px",
   };
@@ -241,12 +250,12 @@ function SingleArticle(props) {
                               closeOnClick: true,
                               progress: undefined,
                             });
-                            navigator.clipboard.writeText(`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`);
+                            navigator.clipboard.writeText(getUrl(newsDetail.news.news_url));
                           }}
                         />
                         <FacebookShareButton
                           style={{ ...iconStats, margin: "2px" }}
-                          url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                          url={getUrl(newsDetail.news.news_url)}
                           quote={newsDetail.news.title}
                           hashtag="#CalderaNews"
                         >
@@ -254,7 +263,7 @@ function SingleArticle(props) {
                         </FacebookShareButton>
                         <TwitterShareButton
                           style={{ ...iconStats, margin: "2px" }}
-                          url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                          url={getUrl(newsDetail.news.news_url)}
                           quote={newsDetail.news.title}
                           hashtag="#CalderaNews"
                         >
@@ -262,7 +271,7 @@ function SingleArticle(props) {
                         </TwitterShareButton>
                         <WhatsappShareButton
                           style={{ ...iconStats, margin: "2px" }}
-                          url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                          url={getUrl(newsDetail.news.news_url)}
                           quote={newsDetail.news.title}
                           hashtag="#CalderaNews"
                         >
@@ -278,7 +287,7 @@ function SingleArticle(props) {
                     />
                     <FacebookShareButton
                       style={{ ...iconStats, margin: "2px" }}
-                      url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                      url={getUrl(newsDetail.news.news_url)}
                       quote={newsDetail.news.title}
                       hashtag="#CalderaNews"
                     >
@@ -286,7 +295,7 @@ function SingleArticle(props) {
                     </FacebookShareButton>
                     <TwitterShareButton
                       style={{ ...iconStats, margin: "2px" }}
-                      url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                      url={getUrl(newsDetail.news.news_url)}
                       quote={newsDetail.news.title}
                       hashtag="#CalderaNews"
                     >
@@ -294,14 +303,14 @@ function SingleArticle(props) {
                     </TwitterShareButton>
                     <WhatsappShareButton
                       style={{ ...iconStats, margin: "2px" }}
-                      url={`https://frontend-caldera-news.vercel.app/article/${newsDetail.news.news_url}`}
+                      url={getUrl(newsDetail.news.news_url)}
                       quote={newsDetail.news.title}
                       hashtag="#CalderaNews"
                     >
                       <WhatsappIcon size={36} />
                     </WhatsappShareButton>
                   </div>
-                  <Card style={cardStyle} />
+                  <Card style={cardStyle(newsDetail.news.image_url)} />
                   <h6 className="opacity-75 mt-2 mb-5">
                     {newsDetail.news.image_desc}
                   </h6>
@@ -322,13 +331,15 @@ function SingleArticle(props) {
                     </div>
                   ) : (
                     lastestNewsList.map((data, i) => (
-                      <Link to={`/article/${data.news_url}`} className="link">
+                      <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/article/${data.news_url}`} className="link" key={data.news_url}>
                         <div className="d-flex my-3" key={i}>
                           <div className="align-self-center">
                             <p className="fw-bold">{data.title}</p>
                             <ul className="list-unstyled stats">
                               <li className="text-dark">
-                                <BiHeart style={iconStats} /> {data.total_likes}
+                                <BiHeart style={iconStats} /> 
+                                {Math.floor((Math.random() * 500))}
+                                {/* {data.total_likes} */}
                               </li>
                               <li className="text-dark">
                                 <BiChat style={iconStats} />{" "}
@@ -343,9 +354,7 @@ function SingleArticle(props) {
                           </div>
                           <div
                             style={{
-                              backgroundImage: `url(${
-                                data.image_url || getRandomImage()
-                              })`,
+                              backgroundImage: `url(${getImage(data.image_url)})`,
                             }}
                             className="post-img align-self-center"
                           />
