@@ -33,6 +33,7 @@ function CategoryArticle() {
   const [page, setpage] = useState(1);
   const [newsList, setnewsList] = useState([]);
   const [isLoading, setisLoading] = useState(true);
+  const [count, setcount] = useState(0);
 
   useEffect(() => {
     getNewsList();
@@ -74,10 +75,12 @@ function CategoryArticle() {
     });
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsList(result.data);
+      setcount(result.count);
       setisLoading(false);
     } else {
       setnewsList([]);
       setisLoading(false);
+      setcount(0);
     }
   };
 
@@ -199,13 +202,13 @@ function CategoryArticle() {
               <Pagination
                 defaultCurrent={offset}
                 defaultPageSize={10}
-                total={newsList.length}
+                total={count}
                 onChange={(page, pageSize) => {
                   setpage(page);
                   if (page === 1) {
                     setoffset(0);
                   } else {
-                    setoffset(page * 10);
+                    setoffset((page - 1) * 10);
                   }
                 }}
               />

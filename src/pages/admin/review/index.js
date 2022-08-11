@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import {Layout, Space, Table, Tag } from "antd";
+import {Layout, Space, Table, Tag, Pagination } from "antd";
 import {Button, FormControl, Row, Col, FormGroup, FormLabel, FormSelect} from 'react-bootstrap';
 
 import SidebarAdmin from "../layouts/Sider";
@@ -19,7 +19,7 @@ function ReviewNews(props) {
   const [newsList, setnewsList] = useState([]);
   const [newsCategory, setNewsCategory] = useState([]);
   const [category_id, setcategory_id] = useState(null);
-
+  const [count, setcount] = useState(0);
 
   const [title, settitle] = useState("");
 
@@ -57,8 +57,10 @@ function ReviewNews(props) {
     const result = await newsApi.getNewsList(payload);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsList(result.data);
+      setcount(result.count);
     } else {
       setnewsList([]);
+      setcount(0);
     }
   };
 
@@ -148,6 +150,7 @@ function ReviewNews(props) {
             </div>          
             <hr />
             <Table
+              pagination={false}
               scroll={{ x: 980 }}
               columns={[
                 {
@@ -220,6 +223,24 @@ function ReviewNews(props) {
               ]}
               dataSource={newsList}
             />
+            <br />
+            <Row>
+            <Col hidden={newsList.length === 0}>
+              <Pagination
+                defaultCurrent={offset}
+                defaultPageSize={10}
+                total={count}
+                onChange={(page, pageSize) => {
+                  setpage(page);
+                  if (page === 1) {
+                    setoffset(0);
+                  } else {
+                    setoffset((page - 1) * 10);
+                  }
+                }}
+              />
+            </Col>
+          </Row>
           </div>
         </Content>
         <Footer

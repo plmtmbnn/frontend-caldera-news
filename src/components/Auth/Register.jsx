@@ -12,9 +12,9 @@ const Register = (props) => {
 
   const [isRegistered, setisRegistered] = useState(false);
   const [registerForm, setregisterForm] = useState({
-    email: "admin.caldera@gmail.com",
-    password: "12345",
-    full_name: "Caldera",
+    email: "",
+    password: "",
+    full_name: "",
     avatar_file: null,
   });
 
@@ -27,8 +27,7 @@ const Register = (props) => {
       if (
         registerForm.full_name &&
         registerForm.email &&
-        registerForm.password &&
-        registerForm.avatar_file
+        registerForm.password
       ) {
         toast.info("Sedang diproses...", {
           position: "top-center",
@@ -115,7 +114,7 @@ const Register = (props) => {
       ) : (
         <Form>
           <Form.Group className="mb-3">
-            <Form.Label>Nama Lengkap</Form.Label>
+            <Form.Label>Nama Lengkap*</Form.Label>
             <Form.Control
               value={registerForm.full_name}
               required
@@ -127,7 +126,7 @@ const Register = (props) => {
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Alamat Email</Form.Label>
+            <Form.Label>Alamat Email*</Form.Label>
             <Form.Control
               value={registerForm.email}
               required
@@ -139,7 +138,7 @@ const Register = (props) => {
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Kata Sandi</Form.Label>
+            <Form.Label>Kata Sandi*</Form.Label>
             <Form.Control
               value={registerForm.password}
               required
