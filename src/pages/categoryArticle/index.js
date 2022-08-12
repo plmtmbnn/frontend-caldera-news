@@ -151,7 +151,7 @@ function CategoryArticle() {
                 </Row>
               ) : newsList.length === 0 ? (
                 <Row>
-                  <h4>Tidak ada berita...</h4>
+                  <h4>Belum ada berita...</h4>
                 </Row>
               ) : (
                 newsList.map((data, i) => (

@@ -11,6 +11,7 @@ import { newsApi } from "../api/api.news";
 import moment from "moment";
 
 import newsImage from '../assets/news-image.jpg';
+import danauToba from '../assets/danau-toba.jpg';
 
 const getImage = (image_url) => {
   if(image_url){
@@ -66,7 +67,24 @@ function TrendingSlider() {
 
   return (
     <Slider {...settings}>
-      {trendingNewsList.map((data, i) => {
+      {
+      trendingNewsList.length === 0 ?
+      <div className="px-2">
+              <Card
+                style={{
+                  ...cardStyle,
+                  backgroundImage: `url(${danauToba})`,
+                }}
+              >
+                <Card.Body className="slide-stats">
+                </Card.Body>
+              </Card>
+              <h4 className="text-white fw-bold text-center m-3">
+                {'caldera.id | Mengulas Sedalam Kaldera'}
+              </h4>
+            </div>
+      :
+      trendingNewsList.map((data, i) => {
         return (
           <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/article/${data.news_url}`} className="link" key={i}>
             <div className="px-2">

@@ -179,9 +179,7 @@ const Home = () => {
             <Col lg={{ span: 10, offset: 1 }}>
               <Row className="mt-5">
                 {trendingNewsList.length === 0 ? (
-                  <div className="d-flex my-3 text-center">
-                    <h6 style={{ color: "white" }}>Belum ada berita</h6>
-                  </div>
+                  <></>
                 ) : (
                   trendingNewsList.map((data, i) => (
                     <Col md={6} lg={4} className="my-2" key={i}>
@@ -339,7 +337,7 @@ const Home = () => {
                   return (
                     <TabPane tab={e.category_name} key={e.id}>
                       {baseOnCategoryNewsList.length === 0 ? (
-                        <p>Tidak ada berita</p>
+                        <p>Belum ada berita</p>
                       ) : (
                         baseOnCategoryNewsList.map((data, i) => (
                           <Link
