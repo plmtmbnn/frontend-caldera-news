@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -27,7 +28,7 @@ function FooterApp() {
                 <Link onClick={()=>{window.scrollTo(0, 0)}} to="/category/peristiwa">Peristiwa</Link>
               </li>
               <li>
-                <Link onClick={()=>{window.scrollTo(0, 0)}} to="/category/parawisata">Parawisata</Link>
+                <Link onClick={()=>{window.scrollTo(0, 0)}} to="/category/pariwisata">Pariwisata</Link>
               </li>
               <li>
                 <Link onClick={()=>{window.scrollTo(0, 0)}} to="/category/pertanian">Pertanian</Link>
@@ -45,7 +46,7 @@ function FooterApp() {
               <li>
                 <Link to="/#">Tentang Kami</Link>
               </li>
-              <li>
+              <li hidden>
                 <Link to="/#">Hubungi Kami</Link>
               </li>
               <li>
@@ -58,14 +59,14 @@ function FooterApp() {
               Contact Us
             </h5>
             <ul className="list-unstyled">
-              <li>caldera@gmail.com</li>
+              <li>contactperson@caldera.id</li>
               <li>021 1234 5678</li>
               <li>Balige, Indonesia</li>
             </ul>
           </Col>
         </Row>
         <h6 className="text-muted mt-5 d-md-none text-center">
-          © 2022 Allright reserved
+          © ${moment().format('YYYY')} Allright reserved
         </h6>
       </Container>
     </footer>

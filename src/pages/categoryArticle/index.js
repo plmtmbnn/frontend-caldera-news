@@ -45,7 +45,7 @@ function CategoryArticle() {
       case "peristiwa":
         category_id = 1;
         break;
-      case "parawisata":
+      case "pariwisata":
         category_id = 2;
         break;
       case "politik":
@@ -90,8 +90,8 @@ function CategoryArticle() {
       case "peristiwa":
         result = "Peristiwa";
         break;
-      case "parawisata":
-        result = "Parawisata";
+      case "pariwisata":
+        result = "Pariwisata";
         break;
       case "politik":
         result = "Politik";

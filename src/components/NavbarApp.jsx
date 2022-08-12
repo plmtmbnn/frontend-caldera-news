@@ -49,8 +49,8 @@ const NavbarApp = (props) => {
             <Link to="/category/peristiwa" className="nav-link">
               Peristiwa
             </Link>
-            <Link to="/category/parawisata" className="nav-link">
-              Parawisata
+            <Link to="/category/pariwisata" className="nav-link">
+              Pariwisata
             </Link>
             <Link to="/category/politik" className="nav-link">
               Politik

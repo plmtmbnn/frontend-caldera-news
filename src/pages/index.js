@@ -144,7 +144,7 @@ const Home = () => {
         result = "category/peristiwa";
         break;
       case 2:
-        result = "category/parawisata";
+        result = "category/pariwisata";
         break;
       case 3:
         result = "category/politik";
