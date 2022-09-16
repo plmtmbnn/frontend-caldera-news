@@ -16,6 +16,8 @@ import { connect } from "react-redux";
 import moment from "moment";
 
 import newsImage from '../../../assets/news-image.jpg';
+import { PlusOutlined } from '@ant-design/icons';
+import { Modal, Upload } from 'antd';
 
 const getImage = (image_url) => {
   if(image_url){
@@ -26,6 +28,22 @@ const getImage = (image_url) => {
     return newsImage;
   }
 };
+
+const getBase64 = (file) =>
+new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onload = () => {
+    console.log('reader.result', reader.result);
+    resolve(reader.result);
+  };
+
+  reader.onerror = (error) => {
+    console.log('error', error);
+    reject(error);
+  };
+});
 
 const { Header, Content, Footer } = Layout;
 
@@ -60,13 +78,36 @@ function DetailPost(props) {
     const result = await newsApi.getNewsDetailById(param.id);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsContent(result.data.news);
+    }
+  };
+
+  const getImagesGroup = async () => {
+    const result = await newsApi.getImagesGroup(param.id);
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
+      let currentFileList = [];
+      if(result.data && result.data.images_count > 0) {
+          //status: 'uploading', 'done', 'error'
+
+          Array(...result.data.images).map((e, index) => {
+            currentFileList.push(
+              {
+                uid: `-${index + 1}`,
+                name: e.image_url,
+                status: 'done',
+                url: `${process.env.REACT_APP_API_END_POINT}/news/image/news/${e.image_url}`
+              }
+            );
+          });
+        setFileList(currentFileList);
+      }
     } else {
     }
   };
 
   useEffect(() => {
     getNewsDetail();
-  }, [param.id]);
+    getImagesGroup();
+  }, []);
 
   const upsertNews = async (sumbit_type) => {
     toast.info("Sedang diproses...", {
@@ -175,6 +216,78 @@ function DetailPost(props) {
     }
     return result;
   }
+
+  const uploadAdditionalImage = async (file) => {
+    toast.info("Sedang diproses...", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      progress: undefined,
+    });
+
+    const payload = new FormData();
+    payload.append("file", file);
+    payload.append("news_id", newsContent.id);
+
+      const result = await newsApi.uploadAdditionalImage(payload);
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
+      let message = 'Gambar tambahan berhasil diupload, silakan copy URL';
+      toast.success(message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: undefined,
+      });
+    // return {
+    //   "name": result.image_url,
+    //   "status": "done",
+    //   "url": `${process.env.REACT_APP_API_END_POINT}/news/image/news/${result.image_url}`,
+    //   "thumbUrl": `${process.env.REACT_APP_API_END_POINT}/news/image/news/${result.image_url}`,
+    //   };
+    await getImagesGroup();
+    } else {
+      toast.error("Gagal mengupload gambar.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: undefined,
+      });
+    }
+  };
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
+  const [fileList, setFileList] = useState([]);
+
+  const handleCancel = () => setPreviewOpen(false);
+
+  const handlePreview = async (file) => {
+    console.log('file.url', file);
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
 
   return (
     <Layout
@@ -317,6 +430,30 @@ function DetailPost(props) {
                       />
                     </div>
                   </Form.Group>
+                  <Form.Group className="mb-5">
+                    <Form.Label style={{color: '#ce1127'}}>Gambar Tambahan</Form.Label>
+                      <Upload
+                        action={ async (file) => {
+                          await uploadAdditionalImage(file);
+                        }}
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={(e) => {
+                          navigator.clipboard.writeText(e.url);
+                          toast.success('URL gambar berhasil dicopy.', {
+                            position: "top-center",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            progress: undefined,
+                          });
+                        }}
+                        accept="image/png, image/jpeg"
+                      >
+                        {fileList.length >= 8 ? null : uploadButton}
+                      </Upload>
+                      <p style={{ fontSize: 10}}>Klik icon "preview" untuk meng-copy URL gambar</p>
+                  </Form.Group>
                   <Row>
                   <Col xs={12} md={4} className="my-2 my-md-0">
                     <Form.Check
@@ -401,6 +538,15 @@ function DetailPost(props) {
             </Row>
           </div>
         </Content>
+        <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+          <img
+            alt="example"
+            style={{
+              width: '100%',
+            }}
+            src={previewImage}
+          />
+        </Modal>
         <Footer
           style={{
             textAlign: "center",

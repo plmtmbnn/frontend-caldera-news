@@ -121,13 +121,13 @@ function CreatePost(props) {
             }}
           >
             <div className="mb-3 d-flex">
-              <h4 className="w-100">Buat Berita</h4>
+              <h3 className="w-100 text-center" style={{color: '#ce1127'}}>Buat Berita</h3>
             </div>
             <Row>
               <Col md={8}>
                 <Form>
                   <Form.Group className="mb-4">
-                    <Form.Label>Judul</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Judul</Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="Tulis Judul Artikel"
@@ -141,7 +141,7 @@ function CreatePost(props) {
                     />
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label>Kategori</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Kategori</Form.Label>
                     <Form.Select
                       onChange={(event) => {
                         setnewsContent({
@@ -160,7 +160,7 @@ function CreatePost(props) {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label>Gambar Utama Berita</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Gambar Utama Berita</Form.Label>
                     <br />
                     <FilePond
                       credits={""}
@@ -196,7 +196,7 @@ function CreatePost(props) {
                     />
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label>Deskripsi Gambar</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Deskripsi Gambar</Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="Tulis Deskripsi Gambar"
@@ -210,7 +210,7 @@ function CreatePost(props) {
                     />
                   </Form.Group>
                   <Form.Group className="mb-5">
-                    <Form.Label>Isi Berita</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Isi Berita</Form.Label>
                     <div>
                       <JoditEditor
                         ref={editor}
@@ -229,6 +229,10 @@ function CreatePost(props) {
                         }}
                       />
                     </div>
+                  </Form.Group>
+                  <Form.Group className="mb-5">
+                    <Form.Label style={{color: '#ce1127'}}>Gambar Tambahan</Form.Label>
+                    <p>Silakan simpan terlebih dahulu berita Anda untuk bisa mengupload gambar tambahan</p>
                   </Form.Group>
                   <Row>
                   <Col xs={12} md={4} className="my-2 my-md-0">

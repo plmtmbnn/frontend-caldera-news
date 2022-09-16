@@ -75,6 +75,34 @@ class NewsApi extends BaseApiRequest {
     }
     return result;
   }
+
+  async getImagesGroup(news_id) {
+    let result = OpResult.failed("getImagesGroup");
+    try {
+      let resApi = await this.get(`/news/image-additional/${news_id}`);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("getImagesGroup", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
+
+  async uploadAdditionalImage(payload) {
+    let result = OpResult.failed("uploadAdditionalImage");
+    try {
+      let resApi = await this.post("/news/image/upload", payload, true);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("uploadAdditionalImage", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
 }
 
 export const newsApi = new NewsApi();

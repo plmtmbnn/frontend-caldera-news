@@ -139,7 +139,7 @@ function DetailPost(props) {
             }}
           >
             <div className="mb-3 d-flex">
-              <h4 className="w-100">Buat Berita</h4>
+              <h3 className="w-100 text-center" style={{color: '#ce1127'}}>Buat Berita</h3>
             </div>
             <Row>
               <Col md={8}>
