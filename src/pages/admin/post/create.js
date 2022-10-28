@@ -95,7 +95,7 @@ function CreatePost(props) {
         closeOnClick: true,
         progress: undefined,
       });
-      // window.location.href = "/admin/post";
+      window.location.href = "/admin/post";
     } else {
       toast.error("Gagal menyimpan berita.", {
         position: "top-center",

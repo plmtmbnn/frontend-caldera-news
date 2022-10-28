@@ -213,7 +213,7 @@ function AdminPost(props) {
                   key: "action",
                   render: (_, record) => (
                     <Space size="middle">
-                      <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/admin/post/detail/${record.id}`} target="_blank" rel="noopener noreferrer">
+                      <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/admin/post/detail/${record.id}`} rel="noopener noreferrer">
                         <Button type="primary">Detail</Button>
                       </Link>
                     </Space>
