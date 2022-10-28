@@ -7,7 +7,8 @@ import SidebarAdmin from "../layouts/Sider";
 import { Link } from "react-router-dom";
 
 import { newsApi } from "../../../api/api.news";
-import moment from "moment";
+
+import util from '../../../helper/util';
 
 import { connect } from "react-redux";
 
@@ -207,7 +208,7 @@ function ReviewNews(props) {
                   title: "Tgl Update",
                   dataIndex: "updated_at",
                   key: "updated_at",
-                  render: (text) => <p>{moment(text).format("DD MMM YYYY")}</p>,
+                  render: (text) => <p>{util.indonesiaFormat(text)}</p>,
                 },
                 {
                   title: "Action",

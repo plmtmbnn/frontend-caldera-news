@@ -12,7 +12,8 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 // api
 import { newsApi } from "../api/api.news";
-import moment from "moment";
+
+import util from '../helper/util';
 
 import newsImage from '../assets/news-image.jpg';
 
@@ -207,7 +208,7 @@ const Home = () => {
                         </li>
                         <li>
                           {data.posted_at
-                            ? moment(data.posted_at).format("DD MMM YYYY")
+                            ? util.indonesiaFormat(data.posted_at)
                             : "-"}
                         </li>
                       </ul>
@@ -263,7 +264,7 @@ const Home = () => {
                         </li>
                         <li className="text-dark">
                           {data.posted_at
-                            ? moment(data.posted_at).format("DD MMM YYYY")
+                            ? util.indonesiaFormat(data.posted_at)
                             : "-"}
                         </li>
                       </ul>
@@ -315,7 +316,7 @@ const Home = () => {
                           </li>
                           <li className="text-dark">
                             {data.posted_at
-                              ? moment(data.posted_at).format("DD MMM YYYY")
+                              ? util.indonesiaFormat(data.posted_at)
                               : "-"}
                           </li>
                         </ul>
@@ -348,7 +349,7 @@ const Home = () => {
                             <div className="my-3" key={i}>
                               <p className="mb-0 text-primary">
                                 {data.posted_at
-                                  ? moment(data.posted_at).format("DD MMM YYYY")
+                                  ? util.indonesiaFormat(data.posted_at)
                                   : "-"}
                               </p>
                               <p className="fw-bold mb-2">{data.title}</p>

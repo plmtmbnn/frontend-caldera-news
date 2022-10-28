@@ -154,11 +154,9 @@ hr.title {
 }
 
 .bg-admin {
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(90, 92, 106, 1) 0%,
-    rgba(32, 45, 58, 1) 81.3%
-  );
+  background-image: radial-gradient(circle farthest-corner at 10% 20%,
+      rgba(90, 92, 106, 1) 0%,
+      rgba(32, 45, 58, 1) 81.3%);
   height: 100vh;
   align-items: center;
   display: flex;
@@ -174,7 +172,7 @@ hr.title {
   background: #fff;
 }
 
-.quill > .ql-toolbar:first-child {
+.quill>.ql-toolbar:first-child {
   display: none !important;
 }
 
@@ -196,7 +194,28 @@ hr.title {
   padding-bottom: 5px;
 }
 
-.navbar-light .navbar-nav .show > .nav-link,
+.navbar-light .navbar-nav .show>.nav-link,
 .navbar-light .navbar-nav .nav-link.active {
   color: $primary;
+}
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+
+blockquote p {
+  display: inline;
 }

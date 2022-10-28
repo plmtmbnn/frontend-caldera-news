@@ -6,8 +6,12 @@ import { Link, useParams } from "react-router-dom";
 import SidebarAdmin from "../layouts/Sider";
 import { FilePond } from "react-filepond";
 
-import JoditEditor from "jodit-react";
 import { toast } from "react-toastify";
+
+import { CKEditor } from 'ckeditor4-react';
+
+import CustomDropDownPenulis from '../components/CustomDropDownPenulis';
+import TagCustom from '../components/TagCustom';
 
 // api
 import { newsApi } from "../../../api/api.news";
@@ -20,21 +24,35 @@ const { Header, Content, Footer } = Layout;
 function DetailPost(props) {
   const param = useParams();
   const editor = useRef(null);
+  
+  const [tag, setTag] = useState([]);
 
   const [newsCategory, setNewsCategory] = useState([]);
 
   const [newsContent, setnewsContent] = useState({
     title: "",
     author_id: props.user.author_id,
-    content: "",
+    content: "<div></div>",
     status: "DRAFT",
     file: null,
     category_id: 1,
     news_id: null,
     image_desc: '',
     is_recommendation: false,
-    is_trending: false
+    is_trending: false,
+    origin_author_name: '',
+    id: ''
   });
+
+  const [content, setContentNews] = useState('<div></div>');
+
+  const setContent =(value) => {
+    setContentNews(String(value));
+  }
+
+  const updateOriginAuthor = (origin_author_name) => {
+    setnewsContent({ ...newsContent, origin_author_name})
+  }
 
   const getCategory = async () => {
     const result = await newsApi.getCategory();
@@ -47,6 +65,16 @@ function DetailPost(props) {
     const result = await newsApi.getNewsDetailById(param.id);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsContent(result.data.news);
+      setContent(result.data.news.content);
+      const savedTags = [];
+      Array(...result.data.tags).map((e) => {
+        savedTags.push({ 
+          key: `${e.t_tag.id}`,
+          value: e.t_tag.id,
+          children: e.t_tag.name
+        })
+      });
+      setTag(savedTags);
     } else {
     }
   };
@@ -55,15 +83,32 @@ function DetailPost(props) {
     getNewsDetail();
   }, [param.id]);
 
+  const [contentEditor, setContentEditor] = useState(null);
+
+  useEffect(() => {
+    setContent(newsContent.content);
+    return () => {
+      if (contentEditor) contentEditor.removeListener();
+    };
+  }, [contentEditor, newsContent.content]);
+
   const upsertNews = async (sumbit_type) => {
+    toast.info("Sedang diproses...", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      progress: undefined,
+    });
+
     const payload = new FormData();
     payload.append("title", newsContent.title);
     payload.append("author_id", newsContent.author_id);
-    payload.append("content", newsContent.content);
+    payload.append("content", content);
     payload.append("status", sumbit_type);
     payload.append("category_id", newsContent.category_id);
     payload.append("image_desc", newsContent.image_desc);
-
+    payload.append("origin_author_name", newsContent.origin_author_name);
     payload.append("is_recommendation", newsContent.is_recommendation);
     payload.append("is_trending", newsContent.is_trending);
 
@@ -74,7 +119,13 @@ function DetailPost(props) {
       payload.append("news_id", newsContent.id);
     }
     if (sumbit_type === "PUBLISH") {
-      payload.append("posted_at", moment().format("YYYY-MM-DD"));
+      payload.append("posted_at", moment().format("YYYY-MM-DD HH:mm:ss"));
+    }
+
+    if (tag.length > 0) {
+      const list = [];
+      tag.map((e) => {return list.push(e.value)});
+      payload.append("tag_ids", JSON.stringify(list));
     }
 
     const result = await newsApi.upsertNews(payload);
@@ -90,6 +141,10 @@ function DetailPost(props) {
         closeOnClick: true,
         progress: undefined,
       });
+
+      if(sumbit_type === "PUBLISH"){
+        window.location.href = "/admin/post";
+      }
     } else {
       toast.error("Gagal menyimpan berita.", {
         position: "top-center",
@@ -192,10 +247,7 @@ function DetailPost(props) {
                           ? newsContent.file
                           : [newsContent.file]
                       }
-                      allowMultiple={false}
-                      maxFiles={1}
-                      acceptedFileTypes={"image/*"}
-                      instantUpload={false}
+                      acceptedFileTypes={['image/*', 'audio/*', 'video/*']}
                       beforeAddFile={(item) => {
                         if (
                           newsContent.file === null ||
@@ -230,26 +282,39 @@ function DetailPost(props) {
                         });
                       }}
                     />
-                  </Form.Group>                  
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label style={{color: '#ce1127'}}>Penulis</Form.Label>
+                    <div>
+                      <CustomDropDownPenulis 
+                      origin_author_name={newsContent.origin_author_name}
+                      updateValue={(value) => {
+                        updateOriginAuthor(value)
+                      }}
+                      />
+                    </div>
+                  </Form.Group>
                   <Form.Group className="mb-5">
                     <Form.Label>Isi Berita</Form.Label>
                     <div>
-                      <JoditEditor
-                        ref={editor}
-                        value={newsContent.content}
-                        config={{
-                          height: "450px",
-                          readonly: false,
-                          placeholder: "Mulai menulis berita...",
-                        }}
-                        tabIndex={1} // tabIndex of textarea
-                        onBlur={(newContent) => {
-                          setnewsContent({
-                            ...newsContent,
-                            content: newContent,
-                          });
-                        }}
-                      />
+                    <CKEditor
+                      editorUrl={`${window.location.origin}/ckeditor/ckeditor.js`}
+                      onInstanceReady={({ editor }) => {
+                        setContentEditor(editor);
+                      }}
+                      // ref={editor}
+                      initData={content}
+                      onChange={ (e) => {
+                          setContent(e.editor.getData());
+                      }}
+                      key={newsContent.news_id}
+                    />
+                    </div>
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
+                    <div>
+                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag = {tag} />
                     </div>
                   </Form.Group>
                   <Row>

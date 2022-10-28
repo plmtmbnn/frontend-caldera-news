@@ -7,7 +7,7 @@ import SidebarAdmin from "../layouts/Sider";
 import { toast } from "react-toastify";
 
 import { authApi } from "../../../api/api.auth";
-import moment from "moment";
+import util from '../../../helper/util';
 
 import { connect } from "react-redux";
 
@@ -100,7 +100,9 @@ function AdminUser(props) {
                   key: "user_status",
                   defaultSortOrder: "ascend",
                   sorter: (a, b) => a.user_status.length - b.user_status.length,
-                  render: (text) => {return(<Tag color={text === 'Pembaca' ? 'green': 'red'}>{text}</Tag>)},
+                  render: (text) => {return(
+                  <Tag color={text === 'Pembaca' ? 'green': 'red'}>{text === 'Penulis' ? 'Editor' : text}</Tag>
+                  )},
                 },
                 {
                   title: "Nama",
@@ -121,7 +123,7 @@ function AdminUser(props) {
                   dataIndex: "created_at",
                   key: "created_at",
                   sorter: (a, b) => a.created_at.length - b.created_at.length,
-                  render: (text) => <p>{moment(text).format("DD MMM YYYY")}</p>,
+                  render: (text) => <p>{util.indonesiaFormat(text)}</p>,
                 },
                 {
                   title: "Action",
@@ -144,7 +146,7 @@ function AdminUser(props) {
                         }
                       >
                         {record.user_status === "Pembaca"
-                          ? "Jadikan Penulis"
+                          ? "Jadikan Editor"
                           : "Jadikan Pembaca"}
                       </Button>
                     </Space>

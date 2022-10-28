@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 // api
 import { newsApi } from "../api/api.news";
-import moment from "moment";
+import util from '../helper/util';
 
 import newsImage from '../assets/news-image.jpg';
 import danauToba from '../assets/danau-toba.jpg';
@@ -105,7 +105,7 @@ function TrendingSlider() {
                     </li>
                     <li>
                       {data.posted_at
-                        ? moment(data.posted_at).format("DD MMM YYYY")
+                        ? util.indonesiaFormat(data.posted_at)
                         : "-"}
                     </li>
                   </ul>

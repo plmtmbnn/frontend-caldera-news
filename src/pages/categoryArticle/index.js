@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 
 // api
 import { newsApi } from "../../api/api.news";
-import moment from "moment";
+import util from '../../helper/util';
 
 import { Pagination } from "antd";
 
@@ -176,7 +176,7 @@ function CategoryArticle() {
                               {parseInt(data.total_comment)}
                             </li>
                             <li className="text-dark">
-                              {moment(data.posted_at).format("DD MMM YYYY")}
+                              {util.indonesiaFormat(data.posted_at)}
                             </li>
                           </ul>
                         </Col>

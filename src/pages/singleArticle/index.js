@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { Spin } from 'antd';
+import { Spin, Tag } from 'antd';
 
 import { Container, Row, Col, Card } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
@@ -28,7 +28,7 @@ import {
 import { newsApi } from "../../api/api.news";
 import { commentLikeApi } from "../../api/api.comment-likes";
 
-import moment from "moment";
+import util from '../../helper/util';
 
 import { connect } from "react-redux";
 
@@ -121,6 +121,8 @@ function SingleArticle(props) {
 
   const [comments, setcomments] = useState([]);
 
+  const [tagList, setTagList] = useState([]);
+
   const getNewsDetail = async () => {
     const result = await newsApi.getNewsDetail(params.id);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
@@ -132,6 +134,7 @@ function SingleArticle(props) {
         offset: 0,
       });
       setnewsDetail(result.data);
+      setTagList(result.data.tags);
     } else {
     }
     setisLoading(false);
@@ -198,10 +201,7 @@ function SingleArticle(props) {
   };
 
   return (
-    <div onCopy={(e) => {
-        e.preventDefault();
-        return false;
-    }}>
+    <div>
       <NavbarApp />
       <div className="py-5">
         <Container>
@@ -217,11 +217,13 @@ function SingleArticle(props) {
                 <section>
                   <h3 className="fw-bold my-4">{newsDetail.news.title}</h3>
                   <h6 className="opacity-75">
-                    Penulis: {newsDetail.news.t_author.author_name}
+                    Editor: {newsDetail.news.t_author.author_name} | Penulis: {newsDetail.news.origin_author_name}
+                  </h6>
+                  <h6 className="opacity-75">
+                  {util.indonesiaFormat(newsDetail.news.posted_at)}
                   </h6>
                   <div className="d-flex justify-content-between my-md-4">
                     <p className="text-muted">
-                      {moment(newsDetail.news.posted_at).locale('id').format("DD MMM YYYY")}
                     </p>
                     <ul className="list-unstyled inline">
                       <li>
@@ -316,12 +318,30 @@ function SingleArticle(props) {
                   </h6>
                   <div className="p-article mb-5">
                     <div
+                      onCopy={(e) => {
+                          e.preventDefault();
+                          return false;
+                      }}
                       dangerouslySetInnerHTML={{
                         __html: newsDetail.news.content,
                       }}
                     />
                   </div>
                 </section>
+                {
+                  tagList.length > 0 ?
+                  (<section>
+                  <h4 className="fw-bold">Hashtag</h4>
+                  {
+                    tagList.map((e, index) => {
+                      return(<Tag color="magenta" key={e.id}>{e.t_tag.name}</Tag>)
+                    })
+                  }
+                  </section>)
+                  :
+                  <></>
+                }
+                <hr />
                 <section>
                   <h4 className="fw-bold">Baca Lainnya</h4>
                   <hr className="title mb-4" />
@@ -347,7 +367,7 @@ function SingleArticle(props) {
                               </li>
                               <li className="text-dark">
                                 {data.posted_at
-                                  ? moment(data.posted_at).format("DD MMM YYYY")
+                                  ? util.indonesiaFormat(data.posted_at)
                                   : "-"}
                               </li>
                             </ul>

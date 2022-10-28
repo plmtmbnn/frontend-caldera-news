@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "antd";
-import { Form, Button, Col, Row, FormCheck } from "react-bootstrap";
+import { Form, Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
+import CustomDropDownPenulis from '../components/CustomDropDownPenulis';
+import TagCustom from '../components/TagCustom';
+
 import { FilePond } from "react-filepond";
 
-import JoditEditor from "jodit-react";
 import { toast } from "react-toastify";
 
 // api
@@ -15,12 +17,19 @@ import { newsApi } from "../../../api/api.news";
 import { connect } from "react-redux";
 import moment from "moment";
 
+
+import { CKEditor } from 'ckeditor4-react';
+
+
 const { Header, Content, Footer } = Layout;
 
 function CreatePost(props) {
+  
   const editor = useRef(null);
 
   const [newsCategory, setNewsCategory] = useState([]);
+
+  const [tag, setTag] = useState([]);
 
   const [newsContent, setnewsContent] = useState({
     title: "",
@@ -31,8 +40,14 @@ function CreatePost(props) {
     category_id: 1,
     image_desc: '',
     is_recommendation: false,
-    is_trending: false
+    is_trending: false,
+    origin_author_name: ''
   });
+
+  const updateOriginAuthor = (origin_author_name) => {
+    const payload = { ...newsContent, origin_author_name};
+    setnewsContent(payload)
+  }
 
   const getCategory = async () => {
     const result = await newsApi.getCategory();
@@ -45,18 +60,26 @@ function CreatePost(props) {
     const payload = new FormData();
     payload.append("title", newsContent.title);
     payload.append("author_id", newsContent.author_id);
-    payload.append("content", newsContent.content);
+    payload.append("content", content);
     payload.append("status", sumbit_type);
     payload.append("image_desc", newsContent.image_desc);
     payload.append("is_recommendation", newsContent.is_recommendation);
     payload.append("is_trending", newsContent.is_trending);
+    payload.append("origin_author_name", newsContent.origin_author_name);
 
     if (newsContent.file) {
       payload.append("file", newsContent.file);
     }
+
+    if (tag.length > 0) {
+      const list = [];
+      tag.map((e) => {return list.push(e.value)});
+      payload.append("tag_ids", JSON.stringify(list));
+    }
+
     payload.append("category_id", newsContent.category_id);
     if (sumbit_type === "PUBLISH") {
-      payload.append("posted_at", moment().format("YYYY-MM-DD"));
+      payload.append("posted_at", moment().format("YYYY-MM-DD HH:mm:ss"));
     }
 
     const result = await newsApi.upsertNews(payload);
@@ -72,6 +95,7 @@ function CreatePost(props) {
         closeOnClick: true,
         progress: undefined,
       });
+      // window.location.href = "/admin/post";
     } else {
       toast.error("Gagal menyimpan berita.", {
         position: "top-center",
@@ -93,6 +117,12 @@ function CreatePost(props) {
   useEffect(() => {
     getCategory();
   }, []);
+
+  const [content, setContentNews] = useState('');
+
+  const setContent =(content) => {
+    setContentNews(String(content))
+  }
 
   return (
     <Layout
@@ -172,7 +202,7 @@ function CreatePost(props) {
                       }
                       allowMultiple={false}
                       maxFiles={1}
-                      acceptedFileTypes={"image/*"}
+                      acceptedFileTypes={["image/*"]}
                       instantUpload={false}
                       beforeAddFile={(item) => {
                         if (
@@ -209,25 +239,33 @@ function CreatePost(props) {
                       }}
                     />
                   </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label style={{color: '#ce1127'}}>Penulis</Form.Label> 
+                    <div>
+                      <CustomDropDownPenulis 
+                      origin_author_name={newsContent.origin_author_name}
+                      updateValue={(value) => {
+                        updateOriginAuthor(value)
+                      }}
+                      />
+                    </div>
+                  </Form.Group>
                   <Form.Group className="mb-5">
                     <Form.Label style={{color: '#ce1127'}}>Isi Berita</Form.Label>
                     <div>
-                      <JoditEditor
-                        ref={editor}
-                        value={newsContent.content}
-                        config={{
-                          height: "450px",
-                          readonly: false,
-                          placeholder: "Mulai menulis berita...",
-                        }}
-                        tabIndex={1} // tabIndex of textarea
-                        onBlur={(newContent) => {
-                          setnewsContent({
-                            ...newsContent,
-                            content: newContent,
-                          });
-                        }}
-                      />
+                    <CKEditor
+                      // ref={editor}
+                      editorUrl={`${window.location.origin}/ckeditor/ckeditor.js`}
+                      onChange={(e)=>{
+                          setContent(e.editor.getData());
+                      }}
+                    />
+                    </div>
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
+                    <div>
+                      <TagCustom setTag = { (list) => { setTag(list); }} />
                     </div>
                   </Form.Group>
                   <Form.Group className="mb-5">
@@ -277,7 +315,8 @@ function CreatePost(props) {
                         </Button>
                       </Link>
                     </Col>
-                    <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Col xs={12} md={4} className="my-2 my-md-0"
+                    >
                       <Button
                         onClick={() => {
                           handleSubmit("DRAFT");
@@ -288,7 +327,7 @@ function CreatePost(props) {
                         Simpan Sebagai Draft
                       </Button>
                     </Col>
-                    <Col xs={12} md={4} className="my-2 my-md-0">
+                    <Col xs={12} md={4} className="my-2 my-md-0" hidden={!props.user.isAdmin}>
                       <Button
                         onClick={() => {
                           handleSubmit("PUBLISH");

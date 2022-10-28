@@ -34,6 +34,21 @@ class CommentLikeApi extends BaseApiRequest {
     return result;
   }
 
+  
+  async deleteComment(comment_id) {
+    let result = OpResult.failed("deleteComment");
+    try {
+      let resApi = await this.get(`/news/comment/delete/${comment_id}`);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("deleteComment", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
+
   async getLikeList(news_id) {
     let result = OpResult.failed("getLikeList");
     try {
