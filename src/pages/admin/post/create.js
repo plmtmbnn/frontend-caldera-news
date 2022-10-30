@@ -6,10 +6,13 @@ import { Link } from "react-router-dom";
 import SidebarAdmin from "../layouts/Sider";
 import CustomDropDownPenulis from '../components/CustomDropDownPenulis';
 import TagCustom from '../components/TagCustom';
+import WritingTipsModal from '../components/WritingTipsModal';
 
 import { FilePond } from "react-filepond";
 
 import { toast } from "react-toastify";
+
+import {useNavigate} from 'react-router-dom';
 
 // api
 import { newsApi } from "../../../api/api.news";
@@ -17,16 +20,17 @@ import { newsApi } from "../../../api/api.news";
 import { connect } from "react-redux";
 import moment from "moment";
 
-
-import { CKEditor } from 'ckeditor4-react';
-
+import 'jodit';
+import 'jodit/build/jodit.min.css';
+import JoditEditor from "jodit-react";
 
 const { Header, Content, Footer } = Layout;
 
 function CreatePost(props) {
-  
   const editor = useRef(null);
 
+  const navigate = useNavigate();
+  
   const [newsCategory, setNewsCategory] = useState([]);
 
   const [tag, setTag] = useState([]);
@@ -95,7 +99,7 @@ function CreatePost(props) {
         closeOnClick: true,
         progress: undefined,
       });
-      window.location.href = "/admin/post";
+      navigate("/admin/post");
     } else {
       toast.error("Gagal menyimpan berita.", {
         position: "top-center",
@@ -251,16 +255,21 @@ function CreatePost(props) {
                     </div>
                   </Form.Group>
                   <Form.Group className="mb-5">
-                    <Form.Label style={{color: '#ce1127'}}>Isi Berita</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Isi Berita <WritingTipsModal /></Form.Label> <br />
+                    
                     <div>
-                    <CKEditor
-                      // ref={editor}
-                      editorUrl={`${window.location.origin}/ckeditor/ckeditor.js`}
-                      onChange={(e)=>{
-                          setContent(e.editor.getData());
-                      }}
+                    <JoditEditor
+                        value={content}
+                        editorRef={editor}
+                        tabIndex={1} // tabIndex of textarea
+                        onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+			                  onChange={(newContent) => {}}
                     />
                     </div>
+                  </Form.Group>
+                  <Form.Group className="mb-5">
+                    <Form.Label style={{color: '#ce1127'}}>Gambar Tambahan</Form.Label>
+                    <p>Untuk menambahkan gambar tambahan pada berita, silakan klik <span><b>'Simpan Sebagai Draft'</b></span>, lalu pilih berita untuk melanjutkan kembali.</p>
                   </Form.Group>
                   <Form.Group className="mb-4">
                     <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
@@ -268,11 +277,9 @@ function CreatePost(props) {
                       <TagCustom setTag = { (list) => { setTag(list); }} />
                     </div>
                   </Form.Group>
-                  <Form.Group className="mb-5">
-                    <Form.Label style={{color: '#ce1127'}}>Gambar Tambahan</Form.Label>
-                    <p>Silakan simpan terlebih dahulu berita Anda untuk bisa mengupload gambar tambahan</p>
-                  </Form.Group>
+                  
                   <Row>
+                  <Form.Label style={{color: '#ce1127'}}>Untuk memasukan berita sebagai Berita Rekomendasi / Berita Trending silakan ceklis salah satu atau keduanya</Form.Label>
                   <Col xs={12} md={4} className="my-2 my-md-0">
                     <Form.Check
                       label={`Berita Rekomendasi`}

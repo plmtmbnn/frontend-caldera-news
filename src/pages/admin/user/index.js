@@ -14,7 +14,6 @@ import { connect } from "react-redux";
 const { Header, Content, Footer } = Layout;
 
 function AdminUser(props) {
-  console.log(props.user);
   const [userList, setuserList] = useState([]);
   const [filterUser, setfilterUser] = useState({
     full_name: null,

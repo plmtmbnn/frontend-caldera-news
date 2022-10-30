@@ -16,7 +16,7 @@ import danauToba from '../assets/danau-toba.jpg';
 const getImage = (image_url) => {
   if(image_url){
     const current = 
-    `${process.env.REACT_APP_API_END_POINT}/image/news/${image_url}`;
+    `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
     return(current);
   } else {
     return newsImage;
@@ -82,7 +82,7 @@ function TrendingSlider() {
               <h4 className="text-white fw-bold text-center m-3">
                 {'caldera.id | Mengulas Sedalam Kaldera'}
               </h4>
-            </div>
+      </div>
       :
       trendingNewsList.map((data, i) => {
         return (
@@ -93,6 +93,7 @@ function TrendingSlider() {
                   ...cardStyle,
                   backgroundImage: `url(${getImage(data.image_url)})`,
                 }}
+                key={i + data.image_url}
               >
                 <Card.Body className="slide-stats">
                   <ul className="list-unstyled">

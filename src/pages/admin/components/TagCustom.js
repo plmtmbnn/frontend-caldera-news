@@ -1,8 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Divider, Input, Select, Space, Button } from 'antd';
-
 import React, { useEffect, useState, useRef } from 'react';
-
 
 import { tagApi } from '../../../api/api.tag-api';
 
@@ -10,7 +8,6 @@ const { Option } = Select;
 
 
 const App = ( { setTag, selectedTag}) => {
-  console.log(selectedTag);
   useEffect(() => {
     getTagList();
   }, []);
@@ -73,7 +70,7 @@ const App = ( { setTag, selectedTag}) => {
     }}
     placeholder="Tags"
     onChange={handleChange}
-    defaultValue = { selectedTag }
+    defaultValue = { selectOptions }
     value={ selectOptions }
     dropdownRender={(menu) => (
       <>

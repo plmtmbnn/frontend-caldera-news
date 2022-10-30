@@ -8,6 +8,7 @@ import { FilePond } from "react-filepond";
 
 import CustomDropDownPenulis from '../components/CustomDropDownPenulis';
 import TagCustom from '../components/TagCustom';
+import WritingTipsModal from '../components/WritingTipsModal';
 
 import { toast } from "react-toastify";
 
@@ -17,11 +18,16 @@ import { newsApi } from "../../../api/api.news";
 import { connect } from "react-redux";
 import moment from "moment";
 
-import { CKEditor } from 'ckeditor4-react';
+import 'jodit';
+import 'jodit/build/jodit.min.css';
+import JoditEditor from "jodit-react";
 
 import newsImage from '../../../assets/news-image.jpg';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
+
+import {useNavigate} from 'react-router-dom';
+
 
 const getImage = (image_url) => {
   if(image_url){
@@ -39,7 +45,6 @@ new Promise((resolve, reject) => {
   reader.readAsDataURL(file);
 
   reader.onload = () => {
-    console.log('reader.result', reader.result);
     resolve(reader.result);
   };
 
@@ -55,7 +60,8 @@ function DetailPost(props) {
   const param = useParams();
   const editor = useRef(null);
 
-  
+  const navigate = useNavigate();
+
   const [tag, setTag] = useState([]);
 
   const [newsCategory, setNewsCategory] = useState([]);
@@ -207,7 +213,7 @@ function DetailPost(props) {
         progress: undefined,
       });
       if(sumbit_type === "PUBLISH"){
-        window.location.href = "/admin/post";
+        navigate("/admin/post");
       }
     } else {
       toast.error("Gagal menyimpan berita.", {
@@ -469,26 +475,22 @@ function DetailPost(props) {
                     </div>
                   </Form.Group>                 
                   <Form.Group className="mb-5">
-                    <Form.Label style={{color: '#ce1127'}}>Isi Berita</Form.Label>
+                    <Form.Label style={{color: '#ce1127'}}>Isi Berita <WritingTipsModal /></Form.Label>
                     <div>
-                    <CKEditor
-                      editorUrl={`${window.location.origin}/ckeditor/ckeditor.js`}
-                      onInstanceReady={({ editor }) => {
-                        setContentEditor(editor);
-                      }}
-                      // ref={editor}
-                      initData={content}
-                      onChange={ (e) => {
-                          setContent(e.editor.getData());
-                      }}
-                      key={newsContent.news_id}
-                    />
+                      <JoditEditor
+                          value={content}
+                          editorRef={editor}
+                          tabIndex={1} // tabIndex of textarea
+                          onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                          onChange={(newContent) => {}}
+                          key={newsContent.news_id}
+                      />
                     </div>
                   </Form.Group>
                   <Form.Group className="mb-4">
                     <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
                     <div>
-                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag = {tag} />
+                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag = {tag} key={newsContent.news_id}/>
                     </div>
                   </Form.Group>
                   <Form.Group className="mb-5">
@@ -516,6 +518,7 @@ function DetailPost(props) {
                       <p style={{ fontSize: 10}}>Klik icon "preview" untuk meng-copy URL gambar</p>
                   </Form.Group>
                   <Row>
+                  <Form.Label style={{color: '#ce1127'}}>Untuk memasukan berita sebagai Berita Rekomendasi / Berita Trending silakan ceklis salah satu atau keduanya</Form.Label>
                   <Col xs={12} md={4} className="my-2 my-md-0">
                     <Form.Check
                       label={`Berita Rekomendasi`}
