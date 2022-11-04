@@ -9,6 +9,7 @@ import CategoryArticle from "./pages/categoryArticle";
 import SingleArticle from "./pages/singleArticle";
 import AdminUser from "./pages/admin/user";
 import ReviewNews from "./pages/admin/review";
+import UpdatePassword from "./pages/admin/password";
 
 // import ScrollToTop from './ScrollToTop';
 
@@ -24,6 +25,7 @@ function App() {
       <Route path="/admin/post" element={<AdminPost />}></Route>
       <Route path="/admin/review" element={<ReviewNews />}></Route>
       <Route path="/admin" element={<AdminPage />}></Route>
+      <Route path="/update-password" element={<UpdatePassword />}></Route>
       <Route path="/admin/user" element={<AdminUser />}></Route>
     </Routes>
   );

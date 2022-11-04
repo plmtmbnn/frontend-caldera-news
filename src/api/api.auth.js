@@ -61,6 +61,20 @@ class AuthApi extends BaseApiRequest {
     }
     return result;
   }
+
+  async updatePassword(payload) {
+    let result = OpResult.failed("updatePassword");
+    try {
+      let resApi = await this.post("/auth/password/update", payload);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("updatePassword", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
 }
 
 export const authApi = new AuthApi();

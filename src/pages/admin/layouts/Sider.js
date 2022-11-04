@@ -29,6 +29,9 @@ const SidebarAdmin = (props) => {
       case "/admin/review":
         key = "4";
         break;
+      case "/update-password":
+        key = "5";
+        break;        
       default:
         break;
     }
@@ -81,6 +84,11 @@ const SidebarAdmin = (props) => {
           <FileTextOutlined />
           <span>Daftar Pengguna</span>
           <Link to="/admin/user" />
+        </Menu.Item>
+        <Menu.Item key="5">
+          <FileTextOutlined />
+          <span>Ubah Password</span>
+          <Link to="/update-password" />
         </Menu.Item>
       </Menu>
     </Sider>
