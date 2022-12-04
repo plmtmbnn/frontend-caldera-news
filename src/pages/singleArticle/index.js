@@ -334,7 +334,7 @@ function SingleArticle(props) {
                   <h4 className="fw-bold">Hashtag</h4>
                   {
                     tagList.map((e, index) => {
-                      return(<Tag color="magenta" key={e.id}>{e.t_tag.name}</Tag>)
+                      return(<Tag style={{background: 'linear-gradient(90deg, #eb5757 0%, #000000 100%)', color: 'white', fontSize: 'large'}} key={e.id}>#{e.t_tag.name}</Tag>)
                     })
                   }
                   </section>)
