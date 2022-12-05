@@ -2,19 +2,19 @@ const moment = require("moment");
 
 const util = {
   indonesiaFormat: ( x, showHari ) => {
-    let hari = moment(x).day();
+    let hari = moment(x).add('-1','day').day();
     switch(hari) {
       case 0: hari = "Minggu"; break;
       case 1: hari = "Senin"; break;
       case 2: hari = "Selasa"; break;
       case 3: hari = "Rabu"; break;
       case 4: hari = "Kamis"; break;
-      case 5: hari = "Jum'at"; break;
+      case 5: hari = "Jumat"; break;
       case 6: hari = "Sabtu"; break;
       default: hari = "Minggu"; break;
      }
 
-     let bulan = moment(x).month();
+     let bulan = moment(x).add('-1','day').month();
      switch(bulan) {
       case 0: bulan = "Januari"; break;
       case 1: bulan = "Februari"; break;
@@ -31,7 +31,7 @@ const util = {
       default: bulan = "Desember"; break;
      }
 
-    return `${showHari ? '':`${hari},`} ${moment(x).format('DD')} ${bulan} ${moment(x).locale('id').format('YYYY hh:mm')} WIB`;
+    return `${showHari ? '':`${hari},`} ${moment(x).add('-1','day').format('DD')} ${bulan} ${moment(x).add('-1','day').add('6', 'hour').format('YYYY HH:mm')} WIB`;
   }
 };
 

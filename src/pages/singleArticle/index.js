@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import {Helmet} from "react-helmet";
+
+
 import { Spin, Tag } from 'antd';
 
 import { Container, Row, Col, Card } from "react-bootstrap";
@@ -200,8 +203,13 @@ function SingleArticle(props) {
     }
   };
 
-  return (
-    <div>
+  return (<div>
+      <Helmet>
+      <title>{newsDetail.news.title}</title>
+      <meta property="og:url" content={newsDetail.news.url}></meta>
+      <link rel="icon" href={newsDetail.news.image_url} />
+    </Helmet>
+
       <NavbarApp />
       <div className="py-5">
         <Container>
