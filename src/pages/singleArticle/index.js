@@ -206,7 +206,7 @@ function SingleArticle(props) {
   return (<div>
       <Helmet>
       <title>{newsDetail.news.title}</title>
-      <meta property="og:url" content={newsDetail.news.url}></meta>
+      <meta property="og:url" content={newsDetail.news.news_url}></meta>
       <link rel="icon" href={newsDetail.news.image_url} />
     </Helmet>
 
