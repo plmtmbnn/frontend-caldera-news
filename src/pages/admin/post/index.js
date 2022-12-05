@@ -30,6 +30,14 @@ function AdminPost(props) {
     }
   };
 
+  const deleteNews = async (news_id) => {
+    const result = await newsApi.deleteNews(news_id);
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
+      await getNewsList();
+    }
+  };
+
+
   useEffect(() => {
     getNewsList();
     getCategory();
@@ -214,8 +222,13 @@ function AdminPost(props) {
                   render: (_, record) => (
                     <Space size="middle">
                       <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/admin/post/detail/${record.id}`} rel="noopener noreferrer">
-                        <Button type="primary">Detail</Button>
+                        <Button variant="outline-primary">Detail</Button>
                       </Link>
+                        <Button 
+                        hidden={_.status === "PUBLISH"}
+                        variant="primary" onClick={async (e)=> {
+                          await deleteNews(_.id)
+                        }}>Hapus</Button>
                     </Space>
                   ),
                 },

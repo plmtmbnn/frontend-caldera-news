@@ -103,6 +103,21 @@ class NewsApi extends BaseApiRequest {
     }
     return result;
   }
+
+  
+  async deleteNews(news_id) {
+    let result = OpResult.failed("deleteNews");
+    try {
+      let resApi = await this.get(`/news/delete/${news_id}`);
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("deleteNews", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
 }
 
 export const newsApi = new NewsApi();
