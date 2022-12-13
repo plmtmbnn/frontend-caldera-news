@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import {Helmet} from "react-helmet";
+// import {Helmet} from "react-helmet";
+
+import  {Helmet } from 'react-helmet-async';
+
 
 
 import { Spin, Tag } from 'antd';
 
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import SectionComment from "./components/sectionComment";
 import NavbarApp from "../../components/NavbarApp";
@@ -79,8 +82,15 @@ function SingleArticle(props) {
     }
   };
 
+  useLayoutEffect(() => {
+    getNewsDetail();
+  }, []);
+
   useEffect(() => {
     getNewsDetail();
+    return () => {
+      getNewsDetail();
+  }
   }, [params.id]);
 
   const [isLoading, setisLoading] = useState(true);
@@ -91,9 +101,9 @@ function SingleArticle(props) {
       author_id: 1,
       image_desc: '',
       news_url: "220702-20-27-12_5-tempat-terbaik-di-sumut",
-      title: "",
-      image_url: null,
-      content: "",
+      title: "Berita",
+      image_url: 'https://www.caldera.id/static/media/logo.f22abae4ca373ed8a7b7.png',
+      content: "...",
       status: "PUBLISH",
       category_id: 1,
       posted_at: "2022-07-06T09:18:33.246Z",
@@ -152,16 +162,6 @@ function SingleArticle(props) {
     }
   };
 
-  const cardStyle = (image_url) => {
-    return ({
-    height: "400px",
-    backgroundImage: `url(${getImage(image_url)})`,
-    backgroundSize: "cover",
-    backgroudPosition: "bottom",
-    borderRadius: "8px",
-    border: "none",
-  })
-  };
 
   var iconStats = {
     fontSize: "24px",
@@ -204,12 +204,20 @@ function SingleArticle(props) {
   };
 
   return (<div>
-      <Helmet>
-      <title>{newsDetail.news.title}</title>
-      <meta property="og:url" content={newsDetail.news.news_url}></meta>
-      <link rel="icon" href={newsDetail.news.image_url} />
-    </Helmet>
-
+          <Helmet>
+            <meta charset="utf-8" />
+            <title>{String(newsDetail.news.title || 'Loading...')} | caldera.id</title>
+            <meta name="title" content={String(newsDetail.news.title).substring(0, 35)} />
+            <meta name="description"
+    content={String(newsDetail.news.content).substring(0, 65)} />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="description" content={String(newsDetail.news.content).substring(0, 65)} />
+            <meta data-rh="true" property="og:title" content={String(newsDetail.news.title).substring(0, 35)} />
+            <meta data-rh="true" property="og:description" content={String(newsDetail.news.content).substring(0, 65)} />
+            <meta data-rh="true" property="og:url" content={`https://caldera.id/article/${params.id}`} />
+            <meta data-rh="true" property="og:image" content={String(newsDetail.news.image_url)} />
+            <meta property="og:type" content="article" />
+        </Helmet>
       <NavbarApp />
       <div className="py-5">
         <Container>
@@ -268,6 +276,8 @@ function SingleArticle(props) {
                           url={getUrl(newsDetail.news.news_url)}
                           quote={newsDetail.news.title}
                           hashtag="#CalderaNews"
+                          title={newsDetail.news.title}
+                          
                         >
                           <FacebookIcon size={36} />
                         </FacebookShareButton>
@@ -284,6 +294,7 @@ function SingleArticle(props) {
                           url={getUrl(newsDetail.news.news_url)}
                           quote={newsDetail.news.title}
                           hashtag="#CalderaNews"
+                          forwardedRef
                         >
                           <WhatsappIcon size={36} />
                         </WhatsappShareButton>
@@ -320,7 +331,21 @@ function SingleArticle(props) {
                       <WhatsappIcon size={36} />
                     </WhatsappShareButton>
                   </div>
-                  <Card style={cardStyle(newsDetail.news.image_url)} />
+                  <Container fluid="md">
+                  <Row className="justify-content-md-center">
+                    <Col>
+                    <img 
+                    alt='text' 
+                    className="text-center self-content-center" 
+                    src={getImage(newsDetail.news.image_url)}
+                    style={{
+                      maxWidth:"100%"
+                    }}
+                    />
+                    </Col>
+                  </Row>
+                  </Container>
+                 
                   <h6 className="opacity-75 mt-2 mb-5">
                     {newsDetail.news.image_desc}
                   </h6>

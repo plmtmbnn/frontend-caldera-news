@@ -12,16 +12,14 @@ const App = ( { setTag, selectedTag}) => {
     getTagList();
   }, []);
 
-  const [items, setItems] = useState([]);
   const [name, setName] = useState('');
   const inputRef = useRef(null);
 
   const handleChange = (value, list) => {
     let data = [];
     Array(...list).map((e) => {
-      data.push({ ...e});
+      data.push({ ...e, key: e.value});
     });
-    setSelectOptions(data);
     setTag(data);
   };
 
@@ -49,29 +47,33 @@ const App = ( { setTag, selectedTag}) => {
     }
   }
 
+  
+  const [items, setItems] = useState([]);
   const getTagList = async () => {
     const result = await tagApi.getTag();
     if(result.status === 'SUCCESS' && result.message === 'SUCCESS') {
         const data = [];
         Array(...result.data).map((e) => {
-            data.push(<Option key={`${e.id}`} value={e.id}>{e.name}</Option>);
+          data.push({
+            key: e.id,
+            value: e.id,
+            label: e.name
+          });
         });
         setItems(data);
     }
   }
-  
-  const [selectOptions, setSelectOptions] = useState(selectedTag || []);
 
   return(
   <Select
-    mode="tags"
+  key={String(new Date())}
+    mode="multiple"
     style={{
       width: '100%',
     }}
     placeholder="Tags"
     onChange={handleChange}
-    defaultValue = { selectOptions }
-    value={ selectOptions }
+    value={ selectedTag }
     dropdownRender={(menu) => (
       <>
         {menu}
@@ -97,8 +99,8 @@ const App = ( { setTag, selectedTag}) => {
         </Space>
       </>
     )}
+    options={items}
   >
-    {items}
   </Select>
 )};
 export default App;

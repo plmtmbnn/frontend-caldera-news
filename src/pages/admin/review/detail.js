@@ -70,18 +70,18 @@ function DetailPost(props) {
   const getNewsDetail = async () => {
     const result = await newsApi.getNewsDetailById(param.id);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
-      setnewsContent(result.data.news);
-      setContent(result.data.news.content);
+      
       const savedTags = [];
       Array(...result.data.tags).map((e) => {
         savedTags.push({ 
-          key: `${e.t_tag.id}`,
+          key: e.t_tag.id,
           value: e.t_tag.id,
-          children: e.t_tag.name
+          label: e.t_tag.name
         })
       });
+      setnewsContent(result.data.news);
+      setContent(result.data.news.content);
       setTag(savedTags);
-    } else {
     }
   };
 
@@ -99,6 +99,7 @@ function DetailPost(props) {
   }, [contentEditor, newsContent.content]);
 
   const upsertNews = async (sumbit_type) => {
+    console.log(sumbit_type);
     toast.info("Sedang diproses...", {
       position: "top-center",
       autoClose: 3000,

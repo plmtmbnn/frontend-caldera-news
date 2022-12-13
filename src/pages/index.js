@@ -10,6 +10,12 @@ import FooterApp from "../components/FooterApp";
 import { BiChat, BiHeart } from "react-icons/bi";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
+
+import {Helmet} from "react-helmet-async";
+
+import logoCaldera from '../assets/logo.png';
+
+
 // api
 import { newsApi } from "../api/api.news";
 
@@ -170,12 +176,23 @@ const Home = () => {
   };
   return (
     <div>
+      <Helmet>
+        <title>caldera.id - Mengulas Sedalam Kaldera</title>
+        <meta name="title" content="caldera.id - Mengulas Sedalam Kaldera" />
+        <meta name="description"
+    content="caldera.id - berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
+        <meta data-rh="true" property="og:title" content="caldera.id - Mengulas Sedalam Kaldera" />
+        <meta data-rh="true" property="og:description" content="berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
+        <meta data-rh="true" property="og:url" content="https://caldera.id" />
+        <meta data-rh="true" property="og:image" content={logoCaldera}/>
+        <meta data-rh="true" property="og:type" content="website" />
+      </Helmet>
       <NavbarApp />
       <section className="bg-dark pt-3 pb-5">
         <Container>
           <Row>
             <Col lg={{ span: 8, offset: 2 }}>
-              <TrendingSlider />
+              <TrendingSlider/>
             </Col>
             <Col lg={{ span: 10, offset: 1 }}>
               <Row className="mt-5">

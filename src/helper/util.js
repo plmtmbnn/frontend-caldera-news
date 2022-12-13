@@ -31,7 +31,7 @@ const util = {
       default: bulan = "Desember"; break;
      }
 
-    return `${showHari ? '':`${hari},`} ${moment(x).add('-1','day').format('DD')} ${bulan} ${moment(x).add('-1','day').add('6', 'hour').format('YYYY HH:mm')} WIB`;
+    return `${showHari ? '':`${hari},`} ${moment(x).add('-1','day').format('DD')} ${bulan} ${moment(x).add('-6', 'hour').format('YYYY H:mm')} WIB`;
   }
 };
 

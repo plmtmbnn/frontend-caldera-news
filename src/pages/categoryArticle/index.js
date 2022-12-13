@@ -8,6 +8,8 @@ import NavbarApp from "../../components/NavbarApp";
 import { BiChat, BiHeart } from "react-icons/bi";
 import { Link, useParams } from "react-router-dom";
 
+import {Helmet} from "react-helmet";
+
 // api
 import { newsApi } from "../../api/api.news";
 import util from '../../helper/util';
@@ -125,6 +127,17 @@ function CategoryArticle() {
 
   return (
     <div>
+    <Helmet>
+        <title>caldera.id - {String(params.id).toUpperCase()}</title>
+        <meta name="title" content="caldera.id - Mengulas Sedalam Kaldera" />
+        <meta name="description"
+    content="caldera.id - berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
+        <meta property="og:title" content={'caldera.id - Mengulas Sedalam Kaldera'} />
+        <meta property="og:url" content={`https://caldera.id`} />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon-caldera.png" />
+        <meta property="og:type" content="website" /> <meta name="prerender-status-code" content="301" />
+        <meta name="prerender-header" content="Location: https://www.caldera.id" />
+    </Helmet>
       <NavbarApp />
       <section className="py-5">
         <Container>

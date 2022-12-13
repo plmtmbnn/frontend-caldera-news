@@ -34,10 +34,10 @@ class NewsApi extends BaseApiRequest {
     return result;
   }
 
-  async getNewsDetail(image_url) {
+  async getNewsDetail(news_url) {
     let result = OpResult.failed("getNewsDetail");
     try {
-      let resApi = await this.get(`/news/show/${image_url}`);
+      let resApi = await this.get(`/news/show/${news_url}`);
       if (resApi.status) {
         result = resApi;
       }

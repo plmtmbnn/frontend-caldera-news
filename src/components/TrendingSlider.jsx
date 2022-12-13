@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
-import Slider from "react-slick";
+// import Slider from "react-slick";
 
 // img, icons
 import { BiChat, BiHeart } from "react-icons/bi";
@@ -12,6 +12,9 @@ import util from '../helper/util';
 
 import newsImage from '../assets/news-image.jpg';
 import danauToba from '../assets/danau-toba.jpg';
+
+import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 const getImage = (image_url) => {
   if(image_url){
@@ -65,61 +68,99 @@ function TrendingSlider() {
     fontSize: "16px",
   };
 
+  var urls = [];
+
+  const showNews = () => {
+    const result = [];
+    urls = [];
+
+    trendingNewsList.map((data, i) => {
+      const newsUrl = `/article/${data.news_url}`;
+      urls.push(newsUrl);
+      result.push(
+        <Slide index={i} key={data.id+String(Math.random())}>
+          <div className="px-2" key={data.id+String(Math.random())}>
+            <Link
+            onClick={()=>{
+              window.scrollTo(0, 0);
+            }}
+            to={urls[i]} 
+            className="link"
+            key={data.id+String(Math.random())}>
+            <Card
+              style={{
+                ...cardStyle,
+                backgroundImage: `url(${getImage(data.image_url)})`,
+              }}
+              key={i}
+            >
+              <Card.Body className="slide-stats">
+                <ul className="list-unstyled">
+                  <li>
+                    <BiHeart style={iconStats} /> {Math.floor((Math.random() * 500))} 
+                    {/* {data.total_likes} */}
+                  </li>
+                  <li>
+                    <BiChat style={iconStats} /> {data.total_comment}
+                  </li>
+                  <li>
+                    {data.posted_at
+                      ? util.indonesiaFormat(data.posted_at)
+                      : "-"}
+                  </li>
+                </ul>
+              </Card.Body>
+            </Card>
+            <h4 className="text-white fw-bold text-center m-3">
+              {data.title}
+            </h4>
+            </Link>
+          </div>
+        </Slide>
+        
+      );
+    })
+
+    return result;
+  }
+
   return (
-    <Slider {...settings}>
+    <>
+    <CarouselProvider
+        naturalSlideWidth = {50}
+        naturalSlideHeight = {window.screen.width <= 760 ? 65 : 25}
+        totalSlides={3}
+        isPlaying={true}
+        interval={5000}
+      >
+        <Slider>
+        {showNews()}
+        </Slider>
+      </CarouselProvider>
+
+      {/* <Slider {...settings} key={String(Math.random())}>
       {
-      trendingNewsList.length === 0 ?
-      <div className="px-2">
-              <Card
-                style={{
-                  ...cardStyle,
-                  backgroundImage: `url(${danauToba})`,
-                }}
-              >
-                <Card.Body className="slide-stats">
-                </Card.Body>
-              </Card>
-              <h4 className="text-white fw-bold text-center m-3">
-                {'caldera.id | Mengulas Sedalam Kaldera'}
-              </h4>
-      </div>
-      :
-      trendingNewsList.map((data, i) => {
-        return (
-          <Link onClick={()=>{window.scrollTo(0, 0)}} to={`/article/${data.news_url}`} className="link" key={i}>
-            <div className="px-2">
-              <Card
-                style={{
-                  ...cardStyle,
-                  backgroundImage: `url(${getImage(data.image_url)})`,
-                }}
-                key={i + data.image_url}
-              >
-                <Card.Body className="slide-stats">
-                  <ul className="list-unstyled">
-                    <li>
-                      <BiHeart style={iconStats} /> {Math.floor((Math.random() * 500))} 
-                      {/* {data.total_likes} */}
-                    </li>
-                    <li>
-                      <BiChat style={iconStats} /> {data.total_comment}
-                    </li>
-                    <li>
-                      {data.posted_at
-                        ? util.indonesiaFormat(data.posted_at)
-                        : "-"}
-                    </li>
-                  </ul>
-                </Card.Body>
-              </Card>
-              <h4 className="text-white fw-bold text-center m-3">
-                {data.title}
-              </h4>
-            </div>
-          </Link>
-        );
-      })}
-    </Slider>
+        trendingNewsList.length === 0 ?
+        <div className="px-2" key={String(Math.random())}>
+                <Card
+                  style={{
+                    ...cardStyle,
+                    backgroundImage: `url(${danauToba})`,
+                  }}
+                >
+                  <Card.Body className="slide-stats">
+                  </Card.Body>
+                </Card>
+                <h4 className="text-white fw-bold text-center m-3">
+                  {'caldera.id | Mengulas Sedalam Kaldera'}
+                </h4>
+        </div>
+        :
+        showNews()
+      }
+      </Slider> */}
+    </>
+    
   );
 }
 

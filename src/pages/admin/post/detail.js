@@ -102,17 +102,17 @@ function DetailPost(props) {
   const getNewsDetail = async () => {
     const result = await newsApi.getNewsDetailById(param.id);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
-      setnewsContent(result.data.news);
-      setContent(result.data.news.content);
-
       const savedTags = [];
       Array(...result.data.tags).map((e) => {
         savedTags.push({ 
-          key: `${e.t_tag.id}`,
+          key: e.t_tag.id,
           value: e.t_tag.id,
-          children: e.t_tag.name
+          label: e.t_tag.name
         })
       });
+      
+      setnewsContent(result.data.news);
+      setContent(result.data.news.content);
       setTag(savedTags);
     }
   };
@@ -173,7 +173,7 @@ function DetailPost(props) {
       payload.append("author_id", newsContent.author_id);
       payload.append("status", sumbit_type === 'DRAFT' ? 'DRAFT' : 'REVIEW');
     } else {
-      payload.append("status", 'PUBLISH');
+      payload.append("status", sumbit_type);
     }
     payload.append("title", newsContent.title);
     payload.append("content", content);
@@ -490,7 +490,7 @@ function DetailPost(props) {
                   <Form.Group className="mb-4">
                     <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
                     <div>
-                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag = {tag} key={newsContent.news_id}/>
+                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag={tag} key={newsContent.news_id}/>
                     </div>
                   </Form.Group>
                   <Form.Group className="mb-5">
