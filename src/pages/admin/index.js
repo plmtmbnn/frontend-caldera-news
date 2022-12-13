@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import { Button, Checkbox, Form, Input } from "antd";
 import {Helmet} from "react-helmet";
 
+
 const AdminPage = () => {
+
   const onFinish = (values) => {
     console.log("Success:", values);
   };

@@ -10,15 +10,7 @@ import { updateUser } from "../../redux/action/user_action";
 const Login = (props) => {
   const [isLogin, setisLogin] = useState(false);
 
-  const [loginForm, setloginForm] = useState(
-    process.env.REACT_APP_API_ENV === 'production'
-    ?
-    {email: '', password: ''} 
-    :
-    {
-    email: "test@gmail.com",
-    password: "12345",
-  });
+  const [loginForm, setloginForm] = useState({email: '', password: ''});
 
   const handleChange = (key, value) => {
     setloginForm({ ...loginForm, [key]: value });

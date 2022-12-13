@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Layout, Alert } from "antd";
-import { Form, Button, Col, Row  } from "react-bootstrap";
+import { Layout, Alert, Button } from "antd";
+import { Form, Col, Row  } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
@@ -28,32 +28,6 @@ import { Modal, Upload } from 'antd';
 
 import {useNavigate} from 'react-router-dom';
 
-
-const getImage = (image_url) => {
-  if(image_url){
-    const current = 
-    `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
-    return(current);
-  } else {
-    return newsImage;
-  }
-};
-
-const getBase64 = (file) =>
-new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-
-  reader.onload = () => {
-    resolve(reader.result);
-  };
-
-  reader.onerror = (error) => {
-    console.log('error', error);
-    reject(error);
-  };
-});
-
 const { Header, Content, Footer } = Layout;
 
 function DetailPost(props) {
@@ -61,6 +35,8 @@ function DetailPost(props) {
   const editor = useRef(null);
 
   const navigate = useNavigate();
+
+  const [loading, setloading] = useState(false);
 
   const [tag, setTag] = useState([]);
 
@@ -117,9 +93,7 @@ function DetailPost(props) {
     }
   };
 
-  useEffect(() => {
-    getNewsDetail();
-  }, [param.id]);
+  
   
   const getImagesGroup = async () => {
     const result = await newsApi.getImagesGroup(param.id);
@@ -144,21 +118,10 @@ function DetailPost(props) {
     }
   };
 
-  useEffect(() => {
-    getNewsDetail();
-    getImagesGroup();
-  }, []);
-
-  const [contentEditor, setContentEditor] = useState(null);
-
-  useEffect(() => {
-    setContent(newsContent.content);
-    return () => {
-      if (contentEditor) contentEditor.removeListener();
-    };
-  }, [contentEditor, newsContent.content]);
+  
 
   const upsertNews = async (sumbit_type) => {
+    setloading(true);
     toast.info("Sedang diproses...", {
       position: "top-center",
       autoClose: 3000,
@@ -216,6 +179,28 @@ function DetailPost(props) {
         navigate("/admin/post");
       }
     } else {
+      if(result.message === 'NOT_AUTHENTICATED'){
+        toast.info("Sesi habis, silakan login kembali.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+        });
+        localStorage.setItem(
+          "_CALDERA_",
+          JSON.stringify({
+            id: 3,
+            full_name: "",
+            email: "",
+            avatar_url: "",
+            created_at: "",
+            isAdmin: false,
+            isAuthor: false,
+            token: "xxx",
+          })
+        );
+      } else {
       toast.error("Gagal menyimpan berita.", {
         position: "top-center",
         autoClose: 5000,
@@ -224,6 +209,8 @@ function DetailPost(props) {
         progress: undefined,
       });
     }
+    }
+    setloading(false);
   };
 
   const handleSubmit = async (sumbit_type) => {
@@ -256,10 +243,6 @@ function DetailPost(props) {
 
       return (<Alert message={`Status berita: ${newsContent.status}`} type={type} />)
   }
-
-  useEffect(() => {
-    getCategory();
-  }, []);
 
   const handleHidden = () => {
     let result = false;
@@ -306,6 +289,15 @@ function DetailPost(props) {
     //   };
     await getImagesGroup();
     } else {
+      if(result.message === 'NOT_AUTHENTICATED'){
+        toast.info("Sesi habis, silakan login kembali.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+        });
+      } else {
       toast.error("Gagal mengupload gambar.", {
         position: "top-center",
         autoClose: 5000,
@@ -313,25 +305,41 @@ function DetailPost(props) {
         closeOnClick: true,
         progress: undefined,
       });
+      }
     }
   };
 
+  
+const getImage = (image_url) => {
+  if(image_url){
+    const current = 
+    `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
+    return(current);
+  } else {
+    return newsImage;
+  }
+};
+
+const getBase64 = (file) =>
+new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onload = () => {
+    resolve(reader.result);
+  };
+
+  reader.onerror = (error) => {
+    console.log('error', error);
+    reject(error);
+  };
+});
+
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState([]);
 
   const handleCancel = () => setPreviewOpen(false);
 
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-  };
 
   const uploadButton = (
     <div>
@@ -345,6 +353,24 @@ function DetailPost(props) {
       </div>
     </div>
   );
+
+  console.log('sini');
+  
+  useEffect(() => {
+    getNewsDetail();
+    getCategory();
+    getImagesGroup();
+  }, []);
+
+  const [contentEditor, setContentEditor] = useState(null);
+
+  // useEffect(() => {
+  //   setContent(newsContent.content);
+  //   return () => {
+  //     if (contentEditor) contentEditor.removeListener();
+  //   };
+  // }, [contentEditor, newsContent.content]);
+  
 
   return (
     <Layout
@@ -427,24 +453,17 @@ function DetailPost(props) {
                           getImage(newsContent.image_url)
                           : [newsContent.file]
                       }
-                      acceptedFileTypes={['image/*', 'audio/*', 'video/*']}
-                      beforeAddFile={(item) => {
-                        if (
-                          newsContent.file === null ||
-                          newsContent.file !== item.file
-                        ) {
-                          setnewsContent({
-                            ...newsContent,
-                            file: item.file,
-                          });
-                        }
+                      maxFiles={1}
+                      acceptedFileTypes={['image/*']}
+                      beforeAddFile={(fileItems) => {
+                          if(typeof fileItems.source !== 'string') {
+                            setnewsContent({
+                              ...newsContent,
+                              file: fileItems.file
+                            });
+                          }
                       }}
-                      beforeRemoveFile={() => {
-                        setnewsContent({
-                          ...newsContent,
-                          file: null,
-                        });
-                      }}
+                      
                       labelIdle='Silakan drag & drop file Anda atau <span class="filepond--label-action">Cari File</span>'
                       name="files"
                     />
@@ -483,14 +502,14 @@ function DetailPost(props) {
                           tabIndex={1} // tabIndex of textarea
                           onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
                           onChange={(newContent) => {}}
-                          key={newsContent.news_id}
+                          key={String(new Date())}
                       />
                     </div>
                   </Form.Group>
                   <Form.Group className="mb-4">
                     <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
                     <div>
-                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag={tag} key={newsContent.news_id}/>
+                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag={tag}/>
                     </div>
                   </Form.Group>
                   <Form.Group className="mb-5">
@@ -557,7 +576,7 @@ function DetailPost(props) {
                           onClick={() => {
                             handleSubmit("CANCEL");
                           }}
-                          variant="light"
+                          type="dashed"
                           className="me-3"
                         >
                           Batal
@@ -569,8 +588,8 @@ function DetailPost(props) {
                         onClick={() => {
                           handleSubmit("DRAFT");
                         }}
-                        variant="outline-primary"
                         className="me-3"
+                        loading={loading}
                       >
                         Simpan Sebagai Draft
                       </Button>
@@ -581,10 +600,10 @@ function DetailPost(props) {
                         onClick={() => {
                           handleSubmit("PUBLISH");
                         }}
-                        variant="primary"
+                        type="primary"
                         className="me-3 px-5"
+                        loading={loading}
                       >
-                        
                         {
                         props.user && props.user.isAuthor && !props.user.isAdmin ?
                           'Simpan & Mulai Review Admin'
@@ -602,13 +621,12 @@ function DetailPost(props) {
             </Row>
           </div>
         </Content>
-        <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+        <Modal open={previewOpen} footer={null} onCancel={handleCancel}>
           <img
             alt="example"
             style={{
               width: '100%',
             }}
-            src={previewImage}
           />
         </Modal>
         <Footer

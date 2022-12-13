@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Layout } from "antd";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import { Layout, Button } from "antd";
+import { Form, Col, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
@@ -98,8 +98,10 @@ function DetailPost(props) {
     };
   }, [contentEditor, newsContent.content]);
 
+  const [loading, setloading] = useState(false);
+
   const upsertNews = async (sumbit_type) => {
-    console.log(sumbit_type);
+    setloading(true);
     toast.info("Sedang diproses...", {
       position: "top-center",
       autoClose: 3000,
@@ -153,6 +155,28 @@ function DetailPost(props) {
         navigate("/admin/post");
       }
     } else {
+      if(result.message === 'NOT_AUTHENTICATED'){
+        toast.info("Sesi habis, silakan login kembali.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+        });
+        localStorage.setItem(
+          "_CALDERA_",
+          JSON.stringify({
+            id: 3,
+            full_name: "",
+            email: "",
+            avatar_url: "",
+            created_at: "",
+            isAdmin: false,
+            isAuthor: false,
+            token: "xxx",
+          })
+        );
+      } else {
       toast.error("Gagal menyimpan berita.", {
         position: "top-center",
         autoClose: 5000,
@@ -161,6 +185,8 @@ function DetailPost(props) {
         progress: undefined,
       });
     }
+    }
+    setloading(false);
   };
 
   const handleSubmit = async (sumbit_type) => {
@@ -255,22 +281,14 @@ function DetailPost(props) {
                           : [newsContent.file]
                       }
                       acceptedFileTypes={['image/*', 'audio/*', 'video/*']}
-                      beforeAddFile={(item) => {
-                        if (
-                          newsContent.file === null ||
-                          newsContent.file.size !== item.file.size
-                        ) {
+                      instantUpload={false}
+                      beforeAddFile={(fileItems) => {
+                        if(typeof fileItems.source !== 'string') {
                           setnewsContent({
                             ...newsContent,
-                            file: item.file,
+                            file: fileItems.file,
                           });
                         }
-                      }}
-                      beforeRemoveFile={() => {
-                        setnewsContent({
-                          ...newsContent,
-                          file: null,
-                        });
                       }}
                       labelIdle='Silakan drag & drop file Anda atau <span class="filepond--label-action">Cari File</span>'
                       name="files"
@@ -317,7 +335,7 @@ function DetailPost(props) {
                   <Form.Group className="mb-4">
                     <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
                     <div>
-                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag = {tag} key={newsContent.news_id}/>
+                      <TagCustom setTag = { (list) => { setTag(list); }} selectedTag = {tag}/>
                     </div>
                   </Form.Group>
                   <Row>
@@ -357,7 +375,7 @@ function DetailPost(props) {
                           onClick={() => {
                             handleSubmit("CANCEL");
                           }}
-                          variant="light"
+                          type="dashed"
                           className="me-3"
                         >
                           Batal
@@ -369,8 +387,8 @@ function DetailPost(props) {
                         onClick={() => {
                           handleSubmit("DRAFT");
                         }}
-                        variant="outline-primary"
                         className="me-3"
+                        loading={loading}
                       >
                         Simpan Sebagai Draft
                       </Button>
@@ -380,8 +398,9 @@ function DetailPost(props) {
                         onClick={() => {
                           handleSubmit("PUBLISH");
                         }}
-                        variant="primary"
+                        type="primary"
                         className="me-3 px-5"
+                        loading={loading}
                       >
                         Simpan &amp; Publish
                       </Button>

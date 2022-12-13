@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Navbar,
   Container,
@@ -23,6 +23,10 @@ import Register from "./Auth/Register";
 import { connect } from "react-redux";
 import { resetUser } from "../redux/action/user_action";
 
+
+// api
+import { newsApi } from "../api/api.news";
+
 const NavbarApp = (props) => {
   const [showLogin, setShowLogin] = useState(false);
   const handleCloseLogin = () => setShowLogin(false);
@@ -31,6 +35,35 @@ const NavbarApp = (props) => {
   const [showRegister, setShowRegister] = useState(false);
   const handleCloseRegister = () => setShowRegister(false);
   const handleShowRegister = () => setShowRegister(true);
+
+  const [checkToken, setcheckToken] = useState(false);
+  const getcheckToken = async () => {
+    const result = await newsApi.checkToken();
+    console.log(result);
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
+      setcheckToken(false);
+    } else {
+      localStorage.setItem(
+        "_CALDERA_",
+        JSON.stringify({
+          id: 3,
+          full_name: "",
+          email: "",
+          avatar_url: "",
+          created_at: "",
+          isAdmin: false,
+          isAuthor: false,
+          token: "xxx",
+        })
+      );
+      props.dispatch(resetUser());
+      setcheckToken(false);
+    }
+  };
+
+  useEffect(() => {
+    getcheckToken();
+  }, []);
 
   return (
     <Navbar className="bg-navbar py-4" expand="lg">
@@ -114,7 +147,7 @@ const NavbarApp = (props) => {
                           created_at: "",
                           isAdmin: false,
                           isAuthor: false,
-                          token: "",
+                          token: "xxx",
                         })
                       );
                       props.dispatch(resetUser());

@@ -6,6 +6,21 @@ class NewsApi extends BaseApiRequest {
     super(process.env.REACT_APP_API_END_POINT);
   }
 
+  async checkToken() {
+    let result = OpResult.failed("checkToken");
+    try {
+      let resApi = await this.get("/token/check");
+      if (resApi.status) {
+        result = resApi;
+      }
+    } catch (e) {
+      console.log("checkToken", e);
+      result = OpResult.failed("Internal Error");
+    }
+    return result;
+  }
+
+
   async getCategory() {
     let result = OpResult.failed("getCategory");
     try {

@@ -5,14 +5,58 @@ import { Link, useLocation, useParams } from "react-router-dom";
 
 import { connect } from "react-redux";
 
+
+// api
+import { newsApi } from "../../../api/api.news";
+
+import { toast } from "react-toastify";
+
 const { Sider } = Layout;
 
 const SidebarAdmin = (props) => {
+  
+  const [checkToken, setcheckToken] = useState(false);
+  const getcheckToken = async () => {
+    const result = await newsApi.checkToken();
+    if (result.status === "SUCCESS" && result.message === "SUCCESS") {
+      setcheckToken(false);
+    } else {
+      toast.info("Sesi habis, silakan login kembali.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: undefined,
+      });
+
+      localStorage.setItem(
+        "_CALDERA_",
+        JSON.stringify({
+          id: 3,
+          full_name: "",
+          email: "",
+          avatar_url: "",
+          created_at: "",
+          isAdmin: false,
+          isAuthor: false,
+          token: "xxx",
+        })
+      );
+
+      setTimeout(()=> {
+        window.location.href = "/";
+      }, 5000);
+      setcheckToken(false);
+    }
+  };
+
+  useEffect(() => {
+    getcheckToken();
+  }, []);
+
   const [collapsed, setCollapsed] = useState(false);
   const params = useParams();
   let location = useLocation();
-
-  useEffect(() => {});
 
   const getKey = () => {
     let key = null;

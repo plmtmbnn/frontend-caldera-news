@@ -12,7 +12,7 @@ class BaseApiRequest {
   }
 
   handleEntpoint(endpoint) {
-    let result = 'https://backend-caldera-news.herokuapp.com';
+    let result = 'https://api.caldera.id';
 
     if(endpoint){
       result = endpoint;
@@ -85,8 +85,10 @@ class BaseApiRequest {
           {
              ...this.config,
              headers: {
-              ...this.config.headers,
-              "Content-Type": isFormData ? "multipart/form-data" : "application/json"
+                  ...this.config.headers,
+                  "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+                  maxContentLength: Infinity,
+                  maxBodyLength: Infinity
              }
           }
         );

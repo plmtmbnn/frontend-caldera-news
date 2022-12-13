@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Layout } from "antd";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import { Layout, Button } from "antd";
+import { Form, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import SidebarAdmin from "../layouts/Sider";
@@ -60,7 +60,10 @@ function CreatePost(props) {
     }
   };
 
+  const [loading, setloading] = useState(false);
+
   const upsertNews = async (sumbit_type) => {
+    setloading(true);
     const payload = new FormData();
     payload.append("title", newsContent.title);
     payload.append("author_id", newsContent.author_id);
@@ -101,14 +104,39 @@ function CreatePost(props) {
       });
       navigate("/admin/post");
     } else {
-      toast.error("Gagal menyimpan berita.", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        progress: undefined,
-      });
+      if(result.message === 'NOT_AUTHENTICATED'){
+        toast.info("Sesi habis, silakan login kembali.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+        });
+
+        localStorage.setItem(
+          "_CALDERA_",
+          JSON.stringify({
+            id: 3,
+            full_name: "",
+            email: "",
+            avatar_url: "",
+            created_at: "",
+            isAdmin: false,
+            isAuthor: false,
+            token: "xxx",
+          })
+        );
+      } else {
+        toast.error("Gagal menyimpan berita.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+        });
+      }
     }
+    setloading(false);
   };
 
   const handleSubmit = async (sumbit_type) => {
@@ -208,14 +236,11 @@ function CreatePost(props) {
                       maxFiles={1}
                       acceptedFileTypes={["image/*"]}
                       instantUpload={false}
-                      beforeAddFile={(item) => {
-                        if (
-                          newsContent.file === null ||
-                          newsContent.file.size !== item.file.size
-                        ) {
+                      beforeAddFile={(fileItems) => {
+                        if(typeof fileItems.source !== 'string') {
                           setnewsContent({
                             ...newsContent,
-                            file: item.file,
+                            file: fileItems.file,
                           });
                         }
                       }}
@@ -274,7 +299,7 @@ function CreatePost(props) {
                   <Form.Group className="mb-4">
                     <Form.Label style={{color: '#ce1127'}}>Hashtag</Form.Label> 
                     <div>
-                      <TagCustom setTag = { (list) => { setTag(list); }} />
+                      <TagCustom setTag={ (list) => { setTag(list); }} selectedTag = {tag} />
                     </div>
                   </Form.Group>
                   
@@ -315,7 +340,7 @@ function CreatePost(props) {
                           onClick={() => {
                             handleSubmit("CANCEL");
                           }}
-                          variant="light"
+                          vartype="dashed"
                           className="me-3"
                         >
                           Batal
@@ -328,8 +353,8 @@ function CreatePost(props) {
                         onClick={() => {
                           handleSubmit("DRAFT");
                         }}
-                        variant="outline-primary"
                         className="me-3"
+                        loading={loading}
                       >
                         Simpan Sebagai Draft
                       </Button>
@@ -339,8 +364,9 @@ function CreatePost(props) {
                         onClick={() => {
                           handleSubmit("PUBLISH");
                         }}
-                        variant="primary"
+                        type="primary"
                         className="me-3 px-5"
+                        loading={loading}
                       >
                         Simpan & Publish
                       </Button>
