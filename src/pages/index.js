@@ -177,15 +177,24 @@ const Home = () => {
   return (
     <div>
       <Helmet>
-        <title>caldera.id - Mengulas Sedalam Kaldera</title>
-        <meta name="title" content="caldera.id - Mengulas Sedalam Kaldera" />
-        <meta name="description"
-    content="caldera.id - berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
-        <meta data-rh="true" property="og:title" content="caldera.id - Mengulas Sedalam Kaldera" />
-        <meta data-rh="true" property="og:description" content="berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
-        <meta data-rh="true" property="og:url" content="https://caldera.id" />
-        <meta data-rh="true" property="og:image" content={logoCaldera}/>
-        <meta data-rh="true" property="og:type" content="website" />
+          <title>caldera.id - Mengulas Sedalam Kaldera</title>
+          <meta charset="utf-8" />
+          <meta name="title" content="caldera.id - Mengulas Sedalam Kaldera" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="theme-color" content="#000000" />
+          <meta name="description"
+            content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+          <meta property="og:title" content="caldera.id - Mengulas Sedalam Kaldera" />
+          <meta property="og:image" content="https://www.caldera.id/favicon-caldera.png" />
+          <meta property="og:type" content="website" />
+          <meta property="og:description"
+            content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+          <meta itemprop="name" content="caldera.id - Mengulas Sedalam Kaldera" />
+          <meta itemprop="image" content="https://www.caldera.id/favicon-caldera.png" />
+          <meta itemprop="description"
+            content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
       </Helmet>
       <NavbarApp />
       <section className="bg-dark pt-3 pb-5">

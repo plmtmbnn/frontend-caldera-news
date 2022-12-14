@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import { Button, Checkbox, Form, Input } from "antd";
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 
 
 const AdminPage = () => {
@@ -16,16 +16,12 @@ const AdminPage = () => {
 
   return (
     <div className="bg-admin">
-         <Helmet>
-        <title>caldera.id | Menu Admin</title>
-        <meta name="title" content="caldera.id - Menu Admin" />
-        <meta name="description"
-    content="caldera.id - berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
-        <meta property="og:title" content={'caldera.id - Menu Admin'} />
-        <meta property="og:url" content={`https://caldera.id`} />
-        <meta property="og:type" content="website" /> <meta name="prerender-status-code" content="301" />
-        <meta name="prerender-header" content="Location: https://www.caldera.id" />
-    </Helmet>
+          <Helmet>
+            <title>Menu Admin | caldera.id </title>
+            <meta name="title" content="caldera.id - Menu Admin" />
+            <meta name="description"  
+              content="caldera.id - berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
+          </Helmet>
       <Row className="w-100">
         <Col md={{ span: 4, offset: 4 }}>
           <Card>

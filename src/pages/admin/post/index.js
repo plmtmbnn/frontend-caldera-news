@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import {Layout, Space, Table, Tag, Pagination } from "antd";
+import {Layout, Space, Table, Tag, Pagination, Button as ButtonAntd } from "antd";
 import {Button, FormControl, Row, Col, FormGroup, FormLabel, FormSelect} from 'react-bootstrap';
 
 import SidebarAdmin from "../layouts/Sider";
@@ -13,6 +13,15 @@ import { connect } from "react-redux";
 
 const { Header, Content, Footer } = Layout;
 
+const options = [
+  {
+    value: 'Trending',
+  },
+  {
+    value: 'Rekomendasi'
+  }
+];
+
 function AdminPost(props) {
   const [offset, setoffset] = useState(0);
   const [page, setpage] = useState(1);
@@ -22,6 +31,8 @@ function AdminPost(props) {
   const [count, setcount] = useState(0);
 
   const [title, settitle] = useState("");
+
+  const [newsType, setnewsType] = useState("SEMUA");
 
   const getCategory = async () => {
     const result = await newsApi.getCategory();
@@ -37,11 +48,14 @@ function AdminPost(props) {
     }
   };
 
-
   useEffect(() => {
     getNewsList();
     getCategory();
-  }, [page, category_id]);
+  }, []);
+
+  useEffect(() => {
+    getNewsList();
+  }, [page, category_id, newsType]);
 
   const getNewsList = async () => {    
     let payload = {
@@ -60,7 +74,8 @@ function AdminPost(props) {
     if(category_id && category_id !== 'Semua'){
       payload.category_id = category_id;
     }
-
+    payload.newsType = newsType;
+    
     const result = await newsApi.getNewsList(payload);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsList(result.data);
@@ -120,6 +135,36 @@ function AdminPost(props) {
                 </Col>
                 <Col>
                 <FormGroup>
+                    <FormLabel>Tipe</FormLabel>
+                    <FormSelect
+                      onChange={(event) => {setnewsType(event.target.value);}}
+                    >
+                      <option
+                            selected={"SEMUA" === newsType}
+                            key={"SEMUA"}
+                            value={"SEMUA"}
+                          >
+                            Semua
+                      </option>
+                      <option
+                            selected={'TRENDING' === newsType}
+                            key={'TRENDING'}
+                            value={'TRENDING'}
+                          >
+                            Berita Trending / Utama
+                      </option>
+                      <option
+                            selected={'REKOMENDASI' === category_id}
+                            key={'REKOMENDASI'}
+                            value={'REKOMENDASI'}
+                          >
+                            Berita Rekomendasi
+                      </option>                                            
+                    </FormSelect>
+                  </FormGroup>
+                </Col>
+                <Col>
+                <FormGroup>
                     <FormLabel>Kategori Berita</FormLabel>
                     <FormSelect
                       onChange={(event) => {setcategory_id(event.target.value);}}
@@ -144,9 +189,10 @@ function AdminPost(props) {
                       })}
                     </FormSelect>
                   </FormGroup>
-                </Col>                
+                </Col>
               </Row>              
             </div>
+            <br />
             <div>
               <Button
                 onClick={ async ()=> {
@@ -164,7 +210,29 @@ function AdminPost(props) {
                   title: "Judul",
                   dataIndex: "title",
                   key: "title",
-                  render: (text) => <p>{text}</p>,
+                  render: (text, e) => {
+                    return(
+                      <Link 
+                      style={{
+                    'text-decoration': 'none', 'border-bottom':'1px solid #af504c'
+                    }}
+                      onClick={()=>{window.scrollTo(0, 0)}} to={`/admin/post/detail/${e.id}`} rel="noopener noreferrer">
+                      <p style={{color: 'black', 
+                    'text-decoration': 'none'
+                    }} type="link" block>{text}</p>
+                    </Link>)},
+                },
+                {
+                  title: "Keterangan",
+                  dataIndex: "title",
+                  key: "title",
+                  render: (text, e) => {
+
+                    return(<div>
+                      <Tag hidden={!e.is_trending} color="#f50">Trending</Tag>
+                      <Tag hidden={!e.is_recommendation} color="#2db7f5">Rekomendasi</Tag>
+                    </div>);
+                  },
                 },
                 {
                   title: "Status",

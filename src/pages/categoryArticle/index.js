@@ -8,7 +8,7 @@ import NavbarApp from "../../components/NavbarApp";
 import { BiChat, BiHeart } from "react-icons/bi";
 import { Link, useParams } from "react-router-dom";
 
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 
 // api
 import { newsApi } from "../../api/api.news";
@@ -128,15 +128,24 @@ function CategoryArticle() {
   return (
     <div>
     <Helmet>
-        <title>caldera.id - {String(params.id).toUpperCase()}</title>
-        <meta name="title" content="caldera.id - Mengulas Sedalam Kaldera" />
-        <meta name="description"
-    content="caldera.id - berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
-        <meta property="og:title" content={'caldera.id - Mengulas Sedalam Kaldera'} />
-        <meta property="og:url" content={`https://caldera.id`} />
-        <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon-caldera.png" />
-        <meta property="og:type" content="website" /> <meta name="prerender-status-code" content="301" />
-        <meta name="prerender-header" content="Location: https://www.caldera.id" />
+
+            <title>{String(params.id).toUpperCase()} - caldera.id</title>
+            <meta charset="utf-8" />
+            <meta name="title" content={`${String(params.id).toUpperCase()} - caldera.id`} />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="theme-color" content="#000000" />
+            <meta name="description"
+              content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+            <meta property="og:title" content={`${String(params.id).toUpperCase()} - caldera.id`} />
+            <meta property="og:image" content="https://www.caldera.id/favicon-caldera.png" />
+            <meta property="og:type" content="website" />
+            <meta property="og:description"
+              content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+            <meta itemprop="name" content={`${String(params.id).toUpperCase()} - caldera.id`} />
+            <meta itemprop="image" content="https://www.caldera.id/favicon-caldera.png" />
+            <meta itemprop="description" content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
     </Helmet>
       <NavbarApp />
       <section className="py-5">

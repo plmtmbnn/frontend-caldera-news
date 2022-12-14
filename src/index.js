@@ -45,21 +45,15 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview,
       <BrowserRouter>
         <ToastContainer />
         <HelmetProvider>
-          <App>
-            <Helmet>
-              <meta data-rh="true" property="og:title" content="caldera.id - Mengulas Sedalam Kaldera" />
-              <meta data-rh="true" property="og:description" content="berita seputar batak, berita toba, berita adat batak, berita budaya batak, wisata batak, wisata danau toba" />
-              <meta data-rh="true" property="og:url" content="https://caldera.id" />
-              <meta data-rh="true" property="og:image" content={logoCaldera}/>
-              <meta data-rh="true" property="og:type" content="website" />
-            </Helmet>
-          </App>
+          <App />
         </HelmetProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>);
 
-    hydrate(_APP_, rootElement);
+var isMarkupPresent = rootElement.hasChildNodes();
+
+isMarkupPresent ? hydrate(_APP_, rootElement) : render(_APP_, rootElement);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

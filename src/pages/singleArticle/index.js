@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 // import {Helmet} from "react-helmet";
 
-import  {Helmet } from 'react-helmet-async';
+import  { Helmet } from 'react-helmet-async';
 
 
 
@@ -205,18 +205,27 @@ function SingleArticle(props) {
 
   return (<div>
           <Helmet>
-            <meta charset="utf-8" />
             <title>{String(newsDetail.news.title || 'Loading...')} | caldera.id</title>
-            <meta name="title" content={String(newsDetail.news.title).substring(0, 35)} />
-            <meta name="description"
-    content={String(newsDetail.news.content).substring(0, 65)} />
+            <meta charset="utf-8" />
+            <meta name="title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 35)} />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <meta name="description" content={String(newsDetail.news.content).substring(0, 65)} />
-            <meta data-rh="true" property="og:title" content={String(newsDetail.news.title).substring(0, 35)} />
-            <meta data-rh="true" property="og:description" content={String(newsDetail.news.content).substring(0, 65)} />
-            <meta data-rh="true" property="og:url" content={`https://caldera.id/article/${params.id}`} />
-            <meta data-rh="true" property="og:image" content={String(newsDetail.news.image_url)} />
-            <meta property="og:type" content="article" />
+            <meta name="theme-color" content="#000000" />
+            <meta name="description"
+              content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+            <meta property="og:title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 35)} />
+            <meta property="og:image" content="https://www.caldera.id/favicon-caldera.png" />
+            <meta property="og:type" content="website" />
+            <meta property="og:description"
+              content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+            <meta itemprop="name" content={String(newsDetail.news.title || 'caldera.id').substring(0, 35)} />
+            <meta itemprop="image" content="https://www.caldera.id/favicon-caldera.png" />
+            <meta itemprop="description"
+              content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+            {/* <meta data-rh="true" property="og:image" content={String(newsDetail.news.image_url)} /> */}
+        
         </Helmet>
       <NavbarApp />
       <div className="py-5">
