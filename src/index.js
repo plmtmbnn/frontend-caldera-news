@@ -1,13 +1,14 @@
 import React from "react";
 
-import { hydrate, render } from "react-dom";
+import { hydrateRoot, render } from "react-dom";
 
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import  {Helmet, HelmetProvider } from 'react-helmet-async';
+import Loadable from 'react-loadable';
 
-import logoCaldera from './assets/logo.png';
+import  { HelmetProvider } from 'react-helmet-async';
+
 // vendors
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -40,20 +41,28 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview,
 
   const rootElement = document.getElementById("root");
 
+  const helmetContext = {};
+
   const _APP_ = (<React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <ToastContainer />
-        <HelmetProvider>
-          <App />
-        </HelmetProvider>
-      </BrowserRouter>
-    </Provider>
+      <Provider store={store}>
+        <BrowserRouter>
+          <ToastContainer />
+            <HelmetProvider context={helmetContext}>
+              <App />
+            </HelmetProvider>
+        </BrowserRouter>
+      </Provider>
   </React.StrictMode>);
 
 var isMarkupPresent = rootElement.hasChildNodes();
 
-isMarkupPresent ? hydrate(_APP_, rootElement) : render(_APP_, rootElement);
+isMarkupPresent ? hydrateRoot(_APP_, rootElement) : render(_APP_, rootElement);
+
+window.onload = () => {
+  Loadable.preloadReady().then(() => {
+    hydrateRoot(_APP_, rootElement);
+  });
+};
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

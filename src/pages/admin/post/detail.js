@@ -353,8 +353,6 @@ new Promise((resolve, reject) => {
       </div>
     </div>
   );
-
-  console.log('sini');
   
   useEffect(() => {
     getNewsDetail();
@@ -502,7 +500,6 @@ new Promise((resolve, reject) => {
                           tabIndex={1} // tabIndex of textarea
                           onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
                           onChange={(newContent) => {}}
-                          key={String(new Date())}
                       />
                     </div>
                   </Form.Group>

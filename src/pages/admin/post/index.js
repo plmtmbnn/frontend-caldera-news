@@ -28,6 +28,7 @@ function AdminPost(props) {
   const [newsList, setnewsList] = useState([]);
   const [newsCategory, setNewsCategory] = useState([]);
   const [category_id, setcategory_id] = useState(null);
+  const [status, setstatus] = useState(null);
   const [count, setcount] = useState(0);
 
   const [title, settitle] = useState("");
@@ -55,7 +56,7 @@ function AdminPost(props) {
 
   useEffect(() => {
     getNewsList();
-  }, [page, category_id, newsType]);
+  }, [page, category_id, newsType, status]);
 
   const getNewsList = async () => {    
     let payload = {
@@ -76,6 +77,10 @@ function AdminPost(props) {
     }
     payload.newsType = newsType;
     
+    if(status && status !== 'Semua'){
+      payload.status = status;
+    }
+
     const result = await newsApi.getNewsList(payload);
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setnewsList(result.data);
@@ -164,30 +169,67 @@ function AdminPost(props) {
                   </FormGroup>
                 </Col>
                 <Col>
-                <FormGroup>
-                    <FormLabel>Kategori Berita</FormLabel>
-                    <FormSelect
-                      onChange={(event) => {setcategory_id(event.target.value);}}
-                    >
-                      <option
-                            selected={null === category_id}
-                            key={null}
-                            value={null}
-                          >
-                            Semua
-                      </option>
-                      {newsCategory.map((item, index) => {
-                        return (
-                          <option
-                            selected={item.id === category_id}
-                            key={item.id}
-                            value={item.id}
-                          >
-                            {item.category_name}
-                          </option>
-                        );
-                      })}
-                    </FormSelect>
+                  <FormGroup>
+                      <FormLabel>Kategori Berita</FormLabel>
+                      <FormSelect
+                        onChange={(event) => {setcategory_id(event.target.value);}}
+                      >
+                        <option
+                              selected={null === category_id}
+                              key={null}
+                              value={null}
+                            >
+                              Semua
+                        </option>
+                        {newsCategory.map((item, index) => {
+                          return (
+                            <option
+                              selected={item.id === category_id}
+                              key={item.id}
+                              value={item.id}
+                            >
+                              {item.category_name}
+                            </option>
+                          );
+                        })}
+                      </FormSelect>
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup>
+                      <FormLabel>Status Berita</FormLabel>
+                      <FormSelect
+                        onChange={(event) => {setstatus(event.target.value);}}
+                      >
+                        <option
+                              selected={null === status}
+                              key={null}
+                              value={null}
+                            >
+                              Semua
+                        </option>
+                        <option
+                              selected={'DRAFT' === status}
+                              key={'DRAFT'}
+                              value={'DRAFT'}
+                            >
+                              DRAFT
+                        </option>
+                        <option
+                              selected={"REVIEW" === status}
+                              key={"REVIEW"}
+                              value={"REVIEW"}
+                            >
+                              REVIEW
+                        </option>
+                        <option
+                              selected={'PUBLISH' === status}
+                              key={'PUBLISH'}
+                              value={'PUBLISH'}
+                            >
+                              PUBLISH
+                        </option>
+                      </FormSelect>
                   </FormGroup>
                 </Col>
               </Row>              
@@ -279,9 +321,10 @@ function AdminPost(props) {
                 //   render: (text) => <p>{text}</p>,
                 // },
                 {
-                  title: "Tgl Update",
+                  title: "Tanggal",
                   dataIndex: "updated_at",
                   key: "updated_at",
+                  sorter: (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
                   render: (text) => <p>{moment(text).format("DD MMM YYYY")}</p>,
                 },
                 {

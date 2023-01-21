@@ -97,8 +97,8 @@ function TrendingSlider() {
               <Card.Body className="slide-stats">
                 <ul className="list-unstyled">
                   <li>
-                    <BiHeart style={iconStats} /> {Math.floor((Math.random() * 500))} 
-                    {/* {data.total_likes} */}
+                    <BiHeart style={iconStats} />
+                    {data.total_likes}
                   </li>
                   <li>
                     <BiChat style={iconStats} /> {data.total_comment}

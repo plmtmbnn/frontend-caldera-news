@@ -226,8 +226,7 @@ const Home = () => {
                       <ul className="list-unstyled stats">
                         <li>
                           <BiHeart style={iconStats} /> 
-                          {Math.floor((Math.random() * 500))}
-                          {/* {data.total_likes} */}
+                          {data.total_likes}
                         </li>
                         <li>
                           <BiChat style={iconStats} /> {data.total_comment}
@@ -282,8 +281,7 @@ const Home = () => {
                       <ul className="list-unstyled stats">
                         <li className="text-dark">
                           <BiHeart style={iconStats} /> 
-                          {Math.floor((Math.random() * 500))} 
-                          {/* {data.total_likes} */}
+                          {data.total_likes}
                         </li>
                         <li className="text-dark">
                           <BiChat style={iconStats} /> {data.total_comment}
@@ -334,8 +332,7 @@ const Home = () => {
                         <ul className="list-unstyled stats">
                           <li className="text-dark">
                             <BiHeart style={iconStats} /> 
-                            {Math.floor((Math.random() * 500))} 
-                            {/* {data.total_likes} */}
+                            {data.total_likes}
                           </li>
                           <li className="text-dark">
                             <BiChat style={iconStats} /> {data.total_comment}
@@ -382,8 +379,7 @@ const Home = () => {
                               <ul className="list-unstyled stats">
                                 <li className="text-dark">
                                   <BiHeart style={iconStats} />{" "}
-                                  {Math.floor((Math.random() * 500))} 
-                                  {/* {data.total_likes} */}
+                                  {data.total_likes}
                                 </li>
                                 <li className="text-dark">
                                   <BiChat style={iconStats} />{" "}

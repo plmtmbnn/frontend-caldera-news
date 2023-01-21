@@ -66,12 +66,17 @@ const App = ( { setTag, selectedTag}) => {
 
   return(
   <Select
-  key={String(new Date())}
+    showSearch
+    optionFilterProp="children"
+    filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input)}
+    filterSort={(optionA, optionB) =>
+      (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+    }
     mode="multiple"
     style={{
       width: '100%',
     }}
-    placeholder="Tags"
+    placeholder="Tambahkan hashtag disini"
     onChange={handleChange}
     value={ selectedTag }
     dropdownRender={(menu) => (

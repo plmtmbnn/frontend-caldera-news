@@ -46,6 +46,7 @@ const getImage = (image_url) => {
   if(image_url){
     const current = 
     `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
+    console.log(current);
     return(current);
   } else {
     return newsImage;
@@ -88,9 +89,6 @@ function SingleArticle(props) {
 
   useEffect(() => {
     getNewsDetail();
-    return () => {
-      getNewsDetail();
-  }
   }, [params.id]);
 
   const [isLoading, setisLoading] = useState(true);
@@ -102,7 +100,7 @@ function SingleArticle(props) {
       image_desc: '',
       news_url: "220702-20-27-12_5-tempat-terbaik-di-sumut",
       title: "Berita",
-      image_url: 'https://www.caldera.id/static/media/logo.f22abae4ca373ed8a7b7.png',
+      image_url: '',
       content: "...",
       status: "PUBLISH",
       category_id: 1,
@@ -207,25 +205,31 @@ function SingleArticle(props) {
           <Helmet>
             <title>{String(newsDetail.news.title || 'Loading...')} | caldera.id</title>
             <meta charset="utf-8" />
-            <meta name="title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 35)} />
+            <meta name="title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 60)} />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <meta name="theme-color" content="#000000" />
             <meta name="description"
               content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
 
-            <meta property="og:title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 35)} />
-            <meta property="og:image" content="https://www.caldera.id/favicon-caldera.png" />
-            <meta property="og:type" content="website" />
-            <meta property="og:description"
-              content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
-
-            <meta itemprop="name" content={String(newsDetail.news.title || 'caldera.id').substring(0, 35)} />
-            <meta itemprop="image" content="https://www.caldera.id/favicon-caldera.png" />
+            <meta itemprop="name" content={String(newsDetail.news.title || 'caldera.id').substring(0, 60)} />
+            <meta itemprop="image" content={getImage(String(newsDetail.news.image_url))} />
             <meta itemprop="description"
               content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
 
-            {/* <meta data-rh="true" property="og:image" content={String(newsDetail.news.image_url)} /> */}
-        
+            <meta property="og:title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 60)} />
+            <meta property="og:image" content={getImage(String(newsDetail.news.image_url))} />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content={`${window.location.origin}/${window.location.pathname}`} />
+            <meta property="og:description"
+              content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+
+            <meta property="og:type" content="website" />
+
+            <meta property="twitter:card" content="summary_large_image"/>
+            <meta property="twitter:url" content={`${window.location.origin}/${window.location.pathname}`} />
+            <meta property="twitter:title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 60)} />
+            <meta property="twitter:description" content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba"/>
+            <meta property="twitter:image" content={getImage(String(newsDetail.news.image_url))} />
         </Helmet>
       <NavbarApp />
       <div className="py-5">
@@ -400,8 +404,7 @@ function SingleArticle(props) {
                             <ul className="list-unstyled stats">
                               <li className="text-dark">
                                 <BiHeart style={iconStats} /> 
-                                {Math.floor((Math.random() * 500))}
-                                {/* {data.total_likes} */}
+                                {data.total_likes}
                               </li>
                               <li className="text-dark">
                                 <BiChat style={iconStats} />{" "}

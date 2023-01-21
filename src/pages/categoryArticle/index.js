@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState  } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import FooterApp from "../../components/FooterApp";
 import NavbarApp from "../../components/NavbarApp";
@@ -128,22 +128,22 @@ function CategoryArticle() {
   return (
     <div>
     <Helmet>
-
-            <title>{String(params.id).toUpperCase()} - caldera.id</title>
+            <title>{String(window.location.pathname).toUpperCase().replace('/CATEGORY/', '')} - caldera.id</title>
             <meta charset="utf-8" />
-            <meta name="title" content={`${String(params.id).toUpperCase()} - caldera.id`} />
+            <meta name="title" content={`${String(window.location.pathname).toUpperCase().replace('/CATEGORY/', '')} - caldera.id`} />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <meta name="theme-color" content="#000000" />
             <meta name="description"
               content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
 
-            <meta property="og:title" content={`${String(params.id).toUpperCase()} - caldera.id`} />
+            <meta property="og:title" content={`${String(window.location.pathname).toUpperCase().replace('/CATEGORY/', '')} - caldera.id`} />
             <meta property="og:image" content="https://www.caldera.id/favicon-caldera.png" />
             <meta property="og:type" content="website" />
+            <meta property="og:url" content={`${window.location.origin}/${window.location.pathname}`} />
             <meta property="og:description"
               content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
 
-            <meta itemprop="name" content={`${String(params.id).toUpperCase()} - caldera.id`} />
+            <meta itemprop="name" content={`${String(window.location.pathname).toUpperCase().replace('/CATEGORY/', '')} - caldera.id`} />
             <meta itemprop="image" content="https://www.caldera.id/favicon-caldera.png" />
             <meta itemprop="description" content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
     </Helmet>
@@ -190,8 +190,7 @@ function CategoryArticle() {
                           <ul className="list-unstyled stats">
                             <li className="text-dark">
                               <BiHeart style={iconStats} />{" "}
-                              {Math.floor((Math.random() * 500))} 
-                              {/* {parseInt(data.total_likes)} */}
+                              {parseInt(data.total_likes)}
                             </li>
                             <li className="text-dark">
                               <BiChat style={iconStats} />{" "}
