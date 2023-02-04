@@ -43,6 +43,7 @@ const NavbarApp = (props) => {
     if (result.status === "SUCCESS" && result.message === "SUCCESS") {
       setcheckToken(false);
     } else {
+      if (typeof window !== 'undefined') {
       localStorage.setItem(
         "_CALDERA_",
         JSON.stringify({
@@ -56,6 +57,7 @@ const NavbarApp = (props) => {
           token: "xxx",
         })
       );
+      }
       props.dispatch(resetUser());
       setcheckToken(false);
     }
@@ -137,6 +139,7 @@ const NavbarApp = (props) => {
                   <Button
                     variant="warning"
                     onClick={() => {
+                      if (typeof window !== 'undefined') {
                       localStorage.setItem(
                         "_CALDERA_",
                         JSON.stringify({
@@ -150,6 +153,7 @@ const NavbarApp = (props) => {
                           token: "xxx",
                         })
                       );
+                      }
                       props.dispatch(resetUser());
                     }}
                   >

@@ -113,6 +113,7 @@ function CreatePost(props) {
           progress: undefined,
         });
 
+        if (typeof window !== 'undefined') {
         localStorage.setItem(
           "_CALDERA_",
           JSON.stringify({
@@ -126,6 +127,7 @@ function CreatePost(props) {
             token: "xxx",
           })
         );
+        }
       } else {
         toast.error("Gagal menyimpan berita.", {
           position: "top-center",
@@ -283,7 +285,7 @@ function CreatePost(props) {
                     <Form.Label style={{color: '#ce1127'}}>Isi Berita <WritingTipsModal /></Form.Label> <br />
                     
                     <div>
-                    <JoditEditor
+                    <JoditEditor                        
                         value={content}
                         editorRef={editor}
                         tabIndex={1} // tabIndex of textarea

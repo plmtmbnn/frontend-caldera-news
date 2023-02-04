@@ -29,6 +29,7 @@ const SidebarAdmin = (props) => {
         progress: undefined,
       });
 
+      if (typeof window !== 'undefined') {
       localStorage.setItem(
         "_CALDERA_",
         JSON.stringify({
@@ -42,6 +43,7 @@ const SidebarAdmin = (props) => {
           token: "xxx",
         })
       );
+      }
 
       setTimeout(()=> {
         window.location.href = "/";

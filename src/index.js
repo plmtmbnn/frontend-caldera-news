@@ -23,6 +23,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 
 import App from "./App";
+import AppAdmin from "./AppAdmin";
 import reportWebVitals from "./reportWebVitals";
 
 // Import React FilePond
@@ -49,6 +50,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview,
           <ToastContainer />
             <HelmetProvider context={helmetContext}>
               <App />
+              <AppAdmin />
             </HelmetProvider>
         </BrowserRouter>
       </Provider>

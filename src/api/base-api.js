@@ -21,7 +21,10 @@ class BaseApiRequest {
   }
 
   init() {
-    let store = localStorage.getItem("_CALDERA_");
+    let store = null;
+    if (typeof window !== 'undefined') {
+    store = localStorage.getItem("_CALDERA_");
+    }
     if (store) {
         store = JSON.parse(store);
         this.setConfig(store.token);

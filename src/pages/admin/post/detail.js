@@ -187,6 +187,8 @@ function DetailPost(props) {
           closeOnClick: true,
           progress: undefined,
         });
+
+        if (typeof window !== 'undefined') {
         localStorage.setItem(
           "_CALDERA_",
           JSON.stringify({
@@ -200,6 +202,7 @@ function DetailPost(props) {
             token: "xxx",
           })
         );
+        }
       } else {
       toast.error("Gagal menyimpan berita.", {
         position: "top-center",
