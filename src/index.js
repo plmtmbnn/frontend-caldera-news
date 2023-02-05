@@ -1,6 +1,7 @@
 import React from "react";
 
-import { hydrateRoot, render } from "react-dom";
+import { hydrateRoot } from 'react-dom/client';
+import ReactDOM from "react-dom";
 
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -37,10 +38,11 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
+
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview,
   FilePondPluginFileValidateType);
 
-  const rootElement = document.getElementById("root");
+  const domNode = document.getElementById('root');
 
   const helmetContext = {};
 
@@ -56,15 +58,14 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview,
       </Provider>
   </React.StrictMode>);
 
-var isMarkupPresent = rootElement.hasChildNodes();
 
-isMarkupPresent ? hydrateRoot(_APP_, rootElement) : render(_APP_, rootElement);
+domNode.hasChildNodes() ? hydrateRoot(domNode, _APP_) : ReactDOM.render(_APP_, domNode);
 
-window.onload = () => {
-  Loadable.preloadReady().then(() => {
-    hydrateRoot(_APP_, rootElement);
-  });
-};
+// window.onload = () => {
+//   Loadable.preloadReady().then(() => {
+//     ReactDOM.render(_APP_, domNode);
+//   });
+// };
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

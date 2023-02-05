@@ -177,24 +177,34 @@ const Home = () => {
   return (
     <div>
       <Helmet>
-          <title>caldera.id - Mengulas Sedalam Kaldera</title>
-          <meta charset="utf-8" />
-          <meta name="title" content="caldera.id - Mengulas Sedalam Kaldera" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta name="theme-color" content="#000000" />
-          <meta name="description"
-            content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+        <title>caldera.id - Mengulas Sedalam Kaldera</title>
+        <meta charset="utf-8" />
+        <meta name="title" content="caldera.id - Mengulas Sedalam Kaldera" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description"
+          content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
 
-          <meta property="og:title" content="caldera.id - Mengulas Sedalam Kaldera" />
-          <meta property="og:image" content="https://www.caldera.id/favicon-caldera.png" />
-          <meta property="og:type" content="website" />
-          <meta property="og:description"
-            content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+        <meta itemprop="name" content="caldera.id - Mengulas Sedalam Kaldera" />
+        <meta itemprop="image" content="https://www.caldera.id/favicon-caldera.png" />
+        <meta itemprop="description"
+          content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+        
+        <meta property="og:title" content="caldera.id - Mengulas Sedalam Kaldera" />
+        <meta property="og:image" content="https://www.caldera.id/favicon-caldera.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description"
+          content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+        <meta property="og:type" content="website" />
 
-          <meta itemprop="name" content="caldera.id - Mengulas Sedalam Kaldera" />
-          <meta itemprop="image" content="https://www.caldera.id/favicon-caldera.png" />
-          <meta itemprop="description"
-            content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+        <meta property="fb:app_id" content="442815334329143" />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://www.caldera.id" />
+        <meta property="twitter:title" content="caldera.id - Mengulas Sedalam Kaldera" />
+        <meta property="twitter:description"
+          content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
+        <meta property="twitter:image" content="https://www.caldera.id/favicon-caldera.png" />
       </Helmet>
       <NavbarApp />
       <section className="bg-dark pt-3 pb-5">
@@ -368,6 +378,7 @@ const Home = () => {
                             onClick={()=>{window.scrollTo(0, 0)}}
                             to={`/article/${data.news_url}`}
                             className="link"
+                            key={i+Math.random()}
                           >
                             <div className="my-3" key={i}>
                               <p className="mb-0 text-primary">
@@ -406,7 +417,7 @@ const Home = () => {
               <Row>
                 <h2 className="fw-bold text-white mb-5">Kategori Berita</h2>
                 {newsCategory.map((data, i) => (
-                  <Col md={6} className="align-self-center">
+                  <Col md={6} className="align-self-center" key={i}>
                     <Link
                       onClick={()=>{window.scrollTo(0, 0)}}
                       className="cat-link"
