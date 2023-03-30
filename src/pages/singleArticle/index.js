@@ -46,7 +46,6 @@ const getImage = (image_url) => {
   if(image_url){
     const current = 
     `${process.env.REACT_APP_API_END_POINT}/news/image/news/${image_url}`;
-    console.log(current);
     return(current);
   } else {
     return newsImage;
@@ -216,14 +215,16 @@ function SingleArticle(props) {
             <meta itemprop="description"
               content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
 
-            <meta property="og:title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 60)} />
-            <meta property="og:image" content={getImage(String(newsDetail.news.image_url))} />
             <meta property="og:type" content="website" />
             <meta property="og:url" content={`${window.location.origin}/${window.location.pathname}`} />
+            <meta property="og:title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 60)} />
+            <meta property="og:image" content={getImage(String(newsDetail.news.image_url))} />
+            <meta property="og:image:secure_url" content={getImage(String(newsDetail.news.image_url))} />
+            <meta property="og:image:type" content="image/png"/>
             <meta property="og:description"
               content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
-
-            <meta property="og:type" content="website" />
+            <meta property="og:image:width" content="450" />
+            <meta property="og:image:height" content="298" />
 
             <meta property="twitter:card" content="summary_large_image"/>
             <meta property="twitter:url" content={`${window.location.origin}/${window.location.pathname}`} />
