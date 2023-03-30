@@ -52,7 +52,6 @@ app.get('*',async (req, res) => {
 
         // Get the dynamic content from your API or other sources
         const title = apiResult.title;
-        const description = apiResult.description;
 
         // Read the index.html file
         const indexFile = fs.readFileSync(path.join(__dirname, 'build', 'index.html'), 'utf8');
@@ -62,7 +61,7 @@ app.get('*',async (req, res) => {
 
         // Modify the <head> element with the dynamic content
         $('head').append(`<title>${title}</title>`);
-        $('head').append(`<meta name="description" content="${description}">`);
+        $('head').append(`<meta name="description" content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba">`);
         $('head').append(`<meta itemprop="image" content="${getImage(String(apiResult.image_url))}" />`);
         $('head').append(`<meta property="og:type" content="website" />`);
         $('head').append(`<meta property="og:url" content="https://www.caldera.id/article/${newsUrl}" />`);
@@ -77,7 +76,6 @@ app.get('*',async (req, res) => {
         $('head').append(`<meta property="twitter:title" content="${String(apiResult.title || 'caldera.id').substring(0, 60)}" />`);
         $('head').append(`<meta property="twitter:description" content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba"/>`);
         $('head').append(`<meta property="twitter:image" content="${getImage(String(apiResult.image_url))}" />`);
-
         // Send the modified HTML file
         res.send($.html());       
     } else {
@@ -87,6 +85,6 @@ app.get('*',async (req, res) => {
   
   
   const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+    app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+    });
