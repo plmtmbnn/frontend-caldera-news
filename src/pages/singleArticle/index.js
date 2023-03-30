@@ -220,7 +220,7 @@ function SingleArticle(props) {
             <meta property="og:title" content={String(newsDetail.news.title || 'caldera.id').substring(0, 60)} />
             <meta property="og:image" content={getImage(String(newsDetail.news.image_url))} />
             <meta property="og:image:secure_url" content={getImage(String(newsDetail.news.image_url))} />
-            <meta property="og:image:type" content="image/png"/>
+            <meta property="og:image:type" content="image/jpeg"/>
             <meta property="og:description"
               content="Berita seputar batak, berita toba, adat batak, berita budaya batak, wisata danau toba" />
             <meta property="og:image:width" content="450" />
