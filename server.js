@@ -68,6 +68,7 @@ app.get('*',async (req, res) => {
         $('head').append(`<meta property="og:url" content="https://www.caldera.id/article/${newsUrl}" />`);
         $('head').append(`<meta property="og:title" content="${String(apiResult.title || 'caldera.id').substring(0, 60)} />"`);
         $('head').append(`<meta property="og:image" content="${getImage(String(apiResult.image_url))}" />`);
+        $('head').append(`<meta property="og:image:type" content="image/jpeg">`);
         $('head').append(`<meta property="og:image:secure_url" content="${getImage(String(apiResult.image_url))}" />`);
         $('head').append(`<meta property="og:image:width" content="1200">`);
         $('head').append(`<meta property="og:image:height" content="630">`);
